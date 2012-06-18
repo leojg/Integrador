@@ -10,4 +10,15 @@ package integrador.dominio;
  */
 public class FachadaInterfaz {
     
+    private static EstacionAdmin objEA = EstacionAdmin.getInstance();
+    
+    public static boolean altaEstacion(String nom, Integer cp) {
+        return objEA.altaEstacion(crearEstacion(nom, cp));
+    }
+    
+    private static Estacion crearEstacion(String nom, Integer cp) {
+        nom = nom.toLowerCase();
+        return new Estacion(nom, cp);
+    } 
+    
 }

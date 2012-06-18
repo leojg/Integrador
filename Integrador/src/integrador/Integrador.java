@@ -4,6 +4,8 @@
  */
 package integrador;
 
+import integrador.Interfaz.MantenimientoEstacion;
+
 /**
  *
  * @author Administrador
@@ -15,5 +17,7 @@ public class Integrador {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        MantenimientoEstacion frm = new MantenimientoEstacion();
+        frm.setVisible(true);
     }
 }

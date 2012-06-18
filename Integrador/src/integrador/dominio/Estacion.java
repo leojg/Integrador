@@ -37,7 +37,7 @@ public class Estacion {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "Nombre:" + this.nom + "  C.P.:" + this.cp;
     }
 
     

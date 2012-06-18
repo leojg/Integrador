@@ -29,6 +29,7 @@ public class EstacionAdmin {
     public boolean altaEstacion(Estacion objE) {
         if (!this.colEstacion.containsKey(objE.getNom())) {
             this.colEstacion.put(objE.getNom(), objE);
+            System.out.print(objE.toString());
             return true;
         }
         return false;
