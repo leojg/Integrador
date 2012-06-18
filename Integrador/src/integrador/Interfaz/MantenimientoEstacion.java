@@ -4,17 +4,27 @@
  */
 package integrador.Interfaz;
 
+import integrador.dominio.Estacion;
+import integrador.dominio.EstacionAdmin;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Administrador
  */
 public class MantenimientoEstacion extends Mantenimiento {
+
+    private JButton btnAlta;
+    private JButton btnBaja;
+    private JButton btnMod;
+    private JTable tableEst;
+    int srow = -1;
 
     /**
      * Creates new form MantenimientoEstacion
@@ -23,15 +33,59 @@ public class MantenimientoEstacion extends Mantenimiento {
         initComponents();
         //this.setSize(super.getWidth(), super.getHeight());
         this.setSize(super.getMaximumSize());
-        this.setComponents();        
+        this.btnAlta = super.getBtnAlta();
+        this.btnBaja = super.getBtnBaja();
+        this.btnMod = super.getBtnMod();
+        this.tableEst = super.getTableItems();
+        this.setComponents();
+
+
     }
-    
+
     private void setComponents() {
-        JButton btnAlta = super.getBtnAlta();
-         btnAlta.addActionListener(new ActionListener() {
+        setBtnAlta();
+        setBtnBaja();
+        setTableEstaciones();
+    }
+
+    private void setTableEstaciones() {
+        DefaultTableModel Modelo = (DefaultTableModel) super.getTableItems().getModel();
+        Object[] cn = {"Nombre","Codigo Postal"};
+        Modelo.setColumnIdentifiers(cn);
+        Modelo.setRowCount(0);
+        for (Estacion ObjE : FachadaInterfaz.getEstaciones().values()) {
+            Object[] row = {ObjE.getNom(), ObjE.getCp()};
+            Modelo.addRow(row);
+        }
+    }
+
+    private void setBtnAlta() {
+        btnAlta.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent ae) {
-                FachadaInterfaz.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
+                try {
+                    FachadaInterfaz.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
+                    setTableEstaciones();
+                } catch (NumberFormatException numberFormatException) {
+                    JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
+                }
+            }
+        });
+    }
+
+    private void setBtnBaja() {
+        btnBaja.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    srow = tableEst.getSelectedRow();
+                    FachadaInterfaz.bajaEstacion(((String) tableEst.getValueAt(srow, 0)), ((Integer) tableEst.getValueAt(srow, 1)));
+                    setTableEstaciones();
+                } catch (NumberFormatException numberFormatException) {
+                    JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
+                }
             }
         });
     }

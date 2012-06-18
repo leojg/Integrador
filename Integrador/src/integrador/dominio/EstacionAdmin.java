@@ -26,13 +26,23 @@ public class EstacionAdmin {
         return instance;
     }
     
-    public boolean altaEstacion(Estacion objE) {
+    boolean altaEstacion(Estacion objE) {
         if (!this.colEstacion.containsKey(objE.getNom())) {
             this.colEstacion.put(objE.getNom(), objE);
-            System.out.print(objE.toString());
             return true;
         }
         return false;
+    }
+    boolean bajaEstacion(Estacion objE) {
+        if (this.colEstacion.containsKey(objE.getNom())) {
+            this.colEstacion.remove(objE.getNom());
+            return true;
+        }
+        return false;
+    }
+    
+    HashMap<String,Estacion> getEstaciones() {
+        return this.colEstacion;
     }
     
     

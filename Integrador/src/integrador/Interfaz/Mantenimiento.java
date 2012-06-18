@@ -65,7 +65,8 @@ public class Mantenimiento extends javax.swing.JFrame {
         return tableItems;
     }
 
-    public void setTableItems(JTable tableItems) {
+    
+    public   void setTableItems(JTable tableItems) {
         this.tableItems = tableItems;
     }
     /**
