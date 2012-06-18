@@ -39,6 +39,7 @@ public class MantenimientoEstacion extends Mantenimiento {
         this.tableEst = super.getTableItems();
         this.setComponents();
 
+        btnMod.setVisible(false);
 
     }
 
@@ -50,7 +51,7 @@ public class MantenimientoEstacion extends Mantenimiento {
 
     private void setTableEstaciones() {
         DefaultTableModel Modelo = (DefaultTableModel) super.getTableItems().getModel();
-        Object[] cn = {"Nombre","Codigo Postal"};
+        Object[] cn = {"Nombre", "Codigo Postal"};
         Modelo.setColumnIdentifiers(cn);
         Modelo.setRowCount(0);
         for (Estacion ObjE : FachadaInterfaz.getEstaciones().values()) {

@@ -12,6 +12,7 @@ import java.util.HashMap;
  */
 public class EstacionAdmin {
     
+    private LineaAdmin objLA = LineaAdmin.getInstance();
     private HashMap<String, Estacion> colEstacion;
     private static EstacionAdmin instance = null;
 
@@ -34,11 +35,19 @@ public class EstacionAdmin {
         return false;
     }
     boolean bajaEstacion(Estacion objE) {
-        if (this.colEstacion.containsKey(objE.getNom())) {
+        if (this.colEstacion.containsKey(objE.getNom()) && objLA.getLineasEstacion(objE).size() <= 0) {
             this.colEstacion.remove(objE.getNom());
             return true;
         }
         return false;
+    }
+    
+    boolean existenEstaciones(HashMap<String,Estacion> colEst) {
+        for (Estacion objE : colEst.values()) {
+            if (!this.colEstacion.containsKey(objE.getNom()))
+                return false;
+        }
+        return true;
     }
     
     HashMap<String,Estacion> getEstaciones() {
