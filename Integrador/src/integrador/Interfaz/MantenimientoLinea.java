@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /*
  * To change this template, choose Tools | Templates
@@ -35,18 +38,23 @@ public class MantenimientoLinea extends Mantenimiento {
         this.btnMod = super.getBtnMod();
         this.tableLin = super.getTableItems();
         this.setComponents();
-
-        btnMod.setVisible(false);
+        super.getScrollPanelTable().setVisible(false);
+        this.btnMod.setVisible(false);
+       
 
     }
 
     private void setComponents() {
         setBtnAlta();
         setBtnBaja();
-        setTableLineas();
+       setTableLineas();
+       setTreeLineas();
     }
     private void setTableLineas() {
         Utilitaria.cargarJTable(tableLin, "Linea",null);
+    }
+    private void setTreeLineas() {
+        Utilitaria.setTreeLineas(treeLineas);
     }
     private void setBtnAlta() {
         btnAlta.addActionListener(new ActionListener() {
@@ -55,7 +63,7 @@ public class MantenimientoLinea extends Mantenimiento {
             public void actionPerformed(ActionEvent ae) {
                 try {
                     FachadaInterfaz.altaLinea(txtNom.getText());
-                    setTableLineas();
+                    setTreeLineas();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
@@ -71,7 +79,7 @@ public class MantenimientoLinea extends Mantenimiento {
                 try {
                     srow = tableLin.getSelectedRow();
                     FachadaInterfaz.bajaLinea(((String) tableLin.getValueAt(srow, 0)));
-                    setTableLineas();
+                    setTreeLineas();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
@@ -87,13 +95,13 @@ public class MantenimientoLinea extends Mantenimiento {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnAsignarEst = new javax.swing.JButton();
         txtNom = new javax.swing.JTextField();
         lblNom = new javax.swing.JLabel();
-        btnAsignarEst = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        treeLineas = new javax.swing.JTree();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        lblNom.setText("Nombre Linea");
 
         btnAsignarEst.setText("Asignar Estaciones");
         btnAsignarEst.addActionListener(new java.awt.event.ActionListener() {
@@ -102,45 +110,69 @@ public class MantenimientoLinea extends Mantenimiento {
             }
         });
 
+        lblNom.setText("Nombre Linea");
+
+        treeLineas.setMaximumSize(new java.awt.Dimension(300, 64));
+        treeLineas.setMinimumSize(new java.awt.Dimension(300, 64));
+        treeLineas.setPreferredSize(new java.awt.Dimension(300, 64));
+        treeLineas.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                treeLineasValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(treeLineas);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(lblNom)
-                .addGap(18, 18, 18)
-                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(btnAsignarEst)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(lblNom)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(btnAsignarEst)))
+                .addContainerGap(107, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblNom)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnAsignarEst)))
-                .addContainerGap(244, Short.MAX_VALUE))
+                .addGap(44, 44, 44)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblNom, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(13, 13, 13)
+                .addComponent(btnAsignarEst)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAsignarEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarEstActionPerformed
-                    srow = tableLin.getSelectedRow();
-        AsignarEstaciones frmAS = new AsignarEstaciones(FachadaInterfaz.getLinea((String) tableLin.getValueAt(srow, 0)));
+        AsignarEstaciones frmAS = new AsignarEstaciones(FachadaInterfaz.getLinea(treeLineas.getSelectionPath().getLastPathComponent().toString() ));
         frmAS.setVisible(true);
         frmAS.setAlwaysOnTop(true);
-
+    
     }//GEN-LAST:event_btnAsignarEstActionPerformed
+
+    private void treeLineasValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeLineasValueChanged
+    }//GEN-LAST:event_treeLineasValueChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarEst;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblNom;
+    private javax.swing.JTree treeLineas;
     private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }

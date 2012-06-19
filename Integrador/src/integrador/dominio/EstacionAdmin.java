@@ -4,6 +4,8 @@
  */
 package integrador.dominio;
 
+import exceptions.*;
+import java.rmi.NoSuchObjectException;
 import java.util.HashMap;
 
 /**
@@ -29,20 +31,20 @@ public class EstacionAdmin {
         return instance;
     }
 
-    boolean altaEstacion(Estacion objE) {
+    boolean altaEstacion(Estacion objE) throws NombreRepetidoException {
         if (!this.colEstacion.containsKey(objE.getNom())) {
             this.colEstacion.put(objE.getNom(), objE);
             return true;
         }
-        return false;
+        throw new NombreRepetidoException();
     }
 
-    boolean bajaEstacion(Estacion objE) {
+    boolean bajaEstacion(Estacion objE) throws NoSuchObjectException {
         if (this.colEstacion.containsKey(objE.getNom()) && objLA.getLineasEstacion(objE).size() <= 0) {
             this.colEstacion.remove(objE.getNom());
             return true;
         }
-        return false;
+        throw new NoSuchObjectException("No existe una estación con ese nombre.");
     }
 
     boolean existenEstaciones(HashMap<String, Estacion> colEst) {

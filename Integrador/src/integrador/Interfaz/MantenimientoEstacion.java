@@ -4,11 +4,16 @@
  */
 package integrador.Interfaz;
 
+import exceptions.NombreRepetidoException;
 import integrador.dominio.Estacion;
 import integrador.dominio.EstacionAdmin;
 import integrador.dominio.FachadaInterfaz;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.rmi.NoSuchObjectException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -38,7 +43,6 @@ public class MantenimientoEstacion extends Mantenimiento {
         this.btnMod = super.getBtnMod();
         this.tableEst = super.getTableItems();
         this.setComponents();
-
         btnMod.setVisible(false);
 
     }
@@ -48,21 +52,34 @@ public class MantenimientoEstacion extends Mantenimiento {
         setBtnBaja();
         setTableEstaciones();
     }
-    
 
     private void setTableEstaciones() {
-        Utilitaria.cargarJTable(tableEst, "Estacion",null);
+        Utilitaria.cargarJTable(tableEst, "Estacion", null);
     }
+
     private void setBtnAlta() {
         btnAlta.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
+                    if ("".equals(txtNom.getText())) {
+                        throw new NullPointerException();
+                    }
                     FachadaInterfaz.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
+
+                    JOptionPane.showMessageDialog(lblCP, "Operación Exitosa");
                     setTableEstaciones();
-                } catch (NumberFormatException numberFormatException) {
-                    JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
+                } catch (NombreRepetidoException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                } catch (NumberFormatException ex) {
+                    if ("".equals(txtCP.getText())) {
+                        JOptionPane.showMessageDialog(rootPane, "No se ha ingresado el codigo postal", null, WIDTH);
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
+                    }
+                } catch (NullPointerException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "No se ha ingresado nombre de la estación");
                 }
             }
         });
@@ -76,9 +93,14 @@ public class MantenimientoEstacion extends Mantenimiento {
                 try {
                     srow = tableEst.getSelectedRow();
                     FachadaInterfaz.bajaEstacion(((String) tableEst.getValueAt(srow, 0)), ((Integer) tableEst.getValueAt(srow, 1)));
+                    JOptionPane.showMessageDialog(lblCP, "Operación Exitosa");
                     setTableEstaciones();
-                } catch (NumberFormatException numberFormatException) {
-                    JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
+                } catch (NoSuchObjectException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion para continuar");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Error Inesperado. Vuelva a repetir la operación");
                 }
             }
         });

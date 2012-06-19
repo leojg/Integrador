@@ -4,6 +4,8 @@
  */
 package integrador.dominio;
 
+import exceptions.NombreRepetidoException;
+import java.rmi.NoSuchObjectException;
 import java.util.HashMap;
 
 /**
@@ -17,11 +19,11 @@ public class FachadaInterfaz {
     //***************** Estaciones *************************//
     private static EstacionAdmin objEA = EstacionAdmin.getInstance();
 
-    public static boolean altaEstacion(String nom, Integer cp) {
+    public static boolean altaEstacion(String nom, Integer cp) throws NombreRepetidoException {
         return objEA.altaEstacion(crearEstacion(nom, cp));
     }
 
-    public static boolean bajaEstacion(String nom, Integer cp) {
+    public static boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException {
         return objEA.bajaEstacion(crearEstacion(nom, cp));
     }
 

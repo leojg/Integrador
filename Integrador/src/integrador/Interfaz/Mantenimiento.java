@@ -5,6 +5,7 @@
 package integrador.Interfaz;
 
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
@@ -21,7 +22,15 @@ public class Mantenimiento extends Main {
         this.setMaximumSize(this.getPreferredSize());
     }
 
-    public JButton getBtnAlta() {
+    public JScrollPane getScrollPanelTable() {
+        return scrollPanelTable;
+    }
+
+    public void setScrollPanelTable(JScrollPane scrollPanelTable) {
+        this.scrollPanelTable = scrollPanelTable;
+    }
+
+   public JButton getBtnAlta() {
         return btnAlta;
     }
 
@@ -71,7 +80,7 @@ public class Mantenimiento extends Main {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        scrollPanelTable = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
         btnAlta = new javax.swing.JButton();
         btnMod = new javax.swing.JButton();
@@ -84,22 +93,26 @@ public class Mantenimiento extends Main {
 
         tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane1.setViewportView(tableItems);
+        tableItems.setMaximumSize(new java.awt.Dimension(300, 64));
+        tableItems.setMinimumSize(new java.awt.Dimension(300, 64));
+        scrollPanelTable.setViewportView(tableItems);
 
         btnAlta.setText("Alta");
 
         btnMod.setText("Modificar");
 
         btnBaja.setText("Eliminar");
+        btnBaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBajaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,7 +121,7 @@ public class Mantenimiento extends Main {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAlta)
                         .addGap(18, 18, 18)
@@ -126,19 +139,22 @@ public class Mantenimiento extends Main {
                     .addComponent(btnBaja)
                     .addComponent(btnMod))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBajaActionPerformed
+    }//GEN-LAST:event_btnBajaActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlta;
     private javax.swing.JButton btnBaja;
     private javax.swing.JButton btnMod;
     private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane scrollPanelTable;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
 }

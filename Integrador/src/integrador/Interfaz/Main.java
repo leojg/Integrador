@@ -73,6 +73,11 @@ public class Main extends javax.swing.JFrame {
         });
 
         menuInicio.setText("Inicio");
+        menuInicio.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuInicioMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(menuInicio);
 
         menuCompras.setText("Compras");
@@ -119,14 +124,14 @@ public class Main extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(484, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(291, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
@@ -174,6 +179,21 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_menuLineasMouseClicked
+
+    private void menuInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuInicioMouseClicked
+        Point p = this.getLocation();
+        Main frmMain = new Main();
+        this.setVisible(false);
+        frmMain.setLocation(p);
+        frmMain.setVisible(true);
+
+        try {
+            this.finalize();
+        } catch (Throwable ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_menuInicioMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
