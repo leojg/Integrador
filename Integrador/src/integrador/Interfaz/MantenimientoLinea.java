@@ -1,42 +1,39 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package integrador.Interfaz;
 
-import integrador.dominio.Estacion;
-import integrador.dominio.EstacionAdmin;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
  *
  * @author Administrador
  */
-public class MantenimientoEstacion extends Mantenimiento {
+public class MantenimientoLinea extends Mantenimiento {
 
     private JButton btnAlta;
     private JButton btnBaja;
     private JButton btnMod;
-    private JTable tableEst;
+    private JTable tableLin;
     int srow = -1;
-
+    
     /**
-     * Creates new form MantenimientoEstacion
+     * Creates new form MantenimientoLinea
      */
-    public MantenimientoEstacion() {
+    public MantenimientoLinea() {
         initComponents();
-        //this.setSize(super.getWidth(), super.getHeight());
-        this.setSize(super.getMaximumSize());
+          this.setSize(super.getMaximumSize());
         this.btnAlta = super.getBtnAlta();
         this.btnBaja = super.getBtnBaja();
         this.btnMod = super.getBtnMod();
-        this.tableEst = super.getTableItems();
+        this.tableLin = super.getTableItems();
         this.setComponents();
 
         btnMod.setVisible(false);
@@ -46,12 +43,10 @@ public class MantenimientoEstacion extends Mantenimiento {
     private void setComponents() {
         setBtnAlta();
         setBtnBaja();
-        setTableEstaciones();
+        setTableLineas();
     }
-    
-
-    private void setTableEstaciones() {
-        Utilitaria.cargarJTable(tableEst, "Estacion",null);
+    private void setTableLineas() {
+        Utilitaria.cargarJTable(tableLin, "Linea",null);
     }
     private void setBtnAlta() {
         btnAlta.addActionListener(new ActionListener() {
@@ -59,8 +54,8 @@ public class MantenimientoEstacion extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    FachadaInterfaz.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
-                    setTableEstaciones();
+                    FachadaInterfaz.altaLinea(txtNom.getText());
+                    setTableLineas();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
@@ -74,16 +69,15 @@ public class MantenimientoEstacion extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    srow = tableEst.getSelectedRow();
-                    FachadaInterfaz.bajaEstacion(((String) tableEst.getValueAt(srow, 0)), ((Integer) tableEst.getValueAt(srow, 1)));
-                    setTableEstaciones();
+                    srow = tableLin.getSelectedRow();
+                    FachadaInterfaz.bajaLinea(((String) tableLin.getValueAt(srow, 0)));
+                    setTableLineas();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
             }
         });
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,15 +88,19 @@ public class MantenimientoEstacion extends Mantenimiento {
     private void initComponents() {
 
         txtNom = new javax.swing.JTextField();
-        txtCP = new javax.swing.JTextField();
         lblNom = new javax.swing.JLabel();
-        lblCP = new javax.swing.JLabel();
+        btnAsignarEst = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblNom.setText("Nombre Estacion");
+        lblNom.setText("Nombre Linea");
 
-        lblCP.setText("Código Postal");
+        btnAsignarEst.setText("Asignar Estaciones");
+        btnAsignarEst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarEstActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,31 +111,36 @@ public class MantenimientoEstacion extends Mantenimiento {
                 .addComponent(lblNom)
                 .addGap(18, 18, 18)
                 .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblCP)
-                .addGap(18, 18, 18)
-                .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addGap(39, 39, 39)
+                .addComponent(btnAsignarEst)
+                .addContainerGap(76, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblNom)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblCP)
-                        .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(246, Short.MAX_VALUE))
+                        .addComponent(btnAsignarEst)))
+                .addContainerGap(244, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAsignarEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarEstActionPerformed
+                    srow = tableLin.getSelectedRow();
+        AsignarEstaciones frmAS = new AsignarEstaciones(FachadaInterfaz.getLinea((String) tableLin.getValueAt(srow, 0)));
+        frmAS.setVisible(true);
+        frmAS.setAlwaysOnTop(true);
+
+    }//GEN-LAST:event_btnAsignarEstActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel lblCP;
+    private javax.swing.JButton btnAsignarEst;
     private javax.swing.JLabel lblNom;
-    private javax.swing.JTextField txtCP;
     private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }

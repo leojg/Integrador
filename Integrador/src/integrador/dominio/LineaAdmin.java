@@ -26,21 +26,30 @@ public class LineaAdmin {
         return instance;
     }
 
-    boolean altaLinea(Linea objL, HashMap<String, Estacion> colEstaciones) {
+    boolean altaLinea(Linea objL) {
         if (!this.colLineas.containsKey(objL.getNom())) {
             this.colLineas.put(objL.getNom(), objL);
-            for (Estacion objE : colEstaciones.values()) {
-                objL.AgregarEstacion(objE);
-            }
             return true;
         }
         return false;
     }
     
+    boolean bajaLinea(Linea objL) {
+        if (this.colLineas.containsKey(objL.getNom())) {
+            this.colLineas.remove(objL.getNom());
+            return true;
+        }
+        return false;
+    }
+
+    Linea getLinea(String nom) {
+        return this.colLineas.get(nom);
+    }
+
     HashMap<String, Linea> getLineas() {
         return this.colLineas;
     }
-    
+
     HashMap<String, Linea> getLineasEstacion(Estacion objE) {
         HashMap<String, Linea> colLineasEstacion = new HashMap<>();
         for (Linea objL : colLineas.values()) {

@@ -29,11 +29,20 @@ public class Linea {
         }
         return false;
     }
-
+    
     HashMap<String, Estacion> getColEstaciones() {
         return colEstaciones;
     }
 
+    
+    boolean QuitarEstacion(Estacion objE) {
+        if (this.colEstaciones.containsKey(objE.getNom())) {
+            this.colEstaciones.remove(objE.getNom());
+            return true;
+        }
+        return false;
+    }
+    
     public String getNom() {
         return nom;
     }

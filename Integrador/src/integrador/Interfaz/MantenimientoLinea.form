@@ -27,27 +27,24 @@
               <Component id="lblNom" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="txtNom" min="-2" pref="61" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="lblCP" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="txtCP" min="-2" pref="61" max="-2" attributes="0"/>
-              <EmptySpace pref="61" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
+              <Component id="btnAsignarEst" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="76" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="lblNom" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblNom" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" alignment="1" groupAlignment="3" attributes="0">
                       <Component id="txtNom" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblCP" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="txtCP" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnAsignarEst" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="246" max="32767" attributes="0"/>
+              <EmptySpace pref="244" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -55,17 +52,18 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtNom">
     </Component>
-    <Component class="javax.swing.JTextField" name="txtCP">
-    </Component>
     <Component class="javax.swing.JLabel" name="lblNom">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Nombre Estacion"/>
+        <Property name="text" type="java.lang.String" value="Nombre Linea"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblCP">
+    <Component class="javax.swing.JButton" name="btnAsignarEst">
       <Properties>
-        <Property name="text" type="java.lang.String" value="C&#xf3;digo Postal"/>
+        <Property name="text" type="java.lang.String" value="Asignar Estaciones"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAsignarEstActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

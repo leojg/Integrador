@@ -11,7 +11,7 @@ import javax.swing.JTable;
  *
  * @author Administrador
  */
-public class Mantenimiento extends javax.swing.JFrame {
+public class Mantenimiento extends Main {
 
     /**
      * Creates new form Mantenimiento
@@ -35,14 +35,6 @@ public class Mantenimiento extends javax.swing.JFrame {
 
     public void setBtnBaja(JButton btnBaja) {
         this.btnBaja = btnBaja;
-    }
-
-    public JButton getBtnExit() {
-        return btnExit;
-    }
-
-    public void setBtnExit(JButton btnExit) {
-        this.btnExit = btnExit;
     }
 
     public JButton getBtnMod() {
@@ -79,7 +71,6 @@ public class Mantenimiento extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        btnExit = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
         btnAlta = new javax.swing.JButton();
@@ -90,13 +81,6 @@ public class Mantenimiento extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
-        btnExit.setText("Salir");
-        btnExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExitActionPerformed(evt);
-            }
-        });
 
         tableItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -124,18 +108,14 @@ public class Mantenimiento extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                        .addComponent(btnExit))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAlta)
                         .addGap(18, 18, 18)
                         .addComponent(btnBaja)
                         .addGap(18, 18, 18)
-                        .addComponent(btnMod)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btnMod)))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -146,22 +126,16 @@ public class Mantenimiento extends javax.swing.JFrame {
                     .addComponent(btnBaja)
                     .addComponent(btnMod))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnExit)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_btnExitActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlta;
     private javax.swing.JButton btnBaja;
-    private javax.swing.JButton btnExit;
     private javax.swing.JButton btnMod;
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;

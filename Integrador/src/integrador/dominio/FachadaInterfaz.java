@@ -41,14 +41,32 @@ public class FachadaInterfaz {
     public static HashMap<String, Estacion> getEstaciones() {
         return objEA.getEstaciones();
     }
+
+    public static HashMap<String, Estacion> getEstacionesLinea(String nom) {
+        return objLA.getLinea(nom).getColEstaciones();
+    }
+
+    public static HashMap<String, Estacion> getEstacionesNoEstanEnLinea(String nom) {
+        return objEA.getEstacionesNoEstanEnLinea(objLA.getLinea(nom));
+    }
+//    public static HashMap<String, Estacion> getEstacionesLinea(String nomLinea) {
+//   
+//    } 
     //************** Lineas ****************************//
     private static LineaAdmin objLA = LineaAdmin.getInstance();
 
-    public static boolean altaLinea(String nom, HashMap<String, Estacion> colEstaciones) {
-        if (objEA.existenEstaciones(colEstaciones)) {
-            return objLA.altaLinea(crearLinea(nom), colEstaciones);
-        }
-        return false;
+    public static boolean altaLinea(String nom) {
+        return objLA.altaLinea(crearLinea(nom));
+    }
+
+    public static boolean agregarEstacionALinea(String nomLinea, String nomEst) {
+        Linea objL = objLA.getLinea(nomLinea);
+        Estacion objE = objEA.getEstacion(nomEst);
+        return objL.AgregarEstacion(objE);
+    }
+
+    public static boolean bajaLinea(String nom) {
+        return objLA.bajaLinea(crearLinea(nom));
     }
 
     private static Linea crearLinea(String nom) {
@@ -64,5 +82,19 @@ public class FachadaInterfaz {
             }
         }
         return new Linea(nom);
+    }
+
+    public static Linea getLinea(String nom) {
+        return objLA.getLinea(nom);
+    }
+
+    public static HashMap<String, Linea> getLineas() {
+        return objLA.getLineas();
+    }
+
+    public static boolean quitarEstacionDeLinea(String nomLinea, String nomEst) {
+        Linea objL = objLA.getLinea(nomLinea);
+        Estacion objE = objEA.getEstacion(nomEst);
+        return objL.QuitarEstacion(objE);
     }
 }
