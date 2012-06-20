@@ -68,7 +68,7 @@ public class Utilitaria {
 
     private static void setTableLineas(JTable table, Object[] datos) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"Nombre"};
+        Object[] cn = {"Nombre de Linea"};
         Modelo.setColumnIdentifiers(cn);
         Modelo.setRowCount(0);
         if (datos != null) {

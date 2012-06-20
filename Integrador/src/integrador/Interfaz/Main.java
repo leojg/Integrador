@@ -116,6 +116,16 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(menuLineas);
 
         menuReportes.setText("Reportes");
+        menuReportes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuReportesMouseClicked(evt);
+            }
+        });
+        menuReportes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                menuReportesMouseDragged(evt);
+            }
+        });
         jMenuBar1.add(menuReportes);
 
         setJMenuBar(jMenuBar1);
@@ -194,6 +204,24 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_menuInicioMouseClicked
+
+    private void menuReportesMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReportesMouseDragged
+    }//GEN-LAST:event_menuReportesMouseDragged
+
+    private void menuReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReportesMouseClicked
+        Point p = this.getLocation();
+        Reporte frmReporte = new Reporte();
+        this.setVisible(false);
+        frmReporte.setLocation(p);
+        frmReporte.setVisible(true);
+
+        try {
+            this.finalize();
+        } catch (Throwable ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_menuReportesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

@@ -40,6 +40,10 @@ public class FachadaInterfaz {
         return new Estacion(nom, cp);
     }
 
+    public static Estacion getEstacion(String nom) {
+        return objEA.getEstacion(nom);
+    }
+
     public static HashMap<String, Estacion> getEstaciones() {
         return objEA.getEstaciones();
     }
@@ -92,6 +96,10 @@ public class FachadaInterfaz {
 
     public static HashMap<String, Linea> getLineas() {
         return objLA.getLineas();
+    }
+
+    public static HashMap<String, Linea> getLineasEsacion(String nom) {
+        return objLA.getLineasEstacion(objEA.getEstacion(nom));
     }
 
     public static boolean quitarEstacionDeLinea(String nomLinea, String nomEst) {

@@ -119,6 +119,7 @@ public class MantenimientoEstacion extends Mantenimiento {
         txtCP = new javax.swing.JTextField();
         lblNom = new javax.swing.JLabel();
         lblCP = new javax.swing.JLabel();
+        btnVerLineas = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,20 +127,32 @@ public class MantenimientoEstacion extends Mantenimiento {
 
         lblCP.setText("Código Postal");
 
+        btnVerLineas.setText("Ver Lineas Asociadas");
+        btnVerLineas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerLineasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(lblNom)
-                .addGap(18, 18, 18)
-                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(lblCP)
-                .addGap(18, 18, 18)
-                .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(lblNom)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblCP)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(183, 183, 183)
+                        .addComponent(btnVerLineas)))
+                .addContainerGap(161, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,12 +164,22 @@ public class MantenimientoEstacion extends Mantenimiento {
                         .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lblCP)
                         .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(246, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addComponent(btnVerLineas)
+                .addContainerGap(271, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVerLineasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerLineasActionPerformed
+        srow = tableEst.getSelectedRow();
+        LineasAsociadas frmLA = new LineasAsociadas(FachadaInterfaz.getEstacion((String) tableEst.getValueAt(srow, 0)));
+        frmLA.setVisible(true);
+    }//GEN-LAST:event_btnVerLineasActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnVerLineas;
     private javax.swing.JLabel lblCP;
     private javax.swing.JLabel lblNom;
     private javax.swing.JTextField txtCP;

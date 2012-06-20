@@ -17,7 +17,7 @@ public class Integrador {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        MantenimientoLinea frm = new MantenimientoLinea();
+        MantenimientoEstacion frm = new MantenimientoEstacion();
         frm.setVisible(true);
     }
 }
