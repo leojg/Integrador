@@ -173,9 +173,13 @@ public class MantenimientoEstacion extends Mantenimiento {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVerLineasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerLineasActionPerformed
+        if (tableEst.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Estacion para continuar");
+        } else {
         srow = tableEst.getSelectedRow();
         LineasAsociadas frmLA = new LineasAsociadas(FachadaInterfaz.getEstacion((String) tableEst.getValueAt(srow, 0)));
         frmLA.setVisible(true);
+        }
     }//GEN-LAST:event_btnVerLineasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

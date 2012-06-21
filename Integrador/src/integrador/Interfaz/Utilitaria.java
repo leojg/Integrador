@@ -64,6 +64,10 @@ public class Utilitaria {
                 Modelo.addRow(row);
             }
         }
+        if (Modelo.getRowCount() <= 0) {
+            Object[] row = {"No Existen Datos Disponibles"};
+            Modelo.addRow(row);
+        }
     }
 
     private static void setTableLineas(JTable table, Object[] datos) {
@@ -82,6 +86,10 @@ public class Utilitaria {
                 Object[] row = {ObjL.getNom()};
                 Modelo.addRow(row);
             }
+        }
+        if (Modelo.getRowCount() <= 0) {
+            Object[] row = {"No Existen Datos Disponibles"};
+            Modelo.addRow(row);
         }
     }
 

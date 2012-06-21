@@ -40,8 +40,6 @@ public class MantenimientoLinea extends Mantenimiento {
         this.setComponents();
         super.getScrollPanelTable().setVisible(false);
         this.btnMod.setVisible(false);
-       
-
     }
 
     private void setComponents() {
@@ -77,9 +75,12 @@ public class MantenimientoLinea extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    srow = tableLin.getSelectedRow();
-                    FachadaInterfaz.bajaLinea(((String) tableLin.getValueAt(srow, 0)));
+        if (treeLineas.getSelectionCount() <= 0 || treeLineas.getSelectionPath().getParentPath() == null || !treeLineas.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Lineas y Estaciones")) {
+            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Linea para Continauar");
+        } else {
+                    FachadaInterfaz.bajaLinea(treeLineas.getSelectionPath().getLastPathComponent().toString());
                     setTreeLineas();
+        }
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
@@ -159,10 +160,13 @@ public class MantenimientoLinea extends Mantenimiento {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAsignarEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarEstActionPerformed
+        if (treeLineas.getSelectionCount() <= 0 || treeLineas.getSelectionPath().getParentPath() == null || !treeLineas.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Lineas y Estaciones")) {
+            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Linea para Continauar");
+        } else {
         AsignarEstaciones frmAS = new AsignarEstaciones(FachadaInterfaz.getLinea(treeLineas.getSelectionPath().getLastPathComponent().toString() ));
         frmAS.setVisible(true);
         frmAS.setAlwaysOnTop(true);
-    
+        }
     }//GEN-LAST:event_btnAsignarEstActionPerformed
 
     private void treeLineasValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeLineasValueChanged

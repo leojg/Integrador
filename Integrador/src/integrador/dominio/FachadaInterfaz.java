@@ -7,6 +7,7 @@ package integrador.dominio;
 import exceptions.NombreRepetidoException;
 import java.rmi.NoSuchObjectException;
 import java.util.HashMap;
+import java.util.Observable;
 
 /**
  * Clase encargada de establecer el acceso por parte de la interfaz a la capa
@@ -15,7 +16,7 @@ import java.util.HashMap;
  * @author Administrador
  */
 public class FachadaInterfaz {
-
+    
     //***************** Estaciones *************************//
     private static EstacionAdmin objEA = EstacionAdmin.getInstance();
 

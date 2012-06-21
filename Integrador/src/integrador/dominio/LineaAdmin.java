@@ -13,7 +13,7 @@ import java.util.HashMap;
 public class LineaAdmin {
 
     private HashMap<String, Linea> colLineas;
-    private static LineaAdmin instance = null;
+    private static LineaAdmin instance;
 
     private LineaAdmin() {
         colLineas = new HashMap<>();
@@ -22,6 +22,7 @@ public class LineaAdmin {
     public static LineaAdmin getInstance() {
         if (instance == null) {
             instance = new LineaAdmin();
+            instance.cargarLineas();
         }
         return instance;
     }
@@ -29,17 +30,28 @@ public class LineaAdmin {
     boolean altaLinea(Linea objL) {
         if (!this.colLineas.containsKey(objL.getNom())) {
             this.colLineas.put(objL.getNom(), objL);
+            objL.guardar(objL);
             return true;
         }
         return false;
     }
-    
+
     boolean bajaLinea(Linea objL) {
         if (this.colLineas.containsKey(objL.getNom())) {
             this.colLineas.remove(objL.getNom());
+            objL.eliminar(objL);
             return true;
         }
         return false;
+    }
+
+    void cargarLineas() {
+        Linea objL = new Linea();
+        for (Object o : objL.obtenerTodos()) {
+            objL = (Linea) o;
+            this.colLineas.put(objL.getNom(), objL);
+            objL.cargarEstacionesLineas();
+        }
     }
 
     Linea getLinea(String nom) {
