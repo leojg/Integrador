@@ -1,8 +1,10 @@
 package integrador.Interfaz;
 
+import integrador.Utilitaria;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Observable;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -11,10 +13,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * To change this template, choose Tools | Templates and open the template in
+ * the editor.
  */
-
 /**
  *
  * @author Administrador
@@ -26,13 +27,13 @@ public class MantenimientoLinea extends Mantenimiento {
     private JButton btnMod;
     private JTable tableLin;
     int srow = -1;
-    
+
     /**
      * Creates new form MantenimientoLinea
      */
     public MantenimientoLinea() {
         initComponents();
-          this.setSize(super.getMaximumSize());
+        this.setSize(super.getMaximumSize());
         this.btnAlta = super.getBtnAlta();
         this.btnBaja = super.getBtnBaja();
         this.btnMod = super.getBtnMod();
@@ -42,25 +43,30 @@ public class MantenimientoLinea extends Mantenimiento {
         this.btnMod.setVisible(false);
     }
 
+    @Override
+    public void update(Observable o, Object o1) {
+        if (o.getClass() == FachadaInterfaz.class && o1.equals("Linea")) {
+            setTreeLineas();
+        }
+    }
+
     private void setComponents() {
         setBtnAlta();
         setBtnBaja();
-       setTableLineas();
-       setTreeLineas();
+        setTreeLineas();
     }
-    private void setTableLineas() {
-        Utilitaria.cargarJTable(tableLin, "Linea",null);
-    }
+
     private void setTreeLineas() {
         Utilitaria.setTreeLineas(treeLineas);
     }
+
     private void setBtnAlta() {
         btnAlta.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    FachadaInterfaz.altaLinea(txtNom.getText());
+                    objFI.altaLinea(txtNom.getText());
                     setTreeLineas();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
@@ -75,18 +81,19 @@ public class MantenimientoLinea extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-        if (treeLineas.getSelectionCount() <= 0 || treeLineas.getSelectionPath().getParentPath() == null || !treeLineas.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Lineas y Estaciones")) {
-            JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Linea para Continauar");
-        } else {
-                    FachadaInterfaz.bajaLinea(treeLineas.getSelectionPath().getLastPathComponent().toString());
-                    setTreeLineas();
-        }
+                    if (treeLineas.getSelectionCount() <= 0 || treeLineas.getSelectionPath().getParentPath() == null || !treeLineas.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Lineas y Estaciones")) {
+                        JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Linea para Continauar");
+                    } else {
+                        objFI.bajaLinea(treeLineas.getSelectionPath().getLastPathComponent().toString());
+                        setTreeLineas();
+                    }
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
             }
         });
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -116,6 +123,7 @@ public class MantenimientoLinea extends Mantenimiento {
         treeLineas.setMaximumSize(new java.awt.Dimension(300, 64));
         treeLineas.setMinimumSize(new java.awt.Dimension(300, 64));
         treeLineas.setPreferredSize(new java.awt.Dimension(300, 64));
+        treeLineas.setRequestFocusEnabled(false);
         treeLineas.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
             public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
                 treeLineasValueChanged(evt);
@@ -163,15 +171,14 @@ public class MantenimientoLinea extends Mantenimiento {
         if (treeLineas.getSelectionCount() <= 0 || treeLineas.getSelectionPath().getParentPath() == null || !treeLineas.getSelectionPath().getParentPath().getLastPathComponent().toString().equals("Lineas y Estaciones")) {
             JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Linea para Continauar");
         } else {
-        AsignarEstaciones frmAS = new AsignarEstaciones(FachadaInterfaz.getLinea(treeLineas.getSelectionPath().getLastPathComponent().toString() ));
-        frmAS.setVisible(true);
-        frmAS.setAlwaysOnTop(true);
+            AsignarEstaciones frmAS = new AsignarEstaciones(objFI.getLinea(treeLineas.getSelectionPath().getLastPathComponent().toString()), objFI);
+            frmAS.setVisible(true);
+            frmAS.setAlwaysOnTop(true);
         }
     }//GEN-LAST:event_btnAsignarEstActionPerformed
 
     private void treeLineasValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_treeLineasValueChanged
     }//GEN-LAST:event_treeLineasValueChanged
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAsignarEst;
     private javax.swing.JScrollPane jScrollPane1;

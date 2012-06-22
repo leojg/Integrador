@@ -42,13 +42,13 @@ public class BrokerLineasAccess extends Broker {
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
         Linea objL = (Linea) arg;
-        return "DELETE FROM Lineas " + " WHERE linNom=" + objL.getNom();
+        return "UPDATE Lineas set linActivo=0 WHERE linNom=" + objL.getNom();
     }
 
     @Override
     public String getSelectCommand() {
 
-        return "SELECT * FROM Lineas ";
+        return "SELECT * FROM Lineas WHERE linActivo=1 ";
 
     }
 

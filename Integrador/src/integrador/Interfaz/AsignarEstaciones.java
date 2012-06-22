@@ -4,8 +4,10 @@
  */
 package integrador.Interfaz;
 
+import integrador.Utilitaria;
 import integrador.dominio.FachadaInterfaz;
 import integrador.dominio.Linea;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,21 +17,27 @@ import java.util.logging.Logger;
  */
 public class AsignarEstaciones extends javax.swing.JFrame {
 
+    private FachadaInterfaz objFI;
     private Linea objL;
     private int srow = -1;
 
     /**
      * Creates new form AsignarEstaciones
      */
-    public AsignarEstaciones(Linea objL) {
-        initComponents();
-        this.objL = objL;
-        setTables();
+    public AsignarEstaciones(Linea objL, FachadaInterfaz objFI ) {
+        try {
+            initComponents();
+            this.objL = objL;
+            this.objFI = objFI;
+            setTables();
+        } catch (ParseException ex) {
+            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private void setTables() {
-        Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion", FachadaInterfaz.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-        Utilitaria.cargarJTable(tableEstAsignadas, "Estacion", FachadaInterfaz.getEstacionesLinea(objL.getNom()).values().toArray());
+    private void setTables() throws ParseException {
+        Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
+        Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
     }
 
     /**
@@ -160,18 +168,25 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-
-        srow = tableEstSinAsignar.getSelectedRow();
-        FachadaInterfaz.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
-        Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion", FachadaInterfaz.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-        Utilitaria.cargarJTable(tableEstAsignadas, "Estacion", FachadaInterfaz.getEstacionesLinea(objL.getNom()).values().toArray());
+        try {
+            srow = tableEstSinAsignar.getSelectedRow();
+             objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
+            Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
+            Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
+        } catch (ParseException ex) {
+            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
-        srow = tableEstAsignadas.getSelectedRow();
-        FachadaInterfaz.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
-Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion", FachadaInterfaz.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-        Utilitaria.cargarJTable(tableEstAsignadas, "Estacion", FachadaInterfaz.getEstacionesLinea(objL.getNom()).values().toArray());
+        try {
+            srow = tableEstAsignadas.getSelectedRow();
+             objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
+    Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
+            Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
+        } catch (ParseException ex) {
+            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnQuitarActionPerformed
 
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed

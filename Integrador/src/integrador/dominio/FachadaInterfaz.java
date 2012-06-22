@@ -4,8 +4,10 @@
  */
 package integrador.dominio;
 
+import exceptions.EstacionTieneLineaException;
 import exceptions.NombreRepetidoException;
 import java.rmi.NoSuchObjectException;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -15,17 +17,27 @@ import java.util.Observable;
  *
  * @author Administrador
  */
-public class FachadaInterfaz {
-    
-    //***************** Estaciones *************************//
-    private static EstacionAdmin objEA = EstacionAdmin.getInstance();
+public class FachadaInterfaz extends Observable {
 
-    public static boolean altaEstacion(String nom, Integer cp) throws NombreRepetidoException {
-        return objEA.altaEstacion(crearEstacion(nom, cp));
+    //***************** Estaciones *************************//
+    private EstacionAdmin objEA = EstacionAdmin.getInstance();
+
+    public boolean altaEstacion(String nom, Integer cp) throws NombreRepetidoException {
+        if (objEA.altaEstacion(crearEstacion(nom, cp))) {
+            setChanged();
+            notifyObservers("Estacion");
+            return true;
+        }
+        return false;
     }
 
-    public static boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException {
-        return objEA.bajaEstacion(crearEstacion(nom, cp));
+    public boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException, EstacionTieneLineaException {
+        if (objEA.bajaEstacion(crearEstacion(nom, cp))) {
+            setChanged();
+            notifyObservers("Estacion");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -36,47 +48,64 @@ public class FachadaInterfaz {
      * @param cp
      * @return Estacion
      */
-    private static Estacion crearEstacion(String nom, Integer cp) {
+    private Estacion crearEstacion(String nom, Integer cp) {
         nom = nom.toLowerCase();
         return new Estacion(nom, cp);
     }
 
-    public static Estacion getEstacion(String nom) {
+    public Estacion getEstacion(String nom) {
         return objEA.getEstacion(nom);
     }
 
-    public static HashMap<String, Estacion> getEstaciones() {
+    public HashMap<String, Estacion> getEstaciones() {
         return objEA.getEstaciones();
     }
 
-    public static HashMap<String, Estacion> getEstacionesLinea(String nom) {
+    public HashMap<String, Estacion> getEstacionesLinea(String nom) {
         return objLA.getLinea(nom).getColEstaciones();
     }
 
-    public static HashMap<String, Estacion> getEstacionesNoEstanEnLinea(String nom) {
+    public HashMap<String, Estacion> getEstacionesNoEstanEnLinea(String nom) {
         return objEA.getEstacionesNoEstanEnLinea(objLA.getLinea(nom));
     }
-//    public static HashMap<String, Estacion> getEstacionesLinea(String nomLinea) {
+//    public   HashMap<String, Estacion> getEstacionesLinea(String nomLinea) {
 //   
 //    } 
     //************** Lineas ****************************//
-    private static LineaAdmin objLA = LineaAdmin.getInstance();
+    private LineaAdmin objLA = LineaAdmin.getInstance();
 
-    public static boolean altaLinea(String nom) {
-        return objLA.altaLinea(crearLinea(nom));
+    public boolean altaLinea(String nom) {
+
+        if (objLA.altaLinea(crearLinea(nom))) {
+            setChanged();
+            notifyObservers("Linea");
+            return true;
+        }
+        return false;
     }
 
-    public static boolean agregarEstacionALinea(String nomLinea, String nomEst) {
+    public boolean agregarEstacionALinea(String nomLinea, String nomEst) {
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
-        return objL.AgregarEstacion(objE);
+        if (objL.AgregarEstacion(objE)) {
+            setChanged();
+            notifyObservers("Linea");
+            return true;
+        }
+        return false;
+
     }
 
-    public static boolean bajaLinea(String nom) {
-        return objLA.bajaLinea(crearLinea(nom));
+    public boolean bajaLinea(String nom) {
+        if (objLA.bajaLinea(crearLinea(nom))) {
+            setChanged();
+            notifyObservers("Linea");
+            return true;
+        }
+        return false;
     }
 
-    private static Linea crearLinea(String nom) {
+    private Linea crearLinea(String nom) {
         String a = nom.substring(0, 1);
         try {
             Integer.parseInt(a);
@@ -91,21 +120,58 @@ public class FachadaInterfaz {
         return new Linea(nom);
     }
 
-    public static Linea getLinea(String nom) {
+    public Linea getLinea(String nom) {
         return objLA.getLinea(nom);
     }
 
-    public static HashMap<String, Linea> getLineas() {
+    public HashMap<String, Linea> getLineas() {
         return objLA.getLineas();
     }
 
-    public static HashMap<String, Linea> getLineasEsacion(String nom) {
+    public HashMap<String, Linea> getLineasEsacion(String nom) {
         return objLA.getLineasEstacion(objEA.getEstacion(nom));
     }
 
-    public static boolean quitarEstacionDeLinea(String nomLinea, String nomEst) {
+    public boolean quitarEstacionDeLinea(String nomLinea, String nomEst) {
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
-        return objL.QuitarEstacion(objE);
+        if (objL.QuitarEstacion(objE)) {
+            setChanged();
+            notifyObservers("Linea");
+            return true;
+        }
+        return false;
+    }
+    //************** Convenios ****************************//
+    private ConvenioAdmin objCA = ConvenioAdmin.getInstance();
+
+    public boolean altaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+        if (objCA.altaConvenio(crearConvenio(tipo, nom, fecha, valor, tipopago))) {
+            setChanged();
+            notifyObservers("Convenio");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean bajaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+        if (objCA.bajaConvenio(crearConvenio(tipo, nom, fecha, valor, tipopago))) {
+            setChanged();
+            notifyObservers("Convenio");
+            return true;
+        }
+        return false;
+    }
+
+    private Convenio crearConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+        return new Convenio(tipo, nom, fecha, valor, tipopago);
+    }
+
+    public HashMap<Integer, Convenio> getConvenios() {
+        return objCA.getConvenios();
+    }
+    
+    public boolean modConvenio(Integer tipo, Integer precioNuevo) {
+        return this.objCA.modConvenio(tipo, precioNuevo);
     }
 }

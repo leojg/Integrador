@@ -4,20 +4,20 @@
  */
 package integrador.Interfaz;
 
+import integrador.Utilitaria;
+import exceptions.EstacionTieneLineaException;
 import exceptions.NombreRepetidoException;
-import integrador.dominio.Estacion;
-import integrador.dominio.EstacionAdmin;
 import integrador.dominio.FachadaInterfaz;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.NoSuchObjectException;
+import java.text.ParseException;
+import java.util.Observable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -34,7 +34,7 @@ public class MantenimientoEstacion extends Mantenimiento {
     /**
      * Creates new form MantenimientoEstacion
      */
-    public MantenimientoEstacion() {
+    public MantenimientoEstacion() throws ParseException {
         initComponents();
         //this.setSize(super.getWidth(), super.getHeight());
         this.setSize(super.getMaximumSize());
@@ -47,13 +47,25 @@ public class MantenimientoEstacion extends Mantenimiento {
 
     }
 
-    private void setComponents() {
+    
+    @Override
+    public void update(Observable o, Object o1) {
+        if (o.getClass() == FachadaInterfaz.class && o1.equals("Estacion")) {
+            try {
+                setTableEstaciones();
+            } catch (ParseException ex) {
+                Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+        
+    private void setComponents() throws ParseException {
         setBtnAlta();
         setBtnBaja();
         setTableEstaciones();
     }
 
-    private void setTableEstaciones() {
+    private void setTableEstaciones() throws ParseException {
         Utilitaria.cargarJTable(tableEst, "Estacion", null);
     }
 
@@ -66,10 +78,14 @@ public class MantenimientoEstacion extends Mantenimiento {
                     if ("".equals(txtNom.getText())) {
                         throw new NullPointerException();
                     }
-                    FachadaInterfaz.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
+                    objFI.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
 
                     JOptionPane.showMessageDialog(lblCP, "Operación Exitosa");
-                    setTableEstaciones();
+                    try {
+                        setTableEstaciones();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } catch (NombreRepetidoException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } catch (NumberFormatException ex) {
@@ -92,13 +108,15 @@ public class MantenimientoEstacion extends Mantenimiento {
             public void actionPerformed(ActionEvent ae) {
                 try {
                     srow = tableEst.getSelectedRow();
-                    FachadaInterfaz.bajaEstacion(((String) tableEst.getValueAt(srow, 0)), ((Integer) tableEst.getValueAt(srow, 1)));
+                    objFI.bajaEstacion(((String) tableEst.getValueAt(srow, 0)), ((Integer) tableEst.getValueAt(srow, 1)));
                     JOptionPane.showMessageDialog(lblCP, "Operación Exitosa");
                     setTableEstaciones();
                 } catch (NoSuchObjectException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } catch (ArrayIndexOutOfBoundsException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion para continuar");
+                } catch (EstacionTieneLineaException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(rootPane, "Error Inesperado. Vuelva a repetir la operación");
                 }
@@ -176,12 +194,15 @@ public class MantenimientoEstacion extends Mantenimiento {
         if (tableEst.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(rootPane, "Debe seleccionar una Estacion para continuar");
         } else {
-        srow = tableEst.getSelectedRow();
-        LineasAsociadas frmLA = new LineasAsociadas(FachadaInterfaz.getEstacion((String) tableEst.getValueAt(srow, 0)));
-        frmLA.setVisible(true);
+            try {
+                srow = tableEst.getSelectedRow();
+                LineasAsociadas frmLA = new LineasAsociadas(objFI.getEstacion((String) tableEst.getValueAt(srow, 0)), objFI);
+                frmLA.setVisible(true);
+            } catch (ParseException ex) {
+                Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnVerLineasActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVerLineas;
     private javax.swing.JLabel lblCP;

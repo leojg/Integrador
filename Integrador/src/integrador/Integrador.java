@@ -24,9 +24,9 @@ public class Integrador {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        EstacionAdmin ea = EstacionAdmin.getInstance();
-        LineaAdmin la = LineaAdmin.getInstance();
-        MantenimientoEstacion frm = new MantenimientoEstacion();
+//        EstacionAdmin ea = EstacionAdmin.getInstance();
+//        LineaAdmin la = LineaAdmin.getInstance();
+        MantenimientoConvenio frm = new MantenimientoConvenio();
         frm.setVisible(true);
     }
 }

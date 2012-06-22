@@ -41,13 +41,13 @@ public class BrokerEstacionesAccess extends Broker {
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
         Estacion objE = (Estacion) arg;
-        return "DELETE FROM Estaciones WHERE estNom='" + objE.getNom() + "'";
+        return "UPDATE Estaciones SET estActivo=0 WHERE estNom='" + objE.getNom() + "'";
     }
 
     @Override
     public String getSelectCommand() {
 
-        return "SELECT * FROM Estaciones ";
+        return "SELECT * FROM Estaciones WHERE estActivo=1 ";
 
     }
 

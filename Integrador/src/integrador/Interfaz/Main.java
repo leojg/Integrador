@@ -87,6 +87,11 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(menuUsuarios);
 
         menuConvenios.setText("Convenios");
+        menuConvenios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuConveniosMouseClicked(evt);
+            }
+        });
         jMenuBar1.add(menuConvenios);
 
         menuEstaciones.setText("Estaciones");
@@ -135,14 +140,14 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(484, Short.MAX_VALUE)
+                .addContainerGap(570, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(291, Short.MAX_VALUE)
+                .addContainerGap(396, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
@@ -222,6 +227,20 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_menuReportesMouseClicked
+
+    private void menuConveniosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuConveniosMouseClicked
+        Point p = this.getLocation();
+        MantenimientoConvenio frmConvenio = new MantenimientoConvenio();
+        this.setVisible(false);
+        frmConvenio.setLocation(p);
+        frmConvenio.setVisible(true);
+
+        try {
+            this.finalize();
+        } catch (Throwable ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_menuConveniosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

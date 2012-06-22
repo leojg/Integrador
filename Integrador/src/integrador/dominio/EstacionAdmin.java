@@ -26,7 +26,6 @@ public class EstacionAdmin {
 
     public static EstacionAdmin getInstance() {
         if (instance == null) {
-            System.out.print("Una sola vez aca adentro lpm");
             instance = new EstacionAdmin();
             instance.cargarEstaciones();
         }
@@ -42,8 +41,10 @@ public class EstacionAdmin {
         throw new NombreRepetidoException();
     }
 
-    boolean bajaEstacion(Estacion objE) throws NoSuchObjectException {
-        if (this.colEstacion.containsKey(objE.getNom()) && objLA.getLineasEstacion(objE).size() <= 0) {
+    boolean bajaEstacion(Estacion objE) throws NoSuchObjectException, EstacionTieneLineaException {
+        if (this.colEstacion.containsKey(objE.getNom())) {
+            if (objLA.getLineasEstacion(objE).size() > 0)
+                 throw new EstacionTieneLineaException();
             this.colEstacion.remove(objE.getNom());
             objE.eliminar(objE);
             return true;

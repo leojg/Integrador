@@ -4,6 +4,9 @@
  */
 package integrador.Interfaz;
 
+import integrador.dominio.FachadaInterfaz;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -12,14 +15,17 @@ import javax.swing.JTable;
  *
  * @author Administrador
  */
-public class Mantenimiento extends Main {
+public class Mantenimiento extends Main  implements Observer {
 
+    public FachadaInterfaz objFI;
     /**
      * Creates new form Mantenimiento
      */
     public Mantenimiento() {
         initComponents();
+        this.objFI = new FachadaInterfaz();
         this.setMaximumSize(this.getPreferredSize());
+        objFI.addObserver(this);
     }
 
     public JScrollPane getScrollPanelTable() {
@@ -128,12 +134,12 @@ public class Mantenimiento extends Main {
                         .addComponent(btnBaja)
                         .addGap(18, 18, 18)
                         .addComponent(btnMod)))
-                .addContainerGap(112, Short.MAX_VALUE))
+                .addContainerGap(194, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
+                .addContainerGap(175, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAlta)
                     .addComponent(btnBaja)
@@ -157,4 +163,8 @@ public class Mantenimiento extends Main {
     private javax.swing.JScrollPane scrollPanelTable;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object o1) {
+    }
 }

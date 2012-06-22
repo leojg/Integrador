@@ -4,8 +4,10 @@
  */
 package integrador.Interfaz;
 
+import integrador.Utilitaria;
 import integrador.dominio.Estacion;
 import integrador.dominio.FachadaInterfaz;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,14 +18,16 @@ import java.util.logging.Logger;
 public class LineasAsociadas extends javax.swing.JFrame {
 
     private Estacion objE;
+           private FachadaInterfaz objFI;
     /**
      * Creates new form LineasAsociadas
      */
-    public LineasAsociadas(Estacion objE) {
+    public LineasAsociadas(Estacion objE, FachadaInterfaz objFI) throws ParseException {
         initComponents();
         this.objE = objE;
         this.lblEstacion.setText(this.objE.getNom());
-        Utilitaria.cargarJTable(tableLineasEst, "Linea", FachadaInterfaz.getLineasEsacion(objE.getNom()).values().toArray());
+        this.objFI = objFI;
+        Utilitaria.cargarJTable(tableLineasEst, "Linea", objFI.getLineasEsacion(objE.getNom()).values().toArray());
     }
 
     /**
