@@ -4,13 +4,18 @@
  */
 package integrador.dominio;
 
+import integrador.persistencia.Broker;
+import integrador.persistencia.FachadaBaseDeDatos;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
  * Esta clase representa los usuarios del sistema
+ *
  * @author Administrador
  */
-public class Usuario {
+public class Usuario implements IPersistente {
+
     private Integer CI;
     private String nom;
     private GregorianCalendar fechaNac;
@@ -20,8 +25,9 @@ public class Usuario {
     private String mail;
     private Integer tel;
     private Convenio convenio;
+    private Broker objB;
 
-    public Usuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel, Convenio convenio) {
+    public Usuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
         this.CI = CI;
         this.nom = nom;
         this.fechaNac = fechaNac;
@@ -30,7 +36,11 @@ public class Usuario {
         this.CP = CP;
         this.mail = mail;
         this.tel = tel;
-        this.convenio = convenio;
+        this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
+    }
+
+    public Usuario() {
+        this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
     }
 
     public Integer getCI() {
@@ -109,8 +119,29 @@ public class Usuario {
     public String toString() {
         return CI + " - " + nom + " Domicilio:" + barrio + ", " + dir + " " + CP + " Tel:" + tel + " eMail:" + mail + " Fecha de Nacimiento:" + fechaNac;
     }
-    
-    
-    
-    
+
+    @Override
+    public void guardar(Object arg) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void modifcar(Object arg) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void eliminar(Object arg) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ArrayList obtenerTodos() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ArrayList obtenerTodos(Object aux) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

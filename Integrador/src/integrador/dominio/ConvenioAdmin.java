@@ -54,6 +54,10 @@ public class ConvenioAdmin {
         }
     }
 
+    Convenio getConvenio(Integer tipo) {
+        return this.colConvenios.get(tipo);
+    }
+    
     HashMap<Integer, Convenio> getConvenios() {
         return this.colConvenios;
     }

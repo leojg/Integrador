@@ -4,10 +4,7 @@
  */
 package integrador;
 
-import integrador.dominio.Convenio;
-import integrador.dominio.Estacion;
-import integrador.dominio.FachadaInterfaz;
-import integrador.dominio.Linea;
+import integrador.dominio.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -75,6 +72,8 @@ public class Utilitaria {
             setTableLineas(table, datos);
         } else if ("Convenio".equals(id)) {
             setTableConvenios(table, datos);
+        } else if ("Usuario".equals(id)) {
+            setTableUsuarios(table, datos);
         }
     }
 
@@ -85,6 +84,8 @@ public class Utilitaria {
             setTableLineas(table, null);
         } else if ("Convenio".equals(id)) {
             setTableConvenios(table, null);
+        } else if ("Usuario".equals(id)) {
+            setTableUsuarios(table, null);
         }
     }
 
@@ -170,6 +171,43 @@ public class Utilitaria {
         }
     }
 
+        private static void setTableUsuarios(JTable table, Object[] datos) {
+        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
+        Object[] cn = {"CI", "Nombre", "Convenio","Telefono","EMail","Fecha de Nacimiento"};
+        Modelo.setColumnIdentifiers(cn);
+        Modelo.setRowCount(0);
+         if (datos != null) {
+            for (Object Obj0 : datos) {
+                Usuario objU = (Usuario) Obj0;
+                String convenioNom;
+                if (objU.getConvenio() == null) {
+                    convenioNom = "Sin Convenio";
+                } else {
+                    convenioNom = objU.getConvenio().getNom();
+                }
+                Object[] row = {objU.getCI(), objU.getNom(), convenioNom,  objU.getTel(), 
+                    objU.getMail(),  ConvertirGCalendarString(objU.getFechaNac())};
+                Modelo.addRow(row);
+            }
+        } else {
+            for (Usuario objU : objFI.getUsuarios().values()) {
+                String convenioNom;
+                if (objU.getConvenio() == null) {
+                    convenioNom = "Sin Convenio";
+                } else {
+                    convenioNom = objU.getConvenio().getNom();
+                }
+                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getCP(), objU.getDir(),
+                objU.getBarrio(), objU.getTel(), objU.getMail(),  ConvertirGCalendarString(objU.getFechaNac())};
+               Modelo.addRow(row);
+            }
+        }
+        if (Modelo.getRowCount() <= 0) {
+            Object[] row = {"No Existen Datos Disponibles"};
+            Modelo.addRow(row);
+        }
+    }
+    
     public static void setTreeLineas(JTree tree) {
         DefaultMutableTreeNode nodoPadre = new DefaultMutableTreeNode("Lineas y Estaciones");
         DefaultTreeModel modelo = new DefaultTreeModel(nodoPadre);

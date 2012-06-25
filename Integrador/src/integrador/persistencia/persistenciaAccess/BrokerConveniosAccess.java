@@ -33,7 +33,7 @@ public class BrokerConveniosAccess extends Broker {
         Convenio objC = (Convenio) arg;
         java.sql.Date fecha = new java.sql.Date(objC.getFechaIni().getTimeInMillis());
         return "INSERT INTO Convenios (conTipo,conNom,conFvigencia,conValor,conTipopago)"
-                + "VALUES(" + objC.getTipo() + ",'" + objC.getNom() + "'," + fecha + ","
+                + "VALUES(" + objC.getTipo() + ",'" + objC.getNom() + "',#" + fecha + "#,"
                 + objC.getValor() + "," + objC.getTipoPago() + ")";
     }
 

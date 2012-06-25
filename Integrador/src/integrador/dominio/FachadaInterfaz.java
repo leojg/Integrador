@@ -170,8 +170,49 @@ public class FachadaInterfaz extends Observable {
     public HashMap<Integer, Convenio> getConvenios() {
         return objCA.getConvenios();
     }
-    
+
     public boolean modConvenio(Integer tipo, Integer precioNuevo) {
         return this.objCA.modConvenio(tipo, precioNuevo);
+    }
+    //***************** Usuarios *************************//
+    private UsuarioAdmin objUA = UsuarioAdmin.getInstance();
+
+    public boolean altaUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+        if (objUA.altaUsuario(crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
+            setChanged();
+            notifyObservers("Usuario");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean bajaUsuario(Integer CI) {
+        if (objUA.bajaUsuario(objUA.getUsuario(CI))) {
+            setChanged();
+            notifyObservers("Usuario");
+            return true;
+        }
+        return false;
+    }
+
+    private Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+        return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel);
+    }
+
+    public Usuario getUsuario(Integer CI) {
+        return this.objUA.getUsuario(CI);
+    }
+
+    public HashMap<Integer, Usuario> getUsuarios() {
+        return this.objUA.getUsuarios();
+    }
+
+    public boolean modUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+        if (objUA.modUsuario(crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
+            setChanged();
+            notifyObservers("Usuario");
+            return true;
+        }
+        return false;
     }
 }

@@ -5,6 +5,7 @@
 package integrador.Interfaz;
 
 import java.awt.Point;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -20,6 +21,20 @@ public class Main extends javax.swing.JFrame {
      */
     public Main() {
         initComponents();
+        setUIDesign();
+    }
+
+    private void setUIDesign() {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Metal".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MantenimientoUsuario.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
     }
 
     public JButton getBtnExit() {
@@ -58,9 +73,10 @@ public class Main extends javax.swing.JFrame {
 
         jMenu5.setText("jMenu5");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(575, 460));
-        setMinimumSize(new java.awt.Dimension(574, 459));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBounds(new java.awt.Rectangle(10, 10, 600, 600));
+        setMaximumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(600, 600));
         setPreferredSize(new java.awt.Dimension(574, 459));
 
         btnExit.setText("Salir");
@@ -84,6 +100,16 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(menuCompras);
 
         menuUsuarios.setText("Usuarios");
+        menuUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuUsuariosMouseClicked(evt);
+            }
+        });
+        menuUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUsuariosActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(menuUsuarios);
 
         menuConvenios.setText("Convenios");
@@ -166,21 +192,26 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuEstacionesActionPerformed
 
     private void menuEstacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuEstacionesMouseClicked
-                Point p = this.getLocation(); 
-        MantenimientoEstacion frmManEstacion = new MantenimientoEstacion();
-        this.setVisible(false);
-                        frmManEstacion.setLocation(p);
-        frmManEstacion.setVisible(true);
 
         try {
-            this.finalize();
-        } catch (Throwable ex) {
+            Point p = this.getLocation();
+            MantenimientoEstacion frmManEstacion = new MantenimientoEstacion();
+            this.setVisible(false);
+            frmManEstacion.setLocation(p);
+            frmManEstacion.setVisible(true);
+
+            try {
+                this.finalize();
+            } catch (Throwable ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }     // TODO add your handling code here:
+        } catch (ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }     // TODO add your handling code here:
     }//GEN-LAST:event_menuEstacionesMouseClicked
 
     private void menuLineasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuLineasMouseClicked
-        
+
         Point p = this.getLocation();
         MantenimientoLinea frmManLinea = new MantenimientoLinea();
         this.setVisible(false);
@@ -229,18 +260,42 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReportesMouseClicked
 
     private void menuConveniosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuConveniosMouseClicked
-        Point p = this.getLocation();
-        MantenimientoConvenio frmConvenio = new MantenimientoConvenio();
-        this.setVisible(false);
-        frmConvenio.setLocation(p);
-        frmConvenio.setVisible(true);
 
         try {
-            this.finalize();
-        } catch (Throwable ex) {
+            Point p = this.getLocation();
+            MantenimientoConvenio frmConvenio = new MantenimientoConvenio();
+            this.setVisible(false);
+            frmConvenio.setLocation(p);
+            frmConvenio.setVisible(true);
+
+            try {
+                this.finalize();
+            } catch (Throwable ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }        // TODO add your handling code here:
+        } catch (ParseException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_menuConveniosMouseClicked
+
+    private void menuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuariosActionPerformed
+    }//GEN-LAST:event_menuUsuariosActionPerformed
+
+    private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
+
+            Point p = this.getLocation();
+            MantenimientoUsuario frmConvenio = new MantenimientoUsuario();
+            this.setVisible(false);
+            frmConvenio.setLocation(p);
+            frmConvenio.setVisible(true);
+
+            try {
+                this.finalize();
+            } catch (Throwable ex) {
+                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            }        // TODO add your handling code here:
+          // TODO add your handling code here:
+    }//GEN-LAST:event_menuUsuariosMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

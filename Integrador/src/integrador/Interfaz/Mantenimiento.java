@@ -8,6 +8,7 @@ import integrador.dominio.FachadaInterfaz;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -15,6 +16,7 @@ import javax.swing.JTable;
  *
  * @author Administrador
  */
+//Como implementa observer aca. Las que heredan también lo implementan :)
 public class Mantenimiento extends Main  implements Observer {
 
     public FachadaInterfaz objFI;
@@ -72,6 +74,15 @@ public class Mantenimiento extends Main  implements Observer {
         return tableItems;
     }
 
+    public JPanel getPanelBtns() {
+        return panelBtns;
+    }
+
+    public void setPanelBtns(JPanel panelBtns) {
+        this.panelBtns = panelBtns;
+    }
+
+    
     
     public   void setTableItems(JTable tableItems) {
         this.tableItems = tableItems;
@@ -88,9 +99,10 @@ public class Mantenimiento extends Main  implements Observer {
         jButton1 = new javax.swing.JButton();
         scrollPanelTable = new javax.swing.JScrollPane();
         tableItems = new javax.swing.JTable();
-        btnAlta = new javax.swing.JButton();
+        panelBtns = new javax.swing.JPanel();
         btnMod = new javax.swing.JButton();
         btnBaja = new javax.swing.JButton();
+        btnAlta = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
 
@@ -105,11 +117,10 @@ public class Mantenimiento extends Main  implements Observer {
 
             }
         ));
+        tableItems.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         tableItems.setMaximumSize(new java.awt.Dimension(300, 64));
         tableItems.setMinimumSize(new java.awt.Dimension(300, 64));
         scrollPanelTable.setViewportView(tableItems);
-
-        btnAlta.setText("Alta");
 
         btnMod.setText("Modificar");
 
@@ -120,6 +131,32 @@ public class Mantenimiento extends Main  implements Observer {
             }
         });
 
+        btnAlta.setText("Alta");
+
+        javax.swing.GroupLayout panelBtnsLayout = new javax.swing.GroupLayout(panelBtns);
+        panelBtns.setLayout(panelBtnsLayout);
+        panelBtnsLayout.setHorizontalGroup(
+            panelBtnsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelBtnsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnAlta)
+                .addGap(18, 18, 18)
+                .addComponent(btnBaja)
+                .addGap(18, 18, 18)
+                .addComponent(btnMod)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelBtnsLayout.setVerticalGroup(
+            panelBtnsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBtnsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panelBtnsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAlta)
+                    .addComponent(btnBaja)
+                    .addComponent(btnMod))
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,24 +164,16 @@ public class Mantenimiento extends Main  implements Observer {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAlta)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnBaja)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnMod)))
-                .addContainerGap(194, Short.MAX_VALUE))
+                    .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(panelBtns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(195, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(175, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAlta)
-                    .addComponent(btnBaja)
-                    .addComponent(btnMod))
-                .addGap(18, 18, 18)
+                .addContainerGap(165, Short.MAX_VALUE)
+                .addComponent(panelBtns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -160,6 +189,7 @@ public class Mantenimiento extends Main  implements Observer {
     private javax.swing.JButton btnBaja;
     private javax.swing.JButton btnMod;
     private javax.swing.JButton jButton1;
+    private javax.swing.JPanel panelBtns;
     private javax.swing.JScrollPane scrollPanelTable;
     private javax.swing.JTable tableItems;
     // End of variables declaration//GEN-END:variables

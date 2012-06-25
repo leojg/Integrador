@@ -1,10 +1,7 @@
 package integrador.persistencia.persistenciaAccess;
 
 //
-import integrador.dominio.Convenio;
-import integrador.dominio.Estacion;
-import integrador.dominio.IPersistente;
-import integrador.dominio.Linea;
+import integrador.dominio.*;
 import integrador.persistencia.Broker;
 
 import integrador.persistencia.FactoryPersistence;
@@ -30,6 +27,8 @@ public class FactoryPersistenceAccess extends FactoryPersistence {
                 return new BrokerEstacionesAccess((Estacion) objP);
             } else if (objP.getClass() == Convenio.class) {
                 return new BrokerConveniosAccess((Convenio) objP);
+            } else if (objP.getClass() == Usuario.class) {
+                return new BrokerUsuariosAccess((Usuario) objP);
             }
             return null;
         } else if (objP.getClass() == Linea.class && arg.getClass() == Estacion.class) {
