@@ -94,6 +94,9 @@ public class Linea implements IPersistente {
     @Override
     public void eliminar(Object arg) {
         this.objB.eliminar(arg, null);
+        for (Estacion objE : this.colEstaciones.values())  {
+                    this.objBEstacionesLineas.eliminar(objE, this);
+        }
     }
 
     @Override

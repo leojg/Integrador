@@ -122,26 +122,31 @@ public class Usuario implements IPersistente {
 
     @Override
     public void guardar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.guardar(arg, null);
     }
 
     @Override
     public void modifcar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.modificar(arg, null);
+    }
+    
+    public void modifcarConvUsr(Object arg) {
+        Usuario objU = (Usuario) arg;
+        this.objB.modificar(objU, objU.getConvenio());
     }
 
     @Override
     public void eliminar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.eliminar(arg, null);
     }
 
     @Override
     public ArrayList obtenerTodos() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.objB.obtenerTodos();
     }
 
     @Override
     public ArrayList obtenerTodos(Object aux) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.objB.obtenerTodos(aux);
     }
 }

@@ -86,8 +86,10 @@ public class MantenimientoConvenio extends Mantenimiento {
                     setTableConvenios();
                 } catch (ParseException ex) {
                     Logger.getLogger(MantenimientoConvenio.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Uno o mas de los datos requeridos no ha sido ingresado.");
                 } catch (NullPointerException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "No se ha ingresado nombre de la estación");
+                    JOptionPane.showMessageDialog(rootPane, "Uno o mas de los datos requeridos no ha sido ingresado.");
                 }
             }
         });
@@ -114,7 +116,7 @@ public class MantenimientoConvenio extends Mantenimiento {
                     JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
                     setTableConvenios();
                 } catch (ArrayIndexOutOfBoundsException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion para continuar");
+                    JOptionPane.showMessageDialog(rootPane, "Seleccione un Convenio para continuar");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(rootPane, "Error Inesperado. Vuelva a repetir la operación");
                 }
@@ -129,12 +131,21 @@ public class MantenimientoConvenio extends Mantenimiento {
             public void actionPerformed(ActionEvent ae) {
                 try {
                     srow = tableCon.getSelectedRow();
-
-                    objFI.modConvenio(Integer.parseInt(tableCon.getValueAt(srow, 0).toString()), Integer.parseInt(txtValor.getText()));
-                    JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
-                    setTableConvenios();
+                    if (!"".equals(txtValor.getText())) {
+                        objFI.modConvenio(Integer.parseInt(tableCon.getValueAt(srow, 0).toString()), Integer.parseInt(txtValor.getText()));
+                        JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
+                        setTableConvenios();
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "Falta Ingresar un Importe");
+                    }
                 } catch (ParseException ex) {
                     Logger.getLogger(MantenimientoConvenio.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ArrayIndexOutOfBoundsException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Seleccione un Convenio para continuar");
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Uno o mas de los datos requeridos no ha sido ingresado.");
+                } catch (NullPointerException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Uno o mas de los datos requeridos no ha sido ingresado.");
                 }
             }
         });

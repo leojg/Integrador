@@ -21,7 +21,7 @@ public class EstacionAdmin {
     private static EstacionAdmin instance;
 
     private EstacionAdmin() {
-       this.colEstacion = new HashMap<>();
+        this.colEstacion = new HashMap<>();
     }
 
     public static EstacionAdmin getInstance() {
@@ -43,21 +43,35 @@ public class EstacionAdmin {
 
     boolean bajaEstacion(Estacion objE) throws NoSuchObjectException, EstacionTieneLineaException {
         if (this.colEstacion.containsKey(objE.getNom())) {
-            if (objLA.getLineasEstacion(objE).size() > 0)
-                 throw new EstacionTieneLineaException();
+            if (objLA.getLineasEstacion(objE).size() > 0) {
+                throw new EstacionTieneLineaException();
+            }
             this.colEstacion.remove(objE.getNom());
             objE.eliminar(objE);
             return true;
         }
         throw new NoSuchObjectException("No existe una estación con ese nombre.");
     }
-    
+
     void cargarEstaciones() {
-                Estacion objE = new Estacion();
-                for (Object o : objE.obtenerTodos()) {
+        Estacion objE = new Estacion();
+        for (Object o : objE.obtenerTodos()) {
             Estacion e = (Estacion) o;
             this.colEstacion.put(e.getNom(), e);
         }
+    }
+
+    /**
+     * *
+     * Crea una estación
+     *
+     * @param nom
+     * @param cp
+     * @return Estacion
+     */
+    Estacion crearEstacion(String nom, Integer cp) {
+        nom = nom.toLowerCase();
+        return new Estacion(nom, cp);
     }
 
     boolean existenEstaciones(HashMap<String, Estacion> colEst) {
@@ -68,11 +82,11 @@ public class EstacionAdmin {
         }
         return true;
     }
-    
+
     Estacion getEstacion(String nom) {
         return this.colEstacion.get(nom);
     }
-    
+
     HashMap<String, Estacion> getEstaciones() {
         return this.colEstacion;
     }
@@ -85,5 +99,15 @@ public class EstacionAdmin {
             }
         }
         return colEstacionesSinLinea;
+    }
+
+    HashMap<String, Estacion> getEstacionesCercanas(Usuario objU) {
+        HashMap<String, Estacion> colEst = new HashMap<>();
+        for (Estacion objE : this.colEstacion.values()) {
+            if (objU.getCP() == objE.getCp()) {
+                colEst.put(objE.getNom(), objE);
+            }
+        }
+        return colEst;
     }
 }

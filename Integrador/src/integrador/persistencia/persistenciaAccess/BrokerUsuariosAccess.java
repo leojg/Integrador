@@ -1,9 +1,7 @@
 package integrador.persistencia.persistenciaAccess;
 
 //
-import integrador.dominio.IPersistente;
-import integrador.dominio.Usuario;
-import integrador.dominio.UsuarioAdmin;
+import integrador.dominio.*;
 import integrador.persistencia.Broker;
 import java.sql.Date;
 import java.text.ParseException;
@@ -30,51 +28,62 @@ public class BrokerUsuariosAccess extends Broker {
 
     @Override
     public String getInsertCommand(Object arg, Object aux) {
-//        Usuario objU = (Usuario) arg;
-//        return "INSERT INTO Usuarios (conTipo,conNom,conFvigencia,conValor,conTipopago)"
-//                + "VALUES(" + objU.getTipo() + ",'" + objU.getNom() + "',#" + fecha + "#,"
-//                + objU.getValor() + "," + objU.getTipoPago() + ")";
-        return "";
+        Usuario objU = (Usuario) arg;
+        java.sql.Date fecha = new java.sql.Date(objU.getFechaNac().getTimeInMillis());
+        return "INSERT INTO Usuarios (usrCI,usrNom,usrFNac,usrDir,usrBarrio,usrCP,usrMail,usrTel)"
+                + "VALUES(" + objU.getCI() + ",'" + objU.getNom() + "',#" + fecha + "#,'"
+                + objU.getDir() + "','" + objU.getBarrio() + "'," + objU.getCP()
+                + ",'" + objU.getMail() + "'," + objU.getTel() + ")";
     }
 
     @Override
     public String getUpdateCommand(Object arg, Object aux) {
-//               Usuario objU = (Usuario) arg;
-//        return "UPDATE Usuarios SET conValor=" + objU.getValor() + " WHERE conTipo=" + objU.getTipo();
-                return "";
+
+        Usuario objU = (Usuario) arg;
+        if (aux.getClass() == Convenio.class) {
+            Convenio objC = (Convenio) aux;
+             return "UPDATE Usuarios SET conTipo=" + objC.getTipo() + " WHERE usrCI=" + objU.getCI();
+        } else {
+            java.sql.Date fecha = new java.sql.Date(objU.getFechaNac().getTimeInMillis());
+            return "UPDATE Usuarios SET usrNom='" + objU.getNom() + "', usrFNac=#" + fecha + "#, usrDir='" + objU.getDir() + "', usrBarrio='" + objU.getBarrio() + "', usrCP=" + objU.getCP()
+                    + ", usrMail='" + objU.getMail() + "', usrTel=" + objU.getTel()
+                    + " WHERE usrCI=" + objU.getCI();
+        }
     }
 
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
-//        Usuario objU = (Usuario) arg;
-//        return "UPDATE Usuarios SET conActivo=0 WHERE conTipo=" + objU.getTipo();
-                return "";
+        Usuario objU = (Usuario) arg;
+        return "UPDATE Usuarios SET usrActivo=0 WHERE usrCI=" + objU.getCI();
     }
 
     @Override
     public String getSelectCommand() {
-
-        return "SELECT * FROM Usuarios WHERE conActivo=1 ";
-
+        return "SELECT * FROM Usuarios WHERE usrActivo=1 ";
     }
 
     @Override
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
-//        try {
-//            Usuario objU = (Usuario) aux;
-//            objU.setNom(rs.getString("conNom"));
-//            objU.setTipo(rs.getInt("conTipo"));
-//            objU.setTipoPago(rs.getBoolean("conTipopago"));
-//            objU.setValor(rs.getInt("conValor"));
-//            Date fecha = rs.getDate("conFvigencia");
-//            GregorianCalendar cal = new GregorianCalendar();
-//            cal.setTime(fecha);
-//            objU.setFechaIni(cal);
-//
-//
-//        } catch (SQLException e) {
-//            System.out.println("Error al obtener");
-//        }
+        try {
+            Usuario objU = (Usuario) aux;
+            objU.setCI(rs.getInt("usrCI"));
+            objU.setNom(rs.getString("usrNom"));
+            objU.setCP(rs.getInt("usrCP"));
+            objU.setMail(rs.getString("usrMail"));
+            objU.setTel(rs.getInt("usrTel"));
+            objU.setDir(rs.getString("usrDir"));
+            objU.setBarrio(rs.getString("usrBarrio"));
+            Date fecha = rs.getDate("usrFNac");
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(fecha);
+            objU.setFechaNac(cal);
+            Convenio objC = new Convenio();
+            objC.setTipo(rs.getInt("conTipo"));
+            objU.setConvenio(objC);
+
+        } catch (SQLException e) {
+            System.out.println("Error al obtener");
+        }
     }
 
     @Override

@@ -4,6 +4,7 @@
  */
 package integrador.dominio;
 
+import exceptions.FormatoLineaIncorrectoException;
 import java.util.HashMap;
 
 /**
@@ -52,6 +53,24 @@ public class LineaAdmin {
             this.colLineas.put(objL.getNom(), objL);
             objL.cargarEstacionesLineas();
         }
+    }
+
+    Linea crearLinea(String nom) throws FormatoLineaIncorrectoException {
+        String a = nom.substring(0, 1);
+        if (nom.length() > 3) {
+            throw new FormatoLineaIncorrectoException();
+        }
+        try {
+            Integer.parseInt(a);
+            //tirar excepcion;
+        } catch (NumberFormatException nfe) {
+            try {
+                Integer b = Integer.parseInt(nom.substring(1));
+            } catch (NumberFormatException nfe2) {
+             throw new FormatoLineaIncorrectoException();
+            }
+        }
+        return new Linea(nom.toUpperCase());
     }
 
     Linea getLinea(String nom) {

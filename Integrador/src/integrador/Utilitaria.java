@@ -66,7 +66,6 @@ public class Utilitaria {
      */
     public static void cargarJTable(JTable table, String id, Object[] datos) throws ParseException {
         if ("Estacion".equals(id)) {
-
             setTableEstaciones(table, datos);
         } else if ("Linea".equals(id)) {
             setTableLineas(table, datos);
@@ -74,6 +73,8 @@ public class Utilitaria {
             setTableConvenios(table, datos);
         } else if ("Usuario".equals(id)) {
             setTableUsuarios(table, datos);
+        } else if ("Compra".equals(id)) {
+            setTableCompras(table, datos);
         }
     }
 
@@ -86,6 +87,8 @@ public class Utilitaria {
             setTableConvenios(table, null);
         } else if ("Usuario".equals(id)) {
             setTableUsuarios(table, null);
+        } else if ("Compra".equals(id)) {
+            setTableCompras(table, null);
         }
     }
 
@@ -171,12 +174,12 @@ public class Utilitaria {
         }
     }
 
-        private static void setTableUsuarios(JTable table, Object[] datos) {
+    private static void setTableUsuarios(JTable table, Object[] datos) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"CI", "Nombre", "Convenio","Telefono","EMail","Fecha de Nacimiento"};
+        Object[] cn = {"CI", "Nombre", "Convenio", "Telefono", "EMail", "Fecha de Nacimiento"};
         Modelo.setColumnIdentifiers(cn);
         Modelo.setRowCount(0);
-         if (datos != null) {
+        if (datos != null) {
             for (Object Obj0 : datos) {
                 Usuario objU = (Usuario) Obj0;
                 String convenioNom;
@@ -185,8 +188,8 @@ public class Utilitaria {
                 } else {
                     convenioNom = objU.getConvenio().getNom();
                 }
-                Object[] row = {objU.getCI(), objU.getNom(), convenioNom,  objU.getTel(), 
-                    objU.getMail(),  ConvertirGCalendarString(objU.getFechaNac())};
+                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getTel(),
+                    objU.getMail(), ConvertirGCalendarString(objU.getFechaNac())};
                 Modelo.addRow(row);
             }
         } else {
@@ -197,9 +200,9 @@ public class Utilitaria {
                 } else {
                     convenioNom = objU.getConvenio().getNom();
                 }
-                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getCP(), objU.getDir(),
-                objU.getBarrio(), objU.getTel(), objU.getMail(),  ConvertirGCalendarString(objU.getFechaNac())};
-               Modelo.addRow(row);
+                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getTel(),
+                    objU.getMail(), ConvertirGCalendarString(objU.getFechaNac())};
+                Modelo.addRow(row);
             }
         }
         if (Modelo.getRowCount() <= 0) {
@@ -207,7 +210,30 @@ public class Utilitaria {
             Modelo.addRow(row);
         }
     }
-    
+
+    private static void setTableCompras(JTable table, Object[] datos) {
+        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
+        Object[] cn = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
+        Modelo.setColumnIdentifiers(cn);
+        Modelo.setRowCount(0);
+        if (datos != null) {
+            for (Object Obj0 : datos) {
+                Compra ObjC = (Compra) Obj0;
+                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarString(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
+                Modelo.addRow(row);
+            }
+        } else {
+            for (Compra ObjC : objFI.getCompras().values()) {
+                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarString(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
+                Modelo.addRow(row);
+            }
+        }
+        if (Modelo.getRowCount() <= 0) {
+            Object[] row = {"No Existen Datos Disponibles"};
+            Modelo.addRow(row);
+        }
+    }
+
     public static void setTreeLineas(JTree tree) {
         DefaultMutableTreeNode nodoPadre = new DefaultMutableTreeNode("Lineas y Estaciones");
         DefaultTreeModel modelo = new DefaultTreeModel(nodoPadre);
@@ -232,6 +258,13 @@ public class Utilitaria {
 
     }
 
+    /**
+     * Permite que el jtree quede expandido siempre. Incluso cuando se realiza
+     * una modificación
+     *
+     * @param tree
+     * @param path
+     */
     private static void expand(JTree tree, TreePath path) {
         TreeNode node = (TreeNode) path.getLastPathComponent();
         if (node.getChildCount() > 0) {

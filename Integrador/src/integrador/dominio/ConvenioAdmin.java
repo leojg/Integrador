@@ -4,6 +4,8 @@
  */
 package integrador.dominio;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 /**
@@ -23,7 +25,7 @@ public class ConvenioAdmin {
     public static ConvenioAdmin getInstance() {
         if (instance == null) {
             instance = new ConvenioAdmin();
-            instance.cargarEstaciones();
+            instance.cargarConvenios();
         }
         return instance;
     }
@@ -46,7 +48,7 @@ public class ConvenioAdmin {
         return false;
     }
 
-    void cargarEstaciones() {
+    void cargarConvenios() {
         Convenio objC = new Convenio();
         for (Object o : objC.obtenerTodos()) {
             Convenio c = (Convenio) o;
@@ -54,12 +56,8 @@ public class ConvenioAdmin {
         }
     }
 
-    Convenio getConvenio(Integer tipo) {
-        return this.colConvenios.get(tipo);
-    }
-    
-    HashMap<Integer, Convenio> getConvenios() {
-        return this.colConvenios;
+    Convenio crearConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+        return new Convenio(tipo, nom, fecha, valor, tipopago);
     }
 
     boolean modConvenio(Integer tipo, Integer nuevoPrecio) {
@@ -71,5 +69,23 @@ public class ConvenioAdmin {
             return true;
         }
         return false;
+    }
+
+    Convenio getConvenio(Integer tipo) {
+        return this.colConvenios.get(tipo);
+    }
+
+    HashMap<Integer, Convenio> getConvenios() {
+        return this.colConvenios;
+    }
+
+    HashMap<Integer, Convenio> getConveniosVigentes(Integer año) {
+        HashMap<Integer, Convenio> colConv = new HashMap<>();
+        for (Convenio objC : this.colConvenios.values()) {
+            if (objC.getFechaIni().YEAR <= año) {
+                colConv.put(objC.getTipo(), objC);
+            }
+        }
+        return colConv;
     }
 }

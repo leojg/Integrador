@@ -5,6 +5,7 @@
 package integrador.dominio;
 
 import exceptions.EstacionTieneLineaException;
+import exceptions.FormatoLineaIncorrectoException;
 import exceptions.NombreRepetidoException;
 import java.rmi.NoSuchObjectException;
 import java.util.GregorianCalendar;
@@ -23,7 +24,7 @@ public class FachadaInterfaz extends Observable {
     private EstacionAdmin objEA = EstacionAdmin.getInstance();
 
     public boolean altaEstacion(String nom, Integer cp) throws NombreRepetidoException {
-        if (objEA.altaEstacion(crearEstacion(nom, cp))) {
+        if (objEA.altaEstacion(objEA.crearEstacion(nom, cp))) {
             setChanged();
             notifyObservers("Estacion");
             return true;
@@ -32,25 +33,12 @@ public class FachadaInterfaz extends Observable {
     }
 
     public boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException, EstacionTieneLineaException {
-        if (objEA.bajaEstacion(crearEstacion(nom, cp))) {
+        if (objEA.bajaEstacion(objEA.crearEstacion(nom, cp))) {
             setChanged();
             notifyObservers("Estacion");
             return true;
         }
         return false;
-    }
-
-    /**
-     * *
-     * Crea una estación
-     *
-     * @param nom
-     * @param cp
-     * @return Estacion
-     */
-    private Estacion crearEstacion(String nom, Integer cp) {
-        nom = nom.toLowerCase();
-        return new Estacion(nom, cp);
     }
 
     public Estacion getEstacion(String nom) {
@@ -74,9 +62,9 @@ public class FachadaInterfaz extends Observable {
     //************** Lineas ****************************//
     private LineaAdmin objLA = LineaAdmin.getInstance();
 
-    public boolean altaLinea(String nom) {
+    public boolean altaLinea(String nom) throws FormatoLineaIncorrectoException {
 
-        if (objLA.altaLinea(crearLinea(nom))) {
+        if (objLA.altaLinea(objLA.crearLinea(nom))) {
             setChanged();
             notifyObservers("Linea");
             return true;
@@ -97,27 +85,12 @@ public class FachadaInterfaz extends Observable {
     }
 
     public boolean bajaLinea(String nom) {
-        if (objLA.bajaLinea(crearLinea(nom))) {
+        if (objLA.bajaLinea(objLA.getLinea(nom))) {
             setChanged();
             notifyObservers("Linea");
             return true;
         }
         return false;
-    }
-
-    private Linea crearLinea(String nom) {
-        String a = nom.substring(0, 1);
-        try {
-            Integer.parseInt(a);
-            //tirar excepcion;
-        } catch (NumberFormatException nfe) {
-            try {
-                Integer b = Integer.parseInt(nom.substring(1));
-            } catch (NumberFormatException nfe2) {
-                //nombre mal formateado;
-            }
-        }
-        return new Linea(nom);
     }
 
     public Linea getLinea(String nom) {
@@ -146,7 +119,7 @@ public class FachadaInterfaz extends Observable {
     private ConvenioAdmin objCA = ConvenioAdmin.getInstance();
 
     public boolean altaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
-        if (objCA.altaConvenio(crearConvenio(tipo, nom, fecha, valor, tipopago))) {
+        if (objCA.altaConvenio(objCA.crearConvenio(tipo, nom, fecha, valor, tipopago))) {
             setChanged();
             notifyObservers("Convenio");
             return true;
@@ -155,16 +128,12 @@ public class FachadaInterfaz extends Observable {
     }
 
     public boolean bajaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
-        if (objCA.bajaConvenio(crearConvenio(tipo, nom, fecha, valor, tipopago))) {
+        if (objCA.bajaConvenio(objCA.crearConvenio(tipo, nom, fecha, valor, tipopago))) {
             setChanged();
             notifyObservers("Convenio");
             return true;
         }
         return false;
-    }
-
-    private Convenio crearConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
-        return new Convenio(tipo, nom, fecha, valor, tipopago);
     }
 
     public HashMap<Integer, Convenio> getConvenios() {
@@ -178,7 +147,7 @@ public class FachadaInterfaz extends Observable {
     private UsuarioAdmin objUA = UsuarioAdmin.getInstance();
 
     public boolean altaUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
-        if (objUA.altaUsuario(crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
+        if (objUA.altaUsuario(objUA.crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
             setChanged();
             notifyObservers("Usuario");
             return true;
@@ -195,10 +164,6 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    private Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
-        return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel);
-    }
-
     public Usuario getUsuario(Integer CI) {
         return this.objUA.getUsuario(CI);
     }
@@ -208,11 +173,47 @@ public class FachadaInterfaz extends Observable {
     }
 
     public boolean modUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
-        if (objUA.modUsuario(crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
+        if (objUA.modUsuario(objUA.crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
             setChanged();
             notifyObservers("Usuario");
             return true;
         }
         return false;
+    }
+
+    public boolean modUsrConv(Integer CI, Integer conTipo) {
+        Convenio objC = objCA.getConvenio(conTipo);
+        Usuario objU = objUA.getUsuario(CI);
+    if (objUA.modConvenioUsuario(objC, objU)) {
+            setChanged();
+            notifyObservers("Usuario");
+            return true;
+        }
+        return false;
+    }
+    
+     //***************** Compras *************************//
+    
+        private CompraAdmin objCoA = CompraAdmin.getInstance();
+
+    public boolean altaCompra(Long ID, Integer usrCI, GregorianCalendar fechaCompra, Integer cantidad) {
+        if (objCoA.altaCompra(objCoA.crearCompra(ID, objUA.getUsuario(usrCI), fechaCompra, cantidad))) {
+            setChanged();
+            notifyObservers("Compra");
+            return true;
+        }
+        return false;
+    }
+    
+    public Compra getCompra(Long id) {
+        return objCoA.getCompra(id);
+    }
+    
+    public HashMap<Long, Compra> getCompras() {
+        return objCoA.getCompras();
+    }
+    
+    public Long getUltimoIDCompra() {
+        return Compra.getUltimoID();
     }
 }

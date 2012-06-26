@@ -74,9 +74,9 @@ public class Main extends javax.swing.JFrame {
         jMenu5.setText("jMenu5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setBounds(new java.awt.Rectangle(10, 10, 600, 600));
+        setBounds(new java.awt.Rectangle(10, 10, 800, 600));
         setMaximumSize(new java.awt.Dimension(800, 600));
-        setMinimumSize(new java.awt.Dimension(600, 600));
+        setMinimumSize(new java.awt.Dimension(800, 600));
         setPreferredSize(new java.awt.Dimension(574, 459));
 
         btnExit.setText("Salir");
@@ -97,6 +97,16 @@ public class Main extends javax.swing.JFrame {
         jMenuBar1.add(menuInicio);
 
         menuCompras.setText("Compras");
+        menuCompras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuComprasMouseClicked(evt);
+            }
+        });
+        menuCompras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuComprasActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(menuCompras);
 
         menuUsuarios.setText("Usuarios");
@@ -166,17 +176,19 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(570, Short.MAX_VALUE)
+                .addContainerGap(504, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(396, Short.MAX_VALUE)
+                .addContainerGap(401, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
+
+        getAccessibleContext().setAccessibleParent(this);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -196,10 +208,9 @@ public class Main extends javax.swing.JFrame {
         try {
             Point p = this.getLocation();
             MantenimientoEstacion frmManEstacion = new MantenimientoEstacion();
-            this.setVisible(false);
             frmManEstacion.setLocation(p);
             frmManEstacion.setVisible(true);
-
+            this.setVisible(false);
             try {
                 this.finalize();
             } catch (Throwable ex) {
@@ -214,9 +225,9 @@ public class Main extends javax.swing.JFrame {
 
         Point p = this.getLocation();
         MantenimientoLinea frmManLinea = new MantenimientoLinea();
-        this.setVisible(false);
         frmManLinea.setLocation(p);
         frmManLinea.setVisible(true);
+        this.setVisible(false);
 
         try {
             this.finalize();
@@ -229,9 +240,9 @@ public class Main extends javax.swing.JFrame {
     private void menuInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuInicioMouseClicked
         Point p = this.getLocation();
         Main frmMain = new Main();
-        this.setVisible(false);
         frmMain.setLocation(p);
         frmMain.setVisible(true);
+        this.setVisible(false);
 
         try {
             this.finalize();
@@ -247,9 +258,9 @@ public class Main extends javax.swing.JFrame {
     private void menuReportesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReportesMouseClicked
         Point p = this.getLocation();
         Reporte frmReporte = new Reporte();
-        this.setVisible(false);
         frmReporte.setLocation(p);
         frmReporte.setVisible(true);
+        this.setVisible(false);
 
         try {
             this.finalize();
@@ -264,9 +275,9 @@ public class Main extends javax.swing.JFrame {
         try {
             Point p = this.getLocation();
             MantenimientoConvenio frmConvenio = new MantenimientoConvenio();
-            this.setVisible(false);
             frmConvenio.setLocation(p);
             frmConvenio.setVisible(true);
+            this.setVisible(false);
 
             try {
                 this.finalize();
@@ -283,19 +294,35 @@ public class Main extends javax.swing.JFrame {
 
     private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
 
-            Point p = this.getLocation();
-            MantenimientoUsuario frmConvenio = new MantenimientoUsuario();
-            this.setVisible(false);
-            frmConvenio.setLocation(p);
-            frmConvenio.setVisible(true);
+        Point p = this.getLocation();
+        MantenimientoUsuario frmConvenio = new MantenimientoUsuario();
+        frmConvenio.setLocation(p);
+        frmConvenio.setVisible(true);
+        this.setVisible(false);
 
-            try {
-                this.finalize();
-            } catch (Throwable ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-            }        // TODO add your handling code here:
-          // TODO add your handling code here:
+        try {
+            this.finalize();
+        } catch (Throwable ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }       
     }//GEN-LAST:event_menuUsuariosMouseClicked
+
+    private void menuComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasActionPerformed
+    }//GEN-LAST:event_menuComprasActionPerformed
+
+    private void menuComprasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuComprasMouseClicked
+        Point p = this.getLocation();
+        MantenimientoCompra frmCompra = new MantenimientoCompra();
+        frmCompra.setLocation(p);
+        frmCompra.setVisible(true);
+        this.setVisible(false);
+
+        try {
+            this.finalize();
+        } catch (Throwable ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+    }//GEN-LAST:event_menuComprasMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;

@@ -10,6 +10,7 @@ import integrador.dominio.Linea;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -170,20 +171,29 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         try {
             srow = tableEstSinAsignar.getSelectedRow();
+            if (srow != -1) {
              objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
             Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
             Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
-        } catch (ParseException ex) {
+        } else {
+                JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Disponibles\" para continuar");
+            }
+            } catch (ParseException ex) {
             Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
         try {
+            
             srow = tableEstAsignadas.getSelectedRow();
-             objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
+        if (srow != -1) {
+            objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
     Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
             Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
+          } else {
+                JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Asignadas\" para continuar");
+            }
         } catch (ParseException ex) {
             Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
         }

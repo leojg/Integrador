@@ -178,6 +178,8 @@ public class Mantenimiento extends Main  implements Observer {
                 .addContainerGap())
         );
 
+        getAccessibleContext().setAccessibleParent(this);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 

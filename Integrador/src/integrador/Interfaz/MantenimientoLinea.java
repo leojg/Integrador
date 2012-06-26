@@ -1,5 +1,7 @@
 package integrador.Interfaz;
 
+import exceptions.FormatoLineaIncorrectoException;
+import exceptions.NombreRepetidoException;
 import integrador.Utilitaria;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
@@ -71,9 +73,16 @@ public class MantenimientoLinea extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
+                    if ("".equals(txtNom.getText())) {
+                        JOptionPane.showMessageDialog(rootPane, "Inserte un Nombre de Linea para continuar.");
+                    } else {
                     objFI.altaLinea(txtNom.getText());
                     setTreeLineas();
-                } catch (NumberFormatException numberFormatException) {
+                      JOptionPane.showMessageDialog(rootPane,"Operacion Exitosa");
+                    }
+                } catch (FormatoLineaIncorrectoException ex) {
+                    JOptionPane.showMessageDialog(rootPane,ex.getMessage());
+                }catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
             }
