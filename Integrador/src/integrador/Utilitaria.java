@@ -35,9 +35,28 @@ public class Utilitaria {
 
     }
 
+    public static String ConvertirGCalendarStringHora(GregorianCalendar cal) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        String s = sdf.format(cal.getTime());
+        return s;
+
+    }
+
     public static GregorianCalendar ConvertirStringGCalendar(String s) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date d = null;
+        GregorianCalendar gc = new GregorianCalendar();
+        d = sdf.parse(s);
+        gc.setTime(d);
+        return gc;
+
+    }
+
+    public static GregorianCalendar ConvertirStringGCalendarHora(String s) throws ParseException {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date d = null;
         GregorianCalendar gc = new GregorianCalendar();
         d = sdf.parse(s);
@@ -219,12 +238,12 @@ public class Utilitaria {
         if (datos != null) {
             for (Object Obj0 : datos) {
                 Compra ObjC = (Compra) Obj0;
-                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarString(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
+                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarStringHora(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
                 Modelo.addRow(row);
             }
         } else {
             for (Compra ObjC : objFI.getCompras().values()) {
-                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarString(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
+                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarStringHora(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
                 Modelo.addRow(row);
             }
         }

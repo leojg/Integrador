@@ -8,9 +8,7 @@ import exceptions.EstacionTieneLineaException;
 import exceptions.FormatoLineaIncorrectoException;
 import exceptions.NombreRepetidoException;
 import java.rmi.NoSuchObjectException;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Observable;
+import java.util.*;
 
 /**
  * Clase encargada de establecer el acceso por parte de la interfaz a la capa
@@ -172,6 +170,14 @@ public class FachadaInterfaz extends Observable {
         return this.objUA.getUsuarios();
     }
 
+    public HashMap<Integer, Usuario> getUsuariosMasGasto(Date ini, Date fin) {
+        return this.objUA.getUsuariosMasGasto(ini, fin);
+    }
+
+    public ArrayList getUsuariosPorEdad(int eMin, int eMax) {
+        return this.objUA.getUsuariosPorEdad(eMin, eMax);
+    }
+
     public boolean modUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
         if (objUA.modUsuario(objUA.crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
             setChanged();
@@ -184,17 +190,15 @@ public class FachadaInterfaz extends Observable {
     public boolean modUsrConv(Integer CI, Integer conTipo) {
         Convenio objC = objCA.getConvenio(conTipo);
         Usuario objU = objUA.getUsuario(CI);
-    if (objUA.modConvenioUsuario(objC, objU)) {
+        if (objUA.modConvenioUsuario(objC, objU)) {
             setChanged();
             notifyObservers("Usuario");
             return true;
         }
         return false;
     }
-    
-     //***************** Compras *************************//
-    
-        private CompraAdmin objCoA = CompraAdmin.getInstance();
+    //***************** Compras *************************//
+    private CompraAdmin objCoA = CompraAdmin.getInstance();
 
     public boolean altaCompra(Long ID, Integer usrCI, GregorianCalendar fechaCompra, Integer cantidad) {
         if (objCoA.altaCompra(objCoA.crearCompra(ID, objUA.getUsuario(usrCI), fechaCompra, cantidad))) {
@@ -204,15 +208,15 @@ public class FachadaInterfaz extends Observable {
         }
         return false;
     }
-    
+
     public Compra getCompra(Long id) {
         return objCoA.getCompra(id);
     }
-    
+
     public HashMap<Long, Compra> getCompras() {
         return objCoA.getCompras();
     }
-    
+
     public Long getUltimoIDCompra() {
         return Compra.getUltimoID();
     }

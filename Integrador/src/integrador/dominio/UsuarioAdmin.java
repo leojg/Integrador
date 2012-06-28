@@ -4,9 +4,7 @@
  */
 package integrador.dominio;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Clase encargada de administrar usuarios.
@@ -53,31 +51,30 @@ public class UsuarioAdmin {
         for (Object o : objU.obtenerTodos()) {
             Usuario u = (Usuario) o;
             Convenio objC = null;
-            try {
-            objC  = ConvenioAdmin.getInstance().getConvenio(u.getConvenio().getTipo());
-            } catch (NullPointerException ex) {
-            } finally  {
+            objC = ConvenioAdmin.getInstance().getConvenio(u.getConvenio().getTipo());
             u.setConvenio(objC);
             this.colUsr.put(u.getCI(), u);
-            }
         }
     }
+
     /**
-     * Retorna True si el convenio es de pago mensual Y false si es por ticket 
-     * o si el usuario no posee convenio 
+     * Retorna True si el convenio es de pago mensual Y false si es por ticket o
+     * si el usuario no posee convenio
+     *
      * @param objU
-     * @return 
+     * @return
      */
     boolean comprobarTipoConvenioUsuario(Usuario objU) {
         if (objU.getConvenio() == null) {
-           return false;
+            return false;
         } else {
-            if (objU.getConvenio().getTipoPago() == false)
+            if (objU.getConvenio().getTipoPago() == false) {
                 return true;
+            }
         }
         return false;
     }
-    
+
     Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
         return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel);
     }
@@ -108,14 +105,37 @@ public class UsuarioAdmin {
         return this.colUsr;
     }
 
-    HashMap<Integer, Usuario> getUsuariosPorEdad(Date edadMin, Date edadMax) {
-        HashMap<Integer, Usuario> colU = new HashMap<>();
+    ArrayList getUsuariosPorEdad(int eMin, int eMax) {
+        ArrayList arr = new ArrayList();
+        int cont = 0;
         for (Usuario objU : this.colUsr.values()) {
-            if (objU.getFechaNac().getTime().compareTo(edadMin) >= 0
-                    && objU.getFechaNac().getTime().compareTo(edadMax) <= 0) {
-                colU.put(objU.getCI(), objU);
+            Date hoy = GregorianCalendar.getInstance().getTime();
+            int edadUsr = hoy.getYear() - objU.getFechaNac().getTime().getYear();
+            if (edadUsr >= eMin && edadUsr <= eMax) {
+                cont++;
+                Date ini = new Date(hoy.getTime());
+                ini.setYear(ini.getYear() - 1);
+                int gasto = CompraAdmin.getInstance().calcularGastoUsuario(ini, hoy, objU);
+                Object[] usr = {objU.getCI(),objU.getNom(), edadUsr, objU.getConvenio().getTipo(), gasto};
+                arr.add(usr);
             }
         }
-        return colU;
+        return arr;
     }
+    
+    HashMap<Integer, Usuario> getUsuariosMasGasto(Date ini, Date fin) {
+        HashMap<Integer, Usuario> colUsrGasto = new HashMap<>();
+        int max = 0;
+        for (Usuario objU : this.colUsr.values()) {
+            int gastoUsr = CompraAdmin.getInstance().calcularGastoUsuario(ini, fin, objU);
+            if (max < gastoUsr) {
+                colUsrGasto.values().clear();
+                colUsrGasto.put(objU.getCI(), objU);
+                max = gastoUsr;
+            } else if (max == gastoUsr) {
+                colUsrGasto.put(objU.getCI(), objU);
+            }
+        }
+        return colUsrGasto;
+    } 
 }

@@ -118,8 +118,8 @@ public class Mantenimiento extends Main  implements Observer {
             }
         ));
         tableItems.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
-        tableItems.setMaximumSize(new java.awt.Dimension(300, 64));
-        tableItems.setMinimumSize(new java.awt.Dimension(300, 64));
+        tableItems.setMaximumSize(new java.awt.Dimension(500, 64));
+        tableItems.setMinimumSize(new java.awt.Dimension(450, 64));
         scrollPanelTable.setViewportView(tableItems);
 
         btnMod.setText("Modificar");
@@ -164,9 +164,9 @@ public class Mantenimiento extends Main  implements Observer {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panelBtns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(195, Short.MAX_VALUE))
+                    .addComponent(panelBtns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(scrollPanelTable, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
