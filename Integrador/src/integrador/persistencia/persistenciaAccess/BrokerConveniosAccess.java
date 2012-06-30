@@ -32,7 +32,7 @@ public class BrokerConveniosAccess extends Broker {
     public String getInsertCommand(Object arg, Object aux) {
         Convenio objC = (Convenio) arg;
         java.sql.Date fecha = new java.sql.Date(objC.getFechaIni().getTimeInMillis());
-        return "INSERT INTO Convenios (conTipo,conNom,conFvigencia,conValor,conTipopago)"
+        return "INSERT INTO Convenios (con_tipo,con_nom,con_fecha,con_valor,con_tipopago)"
                 + "VALUES(" + objC.getTipo() + ",'" + objC.getNom() + "',#" + fecha + "#,"
                 + objC.getValor() + "," + objC.getTipoPago() + ")";
     }
@@ -40,19 +40,19 @@ public class BrokerConveniosAccess extends Broker {
     @Override
     public String getUpdateCommand(Object arg, Object aux) {
                Convenio objC = (Convenio) arg;
-        return "UPDATE Convenios SET conValor=" + objC.getValor() + " WHERE conTipo=" + objC.getTipo();
+        return "UPDATE Convenios SET con_valor=" + objC.getValor() + " WHERE con_tipo=" + objC.getTipo() + " and con_activo =1";
     }
 
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
         Convenio objC = (Convenio) arg;
-        return "UPDATE Convenios SET conActivo=0 WHERE conTipo=" + objC.getTipo();
+        return "UPDATE Convenios SET con_activo=0 WHERE con_tipo=" + objC.getTipo();
     }
 
     @Override
     public String getSelectCommand() {
 
-        return "SELECT * FROM Convenios WHERE conActivo=1 ";
+        return "SELECT * FROM Convenios WHERE con_activo=1 ";
 
     }
 
@@ -60,11 +60,11 @@ public class BrokerConveniosAccess extends Broker {
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
             Convenio objC = (Convenio) aux;
-            objC.setNom(rs.getString("conNom"));
-            objC.setTipo(rs.getInt("conTipo"));
-            objC.setTipoPago(rs.getBoolean("conTipopago"));
-            objC.setValor(rs.getInt("conValor"));
-            Date fecha = rs.getDate("conFvigencia");
+            objC.setNom(rs.getString("con_nom"));
+            objC.setTipo(rs.getInt("con_tipo"));
+            objC.setTipoPago(rs.getBoolean("con_tipopago"));
+            objC.setValor(rs.getInt("con_valor"));
+            Date fecha = rs.getDate("con_fecha");
             GregorianCalendar cal = new GregorianCalendar();
             cal.setTime(fecha);
             objC.setFechaIni(cal);

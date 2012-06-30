@@ -1,16 +1,16 @@
 package integrador.persistencia.persistenciaAccess;
 
 //
+import integrador.Utilitaria;
+import integrador.dominio.CodigoPostal;
+import integrador.dominio.Compra;
 import integrador.dominio.IPersistente;
-import integrador.dominio.Linea;
-import integrador.dominio.LineaAdmin;
+import integrador.dominio.Usuario;
 import integrador.persistencia.Broker;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.security.Timestamp;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 
 //
 //
@@ -20,45 +20,41 @@ import java.sql.SQLException;
 //  @ Author : 
 //
 //
-public class BrokerLineasAccess extends Broker {
+public class BrokerCPAccess extends Broker {
 
-   
-    public BrokerLineasAccess(Linea objL) {
-        super(objL);
+    public BrokerCPAccess(Compra objC) {
+        super(objC);
     }
 
     @Override
     public String getInsertCommand(Object arg, Object aux) {
-        Linea objL = (Linea) arg;
-        return "INSERT INTO Lineas (lin_nom)VALUES('" + objL.getNom() + "')";
+        CodigoPostal objC = (CodigoPostal) arg;
+        return "INSERT INTO CodigosPostales ("+ objC.getNom() +")";
     }
-    
+
     @Override
     public String getUpdateCommand(Object arg, Object aux) {
-        Linea objL = (Linea) arg;
         return "wut";
     }
 
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
-        Linea objL = (Linea) arg;
-        return "UPDATE Lineas set lin_act=0 WHERE lin_nom='" + objL.getNom()+"' AND lin_id=" + objL.getId();
+        return "wut";
     }
 
     @Override
     public String getSelectCommand() {
 
-        return "SELECT * FROM Lineas WHERE lin_activo=1 ";
+        return "SELECT * FROM CodigosPostales";
 
     }
 
     @Override
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
-            Linea objL = (Linea) aux;
-            objL.setNom(rs.getString("lin_nom"));
-            objL.setId(rs.getInt("lin_id"));
-         
+            CodigoPostal objC = (CodigoPostal) aux;
+            objC.setCp(rs.getInt("cp_num"));
+
         } catch (SQLException e) {
             System.out.println("Error al obtener");
         }
@@ -66,6 +62,6 @@ public class BrokerLineasAccess extends Broker {
 
     @Override
     public IPersistente getNuevo() {
-        return new Linea();
+        return new CodigoPostal();
     }
 }

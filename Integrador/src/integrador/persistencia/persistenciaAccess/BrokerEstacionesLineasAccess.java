@@ -5,6 +5,7 @@ import integrador.dominio.Estacion;
 import integrador.dominio.IPersistente;
 import integrador.dominio.Linea;
 import integrador.dominio.LineaAdmin;
+import integrador.dominio.NodoBinario;
 import integrador.persistencia.Broker;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -23,7 +24,6 @@ import java.sql.SQLException;
 //
 public class BrokerEstacionesLineasAccess extends Broker {
 
-  
     public BrokerEstacionesLineasAccess(Linea objL) {
         super(objL);
     }
@@ -61,17 +61,37 @@ public class BrokerEstacionesLineasAccess extends Broker {
     @Override
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
-            if (dato.equals(rs.getString("linNom"))) {
-                Estacion objE = (Estacion) aux;
-                objE.setNom(rs.getString("estNom"));
+            if (dato.equals(rs.getInt("lin_id"))) {
+                Object antid = rs.getObject("ant_id");
+                Object nextid = rs.getObject("next_id");
+                
+                Estacion objE = new Estacion();
+                objE.setId(rs.getInt("est_id"));
+                NodoBinario ant = null;
+                if (antid != null) {
+                    Estacion estAnt = new Estacion();
+                    estAnt.setId((int) antid);
+                    ant = new NodoBinario(estAnt);
+                }
+                NodoBinario next = null;
+                if (nextid != null) {
+  
+                    Estacion estNext = new Estacion();
+                    estNext.setId((int) nextid);
+                    next = new NodoBinario(estNext);
+                }
+                NodoBinario nb = (NodoBinario) aux;
+
+                nb.setNodo(objE, ant, next);
+
             }
         } catch (SQLException e) {
-            System.out.println("Error al obtener");
+            System.out.println(e.getMessage());
         }
     }
 
     @Override
     public IPersistente getNuevo() {
-        return new Estacion();
+        return new NodoBinario<>();
     }
 }

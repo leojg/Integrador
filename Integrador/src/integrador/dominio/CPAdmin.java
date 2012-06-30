@@ -30,10 +30,20 @@ public class CPAdmin {
     
     private void cagarCP() {
         CodigoPostal cp = new CodigoPostal();
-        cp.obtenerTodos();
+     for (Object o : cp.obtenerTodos()) {
+         CodigoPostal cp2 = (CodigoPostal) o;
+         this.colCP.put(cp2.getCp(), cp2);
+     }
     }
     
-    public HashMap<Integer,CodigoPostal> getCP() {
+    public boolean existeCP(int cp) {
+        if (this.colCP.containsKey(cp)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public HashMap<Integer,CodigoPostal> getCPs() {
         return this.colCP;        
     }
     

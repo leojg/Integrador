@@ -16,6 +16,7 @@ import java.util.HashMap;
  */
 public class EstacionAdmin {
 
+    private int numEst;
     private LineaAdmin objLA = LineaAdmin.getInstance();
     private HashMap<String, Estacion> colEstacion;
     private static EstacionAdmin instance;
@@ -25,7 +26,7 @@ public class EstacionAdmin {
     }
 
     public static EstacionAdmin getInstance() {
-        if (instance == null) {
+                if (instance == null) {
             instance = new EstacionAdmin();
             instance.cargarEstaciones();
         }
@@ -69,9 +70,12 @@ public class EstacionAdmin {
      * @param cp
      * @return Estacion
      */
-    Estacion crearEstacion(String nom, Integer cp) {
+    Estacion crearEstacion(String nom, Integer cp) throws NoExisteCPException {
         nom = nom.toLowerCase();
-        return new Estacion(nom, cp);
+        if (CPAdmin.getInstance().existeCP(cp) == true) {
+        return new Estacion(nom, cp, numEst);
+        }
+        throw new NoExisteCPException();
     }
 
     boolean existenEstaciones(HashMap<String, Estacion> colEst) {
@@ -86,6 +90,15 @@ public class EstacionAdmin {
     Estacion getEstacion(String nom) {
         return this.colEstacion.get(nom);
     }
+    
+    Estacion getEstacion(Integer id) throws ElementoNoEncontradoException {
+        for (Estacion objE : this.colEstacion.values()) {
+            if (objE.getId() == id) {
+                return objE;
+            }
+        }
+        throw new ElementoNoEncontradoException();
+    } 
 
     HashMap<String, Estacion> getEstaciones() {
         return this.colEstacion;
@@ -111,4 +124,15 @@ public class EstacionAdmin {
         }
         return colEst;
     }
+
+    public int getNumEst() {
+        return numEst;
+    }
+
+    public void setNumEst(int numEst) {
+       if (this.numEst <= numEst)
+           this.numEst = numEst;
+    }
+    
+    
 }

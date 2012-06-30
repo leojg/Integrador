@@ -4,8 +4,11 @@
  */
 package integrador.dominio;
 
+import exceptions.ElementoNoEncontradoException;
 import exceptions.FormatoLineaIncorrectoException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,15 +18,20 @@ public class LineaAdmin {
 
     private HashMap<String, Linea> colLineas;
     private static LineaAdmin instance;
-
+    private int numLinea = 0;
+    
     private LineaAdmin() {
         colLineas = new HashMap<>();
     }
 
     public static LineaAdmin getInstance() {
         if (instance == null) {
-            instance = new LineaAdmin();
-            instance.cargarLineas();
+            try {
+                instance = new LineaAdmin();
+                instance.cargarLineas();
+            } catch (ElementoNoEncontradoException ex) {
+                Logger.getLogger(LineaAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return instance;
     }
@@ -46,9 +54,9 @@ public class LineaAdmin {
         return false;
     }
 
-    void cargarLineas() {
+    void cargarLineas() throws ElementoNoEncontradoException {
         Linea objL = new Linea();
-        for (Object o : objL.obtenerTodos()) {
+        for (Object o : objL.obtenerTodos(objL)) {
             objL = (Linea) o;
             this.colLineas.put(objL.getNom(), objL);
             objL.cargarEstacionesLineas();
@@ -70,7 +78,7 @@ public class LineaAdmin {
              throw new FormatoLineaIncorrectoException();
             }
         }
-        return new Linea(nom.toUpperCase());
+        return new Linea(nom.toUpperCase(), numLinea);
     }
 
     Linea getLinea(String nom) {
@@ -84,10 +92,20 @@ public class LineaAdmin {
     HashMap<String, Linea> getLineasEstacion(Estacion objE) {
         HashMap<String, Linea> colLineasEstacion = new HashMap<>();
         for (Linea objL : colLineas.values()) {
-            if (objL.getColEstaciones().containsKey(objE.getNom())) {
+            if (!objL.tieneEstacion(objE)) {
                 colLineasEstacion.put(objL.getNom(), objL);
             }
         }
         return colLineasEstacion;
     }
+
+    public int getNumLinea() {
+        return numLinea;
+    }
+
+    public void setNumLinea(int numLinea) {
+       if (this.numLinea <= numLinea)
+        this.numLinea = numLinea;
+    }
+    
 }

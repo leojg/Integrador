@@ -16,11 +16,13 @@ import java.util.ArrayList;
  */
 public class Estacion implements IPersistente {
 
+    private int id;
     private String nom;
     private Integer cp;
     private Broker objB;
 
-    public Estacion(String nom, Integer cp) {
+    public Estacion(String nom, Integer cp, int id) {
+        this.id = id;
         this.nom = nom;
         this.cp = cp;
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
@@ -30,6 +32,14 @@ public class Estacion implements IPersistente {
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+       
     public Integer getCp() {
         return cp;
     }

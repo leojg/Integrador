@@ -308,4 +308,24 @@ public class Utilitaria {
         }
         tree.expandPath(path);
     }
+
+    /**
+     * Datos debe ser un array multidimensional. En el cual, cada "fila"
+     * representa una fila a agregar a la jtable y cada columna un atributo de
+     * esa fila.
+     *
+     * @param table
+     * @param datos
+     * @param headers
+     */
+   public static void asd(JTable table, Object[][] datos, Object[] headers) {
+        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
+        Modelo.setColumnIdentifiers(headers);
+        Modelo.setRowCount(0);
+        if (datos != null) {
+            for (int r = 0; r < datos.length; r++) {
+                Modelo.addRow(datos[r]);
+            }
+        }
+    }
 }

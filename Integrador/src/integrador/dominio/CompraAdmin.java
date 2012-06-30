@@ -68,7 +68,8 @@ public class CompraAdmin {
         if (UsuarioAdmin.getInstance().comprobarTipoConvenioUsuario(objU) == true) {
             cantidad = 1;
         }
-        return new Compra(id, objU, cantidad, fecha);
+        int costo = cantidad * objU.getConvenio().getValor();
+        return new Compra(id, objU, cantidad, fecha, costo);
     }
 
     Compra getCompra(Long id) {

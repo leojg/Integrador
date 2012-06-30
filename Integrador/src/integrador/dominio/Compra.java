@@ -21,14 +21,16 @@ public class Compra implements IPersistente {
     private Usuario objU;
     private Integer cantidadTickets;
     private GregorianCalendar fechaCompra;
+    private Integer costo;
     private Broker objB;
 
-    public Compra(Long id, Usuario objU, Integer cantidadTickets, GregorianCalendar fechaCompra) {
+    public Compra(Long id, Usuario objU, Integer cantidadTickets, GregorianCalendar fechaCompra, Integer costo) {
         this.id = id;
         this.objU = objU;
         this.cantidadTickets = cantidadTickets;
         this.fechaCompra = fechaCompra;
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
+        this.costo = costo;
     }
 
     public Compra() {
@@ -79,6 +81,16 @@ public class Compra implements IPersistente {
     public void setObjU(Usuario objU) {
         this.objU = objU;
     }
+
+    public Integer getCosto() {
+        return costo;
+    }
+
+    public void setCosto(Integer costo) {
+        this.costo = costo;
+    }
+    
+    
 
     @Override
     public void guardar(Object arg) {

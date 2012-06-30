@@ -30,7 +30,7 @@ public class BrokerEstacionesAccess extends Broker {
     @Override
     public String getInsertCommand(Object arg, Object aux) {
         Estacion objE = (Estacion) arg;
-        return "INSERT INTO Estaciones (estNom,estCP)VALUES('" + objE.getNom() + "'," + objE.getCp() + ")";
+        return "INSERT INTO Estaciones (est_id,est_nom,est_cp)VALUES(" + objE.getId() + ",'" + objE.getNom() + "'," + objE.getCp() + ")";
     }
 
     @Override
@@ -41,13 +41,13 @@ public class BrokerEstacionesAccess extends Broker {
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
         Estacion objE = (Estacion) arg;
-        return "UPDATE Estaciones SET estActivo=0 WHERE estNom='" + objE.getNom() + "'";
+        return "UPDATE Estaciones SET est_act=0 WHERE est_id='" + objE.getId() + "'";
     }
 
     @Override
     public String getSelectCommand() {
 
-        return "SELECT * FROM Estaciones WHERE estActivo=1 ";
+        return "SELECT * FROM Estaciones WHERE est_act=1 ";
 
     }
 
@@ -55,8 +55,9 @@ public class BrokerEstacionesAccess extends Broker {
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
             Estacion objE = (Estacion) aux;
-            objE.setNom(rs.getString("estNom").toLowerCase());
-            objE.setCp(rs.getInt("estCP"));
+            objE.setNom(rs.getString("est_nom").toLowerCase());
+            objE.setCp(rs.getInt("cp_num"));
+            objE.setId(rs.getInt("est_id"));
          
         } catch (SQLException e) {
             System.out.println("Error al obtener");

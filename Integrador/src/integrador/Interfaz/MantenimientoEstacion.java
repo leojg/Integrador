@@ -7,6 +7,7 @@ package integrador.Interfaz;
 import exceptions.EstacionTieneLineaException;
 import exceptions.NombreRepetidoException;
 import integrador.Utilitaria;
+import integrador.dominio.Estacion;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,7 +66,16 @@ public class MantenimientoEstacion extends Mantenimiento {
     }
 
     private void setTableEstaciones() throws ParseException {
-        Utilitaria.cargarJTable(tableEst, "Estacion", null);
+      //  Utilitaria.cargarJTable(tableEst, "Estacion", null);
+        Object[] headers = {"Nombre","Codigo Postal"};
+        Object[][] datos = new Object[ objFI.getEstaciones().size()][2];
+        int cont = 0;
+        for (Estacion objE : objFI.getEstaciones().values()) {
+            datos[cont][0] = objE.getNom();
+            datos[cont][1] = objE.getCp();
+            cont++;
+        }
+   Utilitaria.asd(tableEst, datos,headers);
     }
 
     private void setBtnAlta() {

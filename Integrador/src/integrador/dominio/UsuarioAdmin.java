@@ -5,6 +5,7 @@
 package integrador.dominio;
 
 import exceptions.IDRepetidoException;
+import exceptions.NoExisteCPException;
 import exceptions.NombreRepetidoException;
 import java.util.*;
 
@@ -89,8 +90,11 @@ public class UsuarioAdmin {
         return false;
     }
 
-    Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+    Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) throws NoExisteCPException {
+       if (CPAdmin.getInstance().existeCP(CP)) {    
         return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel, ConvenioAdmin.getInstance().getConvenio(0));
+       }
+       throw new NoExisteCPException();
     }
 
     boolean modUsuario(Usuario objU) {

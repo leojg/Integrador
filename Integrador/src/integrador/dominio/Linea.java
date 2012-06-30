@@ -4,6 +4,7 @@
  */
 package integrador.dominio;
 
+import exceptions.ElementoNoEncontradoException;
 import integrador.persistencia.Broker;
 import integrador.persistencia.FachadaBaseDeDatos;
 import java.util.ArrayList;
@@ -17,56 +18,114 @@ import java.util.HashMap;
  */
 public class Linea implements IPersistente {
 
+    private int id;
     private String nom;
-    private HashMap<String, Estacion> colEstaciones;
+    private ArrayList<NodoBinario> colEstaciones;
     private Broker objB;
     Broker objBEstacionesLineas;
 
     public Linea() {
         Estacion objE = new Estacion();
-        this.colEstaciones = new HashMap<>();
+        this.colEstaciones = new ArrayList<>();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
         this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
     }
 
-    public Linea(String nom) {
+    public Linea(String nom, int id) {
         Estacion objE = new Estacion();
         this.nom = nom;
-        this.colEstaciones = new HashMap<>();
+        this.id = id;
+        this.colEstaciones = new ArrayList<>();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
-                this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
+        this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
     }
 
     boolean AgregarEstacion(Estacion objE) {
-        if (!this.colEstaciones.containsKey(objE.getNom())) {
-            this.colEstaciones.put(objE.getNom(), objE);
-            this.objBEstacionesLineas.guardar(objE, this);
-            return true;
+        if (!tieneEstacion(objE)) {
+            NodoBinario nb = new NodoBinario(objE, null, null);
+            if (colEstaciones.isEmpty()) {
+                colEstaciones.add(nb);
+            } else {
+                for (NodoBinario nb2 : this.colEstaciones) {
+                    if (nb2.derecho == null) {
+                        nb2.derecho = nb;
+                        nb.izquierdo = nb2;
+                        colEstaciones.add(nb);
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
-    
-    public void cargarEstacionesLineas() {
-        for (Object o : objBEstacionesLineas.obtenerTodos(this.getNom())) {
-            Estacion e = (Estacion) o;
-            if (e.getNom() != null) {
-            e = EstacionAdmin.getInstance().getEstacion(e.getNom());
-            this.colEstaciones.put(e.getNom(), e);
+
+    boolean tieneEstacion(Estacion objE) {
+        for (NodoBinario nb : this.colEstaciones) {
+            Estacion e = (Estacion) nb.dato;
+            if (e.getNom().equals(objE.getNom())) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    public void cargarEstacionesLineas() throws ElementoNoEncontradoException {
+        for (Object o : objBEstacionesLineas.obtenerTodos(this.getId())) {
+            NodoBinario nb = (NodoBinario) o;
+            if (nb.dato != null) {
+                Estacion objE = (Estacion) nb.dato;
+                objE = EstacionAdmin.getInstance().getEstacion(objE.getId());
+                nb.dato = objE;
+                if (nb.izquierdo != null) {
+                    Estacion ant = (Estacion) nb.izquierdo.dato;
+                    ant = EstacionAdmin.getInstance().getEstacion(ant.getId());
+                    nb.izquierdo.dato = ant;
+                }
+                if (nb.derecho != null) {
+                    Estacion next = (Estacion) nb.derecho.dato;
+                    next = EstacionAdmin.getInstance().getEstacion(next.getId());
+                    nb.derecho.dato = next;
+                }
+                this.colEstaciones.add(nb);
             }
         }
     }
 
-    HashMap<String, Estacion> getColEstaciones() {
+    ArrayList<NodoBinario> getColNodos() {
         return colEstaciones;
+    }
+    
+    HashMap<String, Estacion> getColEstaciones() {
+        HashMap<String, Estacion> colEst = new HashMap<>();
+        for (NodoBinario nb : this.colEstaciones) {
+            Estacion objE = (Estacion) nb.dato;
+            colEst.put(objE.getNom(), objE);
+        }
+        return colEst;
     }
 
     boolean QuitarEstacion(Estacion objE) {
-        if (this.colEstaciones.containsKey(objE.getNom())) {
-            this.colEstaciones.remove(objE.getNom());
-            this.objBEstacionesLineas.eliminar(objE, this);
-            return true;
+        for (NodoBinario nb : colEstaciones) {
+            Estacion e = (Estacion) nb.dato;
+            if (e.getNom().equals(objE.getNom())) {
+                NodoBinario anterior = nb.izquierdo;
+                NodoBinario posterior = nb.derecho;
+                colEstaciones.remove(nb);
+                anterior.derecho = posterior;
+                posterior.izquierdo = anterior;
+                return true;
+            }
         }
         return false;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNom() {
@@ -95,8 +154,8 @@ public class Linea implements IPersistente {
     @Override
     public void eliminar(Object arg) {
         this.objB.eliminar(arg, null);
-        for (Estacion objE : this.colEstaciones.values())  {
-                    this.objBEstacionesLineas.eliminar(objE, this);
+        for (NodoBinario nb : this.colEstaciones) {
+            this.objBEstacionesLineas.eliminar(nb, this);
         }
     }
 

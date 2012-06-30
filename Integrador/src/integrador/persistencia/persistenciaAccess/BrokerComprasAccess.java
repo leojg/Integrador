@@ -29,8 +29,9 @@ public class BrokerComprasAccess extends Broker {
     public String getInsertCommand(Object arg, Object aux) {
         Compra objC = (Compra) arg;
         String fechahora = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
-        return "INSERT INTO Compras (compraID,usrCI,compraFecha,compraCantidad) "
-                + "VALUES (" + objC.getId() + "," + objC.getObjU().getCI() + ",#" + fechahora + "#," + objC.getCantidadTickets() + ")";
+        return "INSERT INTO Compras (comp_id,usr_ci,comp_fecha,comp_cantidad,comp_costo) "
+                + "VALUES (" + objC.getId() + "," + objC.getObjU().getCI() + ",#" + fechahora + "#," 
+                + objC.getCantidadTickets() + "," + objC.getCosto() + ")";
     }
 
     @Override
@@ -54,16 +55,17 @@ public class BrokerComprasAccess extends Broker {
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
             Compra objC = (Compra) aux;
-            objC.setId(rs.getLong("compraID"));
+            objC.setId(rs.getLong("comp_id"));
             Usuario objU = new Usuario();
-            objU.setCI(rs.getInt("usrCI"));
+            objU.setCI(rs.getInt("usr_ci"));
             objC.setObjU(objU);
-            java.sql.Timestamp fecha = rs.getTimestamp("compraFecha");
+            java.sql.Timestamp fecha = rs.getTimestamp("comp_fecha");
             GregorianCalendar cal = new GregorianCalendar();
             cal.setTime(fecha);
             objC.setFechaCompra(cal);
-            objC.setCantidadTickets(rs.getInt("compraCantidad"));
+            objC.setCantidadTickets(rs.getInt("comp_cantidad"));
             Compra.setUltimoID(objC.getId());
+            objC.setCosto(rs.getInt("comp_costo"));
 
         } catch (SQLException e) {
             System.out.println("Error al obtener");
