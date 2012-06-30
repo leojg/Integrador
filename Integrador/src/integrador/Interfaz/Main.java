@@ -303,13 +303,8 @@ public class Main extends javax.swing.JFrame {
         MantenimientoUsuario frmConvenio = new MantenimientoUsuario();
         frmConvenio.setLocation(p);
         frmConvenio.setVisible(true);
-        this.setVisible(false);
+        this.dispose();
 
-        try {
-            this.finalize();
-        } catch (Throwable ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }       
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
     private void menuComprasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuComprasActionPerformed
@@ -321,12 +316,7 @@ public class Main extends javax.swing.JFrame {
         frmCompra.setLocation(p);
         frmCompra.setVisible(true);
         this.setVisible(false);
-
-        try {
-            this.finalize();
-        } catch (Throwable ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        this.dispose();
     }//GEN-LAST:event_menuComprasMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

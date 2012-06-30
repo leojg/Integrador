@@ -30,9 +30,7 @@ public class Integrador {
     public static void main(String[] args) throws ParseException {
 //        EstacionAdmin ea = EstacionAdmin.getInstance();
 //        LineaAdmin la = LineaAdmin.getInstance();
-     
-        
-        MantenimientoUsuario frm = new MantenimientoUsuario();
+          MantenimientoUsuario frm = new MantenimientoUsuario();
         frm.setVisible(true);
     }
 }

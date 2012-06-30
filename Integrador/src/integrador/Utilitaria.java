@@ -27,6 +27,15 @@ public class Utilitaria {
 
     static FachadaInterfaz objFI = new FachadaInterfaz();
 
+    public static boolean isNumeric(String cadena) {
+        try {
+            Integer.parseInt(cadena);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
     public static String ConvertirGCalendarString(GregorianCalendar cal) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -136,7 +145,7 @@ public class Utilitaria {
 
     private static void setTableLineas(JTable table, Object[] datos) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"Nombre de Linea"};
+        Object[] cn = {"Nombre Linea", "Nombre Estacion", "Codigo Postal"};
         Modelo.setColumnIdentifiers(cn);
         Modelo.setRowCount(0);
         if (datos != null) {
@@ -149,11 +158,11 @@ public class Utilitaria {
             for (Linea ObjL : objFI.getLineas().values()) {
                 Object[] row = {ObjL.getNom()};
                 Modelo.addRow(row);
+                for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
+                    Object[] row2 = {"", objE.getNom(), objE.getCp()};
+                    Modelo.addRow(row2);
+                }
             }
-        }
-        if (Modelo.getRowCount() <= 0) {
-            Object[] row = {"No Existen Datos Disponibles"};
-            Modelo.addRow(row);
         }
     }
 
@@ -195,32 +204,35 @@ public class Utilitaria {
 
     private static void setTableUsuarios(JTable table, Object[] datos) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"CI", "Nombre", "Convenio", "Telefono", "EMail", "Fecha de Nacimiento"};
+        Object[] cn = {"CI", "Nombre", "Convenio", "Barrio", "Direccion", "Telefono",
+            "Código Postal", "EMail", "Fecha de Registro", "Fecha de Nacimiento"};
         Modelo.setColumnIdentifiers(cn);
         Modelo.setRowCount(0);
         if (datos != null) {
             for (Object Obj0 : datos) {
                 Usuario objU = (Usuario) Obj0;
-                String convenioNom;
-                if (objU.getConvenio() == null) {
-                    convenioNom = "Sin Convenio";
-                } else {
-                    convenioNom = objU.getConvenio().getNom();
-                }
-                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getTel(),
-                    objU.getMail(), ConvertirGCalendarString(objU.getFechaNac())};
+//                String convenioNom;
+//                if (objU.getConvenio() == null) {
+//                    convenioNom = "Sin Convenio";
+//                } else {
+//                    convenioNom = objU.getConvenio().getNom();
+//                }
+                Object[] row = {objU.getCI(), objU.getNom(), objU.getConvenio().getNom(), objU.getBarrio(),
+                    objU.getDir(), objU.getTel(), objU.getCP(), objU.getMail(),
+                    ConvertirGCalendarString(objU.getFechaRegistro()), ConvertirGCalendarString(objU.getFechaNac())};
                 Modelo.addRow(row);
             }
         } else {
             for (Usuario objU : objFI.getUsuarios().values()) {
-                String convenioNom;
-                if (objU.getConvenio() == null) {
-                    convenioNom = "Sin Convenio";
-                } else {
-                    convenioNom = objU.getConvenio().getNom();
-                }
-                Object[] row = {objU.getCI(), objU.getNom(), convenioNom, objU.getTel(),
-                    objU.getMail(), ConvertirGCalendarString(objU.getFechaNac())};
+//                String convenioNom;
+//                if (objU.getConvenio() == null) {
+//                    convenioNom = "Sin Convenio";
+//                } else {
+//                    convenioNom = objU.getConvenio().getNom();
+//                }
+                Object[] row = {objU.getCI(), objU.getNom(), objU.getConvenio().getNom(), objU.getBarrio(),
+                    objU.getDir(), objU.getTel(), objU.getCP(), objU.getMail(),
+                    ConvertirGCalendarString(objU.getFechaRegistro()), ConvertirGCalendarString(objU.getFechaNac())};
                 Modelo.addRow(row);
             }
         }
@@ -271,6 +283,7 @@ public class Utilitaria {
             }
 
         }
+        tree.setPreferredSize(null);
         tree.setModel(modelo);
         expand(tree, (TreePath) tree.getPathForRow(0));
 

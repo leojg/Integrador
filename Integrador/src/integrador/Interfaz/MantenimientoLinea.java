@@ -7,11 +7,7 @@ import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -64,6 +60,8 @@ public class MantenimientoLinea extends Mantenimiento {
     }
 
     private void setTreeLineas() {
+        jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         Utilitaria.setTreeLineas(treeLineas);
     }
 
@@ -76,13 +74,13 @@ public class MantenimientoLinea extends Mantenimiento {
                     if ("".equals(txtNom.getText())) {
                         JOptionPane.showMessageDialog(rootPane, "Inserte un Nombre de Linea para continuar.");
                     } else {
-                    objFI.altaLinea(txtNom.getText());
-                    setTreeLineas();
-                      JOptionPane.showMessageDialog(rootPane,"Operacion Exitosa");
+                        objFI.altaLinea(txtNom.getText());
+                        setTreeLineas();
+                        JOptionPane.showMessageDialog(rootPane, "Operacion Exitosa");
                     }
                 } catch (FormatoLineaIncorrectoException ex) {
-                    JOptionPane.showMessageDialog(rootPane,ex.getMessage());
-                }catch (NumberFormatException numberFormatException) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
                 }
             }
@@ -134,6 +132,8 @@ public class MantenimientoLinea extends Mantenimiento {
 
         lblNom.setText("Nombre Linea");
 
+        jScrollPane1.setAutoscrolls(true);
+
         treeLineas.setMaximumSize(new java.awt.Dimension(300, 64));
         treeLineas.setMinimumSize(new java.awt.Dimension(300, 64));
         treeLineas.setPreferredSize(new java.awt.Dimension(300, 64));
@@ -156,12 +156,11 @@ public class MantenimientoLinea extends Mantenimiento {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblNom)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnAsignarEst, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(lblNom)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAsignarEst, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(105, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -170,10 +169,9 @@ public class MantenimientoLinea extends Mantenimiento {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNom, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(btnAsignarEst)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                    .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAsignarEst))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

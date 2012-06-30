@@ -104,7 +104,8 @@ public class EstacionAdmin {
     HashMap<String, Estacion> getEstacionesCercanas(Usuario objU) {
         HashMap<String, Estacion> colEst = new HashMap<>();
         for (Estacion objE : this.colEstacion.values()) {
-            if (objU.getCP() == objE.getCp()) {
+            int cp = objU.getCP(); 
+            if (cp == objE.getCp()) {
                 colEst.put(objE.getNom(), objE);
             }
         }

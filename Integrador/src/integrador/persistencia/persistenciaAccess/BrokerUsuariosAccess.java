@@ -30,19 +30,20 @@ public class BrokerUsuariosAccess extends Broker {
     public String getInsertCommand(Object arg, Object aux) {
         Usuario objU = (Usuario) arg;
         java.sql.Date fecha = new java.sql.Date(objU.getFechaNac().getTimeInMillis());
-        return "INSERT INTO Usuarios (usrCI,usrNom,usrFNac,usrDir,usrBarrio,usrCP,usrMail,usrTel)"
+        java.sql.Date fechaReg = new java.sql.Date(objU.getFechaRegistro().getTimeInMillis());       
+        return "INSERT INTO Usuarios (usrCI,usrNom,usrFNac,usrDir,usrBarrio,usrCP,usrMail,usrTel,usrFRegistro)"
                 + "VALUES(" + objU.getCI() + ",'" + objU.getNom() + "',#" + fecha + "#,'"
                 + objU.getDir() + "','" + objU.getBarrio() + "'," + objU.getCP()
-                + ",'" + objU.getMail() + "'," + objU.getTel() + ")";
+                + ",'" + objU.getMail() + "'," + objU.getTel() + ",#" + fecha + "#)";
     }
 
     @Override
     public String getUpdateCommand(Object arg, Object aux) {
 
         Usuario objU = (Usuario) arg;
-        if (aux.getClass() == Convenio.class) {
+        if (aux != null && aux.getClass() == Convenio.class) {
             Convenio objC = (Convenio) aux;
-             return "UPDATE Usuarios SET conTipo=" + objC.getTipo() + " WHERE usrCI=" + objU.getCI();
+            return "UPDATE Usuarios SET conTipo=" + objC.getTipo() + " WHERE usrCI=" + objU.getCI();
         } else {
             java.sql.Date fecha = new java.sql.Date(objU.getFechaNac().getTimeInMillis());
             return "UPDATE Usuarios SET usrNom='" + objU.getNom() + "', usrFNac=#" + fecha + "#, usrDir='" + objU.getDir() + "', usrBarrio='" + objU.getBarrio() + "', usrCP=" + objU.getCP()
@@ -77,6 +78,10 @@ public class BrokerUsuariosAccess extends Broker {
             GregorianCalendar cal = new GregorianCalendar();
             cal.setTime(fecha);
             objU.setFechaNac(cal);
+            Date fechaReg = rs.getDate("usrFRegistro");
+            GregorianCalendar calReg = new GregorianCalendar();
+            calReg.setTime(fechaReg);
+            objU.setFechaRegistro(calReg);
             Convenio objC = new Convenio();
             objC.setTipo(rs.getInt("conTipo"));
             objU.setConvenio(objC);

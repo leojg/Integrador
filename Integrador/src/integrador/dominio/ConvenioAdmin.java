@@ -4,6 +4,8 @@
  */
 package integrador.dominio;
 
+import exceptions.NombreRepetidoException;
+import exceptions.UsuariosAsociadosException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -30,20 +32,31 @@ public class ConvenioAdmin {
         return instance;
     }
 
-    boolean altaConvenio(Convenio objC) {
+    boolean altaConvenio(Convenio objC) throws NombreRepetidoException {
         if (!this.colConvenios.containsKey(objC.getTipo())) {
             this.colConvenios.put(objC.getTipo(), objC);
             objC.guardar(objC);
             return true;
         }
-        return false;
+        throw new NombreRepetidoException("El tipo de convenio elegido ya está en uso.");
     }
 
-    boolean bajaConvenio(Convenio objC) {
+    boolean bajaConvenio(Convenio objC) throws UsuariosAsociadosException {
         if (this.colConvenios.containsKey(objC.getTipo())) {
+            if (ComprobarUsuariosAsociados(objC))
+                throw new UsuariosAsociadosException();
             this.colConvenios.remove(objC.getTipo());
             objC.eliminar(objC);
             return true;
+        }
+        return false;
+    }
+    
+    private boolean ComprobarUsuariosAsociados(Convenio objC){
+        for (Usuario objU : UsuarioAdmin.getInstance().getUsuarios().values()) {
+            if (objU.getConvenio().getTipo() == objC.getTipo()) {
+                return true;
+            }
         }
         return false;
     }
@@ -82,7 +95,8 @@ public class ConvenioAdmin {
     HashMap<Integer, Convenio> getConveniosVigentes(Integer año) {
         HashMap<Integer, Convenio> colConv = new HashMap<>();
         for (Convenio objC : this.colConvenios.values()) {
-            if (objC.getFechaIni().YEAR <= año) {
+            System.out.print(objC.getFechaIni().getTime().getYear());
+            if (objC.getFechaIni().getTime().getYear() + 1900 <= año) {
                 colConv.put(objC.getTipo(), objC);
             }
         }

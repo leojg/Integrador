@@ -24,10 +24,11 @@ public class Usuario implements IPersistente {
     private Integer CP;
     private String mail;
     private Integer tel;
+    private GregorianCalendar fechaRegistro;
     private Convenio convenio;
     private Broker objB;
 
-    public Usuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+    public Usuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel, Convenio objC) {
         this.CI = CI;
         this.nom = nom;
         this.fechaNac = fechaNac;
@@ -36,9 +37,11 @@ public class Usuario implements IPersistente {
         this.CP = CP;
         this.mail = mail;
         this.tel = tel;
+        this.convenio = objC;
+        this.fechaRegistro = (GregorianCalendar) GregorianCalendar.getInstance();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
     }
-
+    
     public Usuario() {
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
     }
@@ -113,6 +116,14 @@ public class Usuario implements IPersistente {
 
     public void setTel(Integer tel) {
         this.tel = tel;
+    }
+    
+    public GregorianCalendar getFechaRegistro() {
+        return fechaRegistro;
+    }
+
+    public void setFechaRegistro(GregorianCalendar fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 
     @Override

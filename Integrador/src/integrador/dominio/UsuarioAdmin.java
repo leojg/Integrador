@@ -4,6 +4,8 @@
  */
 package integrador.dominio;
 
+import exceptions.IDRepetidoException;
+import exceptions.NombreRepetidoException;
 import java.util.*;
 
 /**
@@ -28,13 +30,16 @@ public class UsuarioAdmin {
         return instance;
     }
 
-    boolean altaUsuario(Usuario objU) {
+    boolean altaUsuario(Usuario objU) throws NombreRepetidoException, IDRepetidoException {
         if (!this.colUsr.containsKey(objU.getCI())) {
+            if (!comprobarNombreUnico(objU)) {
+                throw new NombreRepetidoException();
+            }
             this.colUsr.put(objU.getCI(), objU);
             objU.guardar(objU);
             return true;
         }
-        return false;
+        throw new IDRepetidoException("El CI elegido ya existe");
     }
 
     boolean bajaUsuario(Usuario objU) {
@@ -57,6 +62,15 @@ public class UsuarioAdmin {
         }
     }
 
+    private boolean comprobarNombreUnico(Usuario objU) {
+        for (Usuario u : this.colUsr.values()) {
+            if (u.getNom().equals(objU.getNom())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Retorna True si el convenio es de pago mensual Y false si es por ticket o
      * si el usuario no posee convenio
@@ -76,11 +90,13 @@ public class UsuarioAdmin {
     }
 
     Usuario crearUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
-        return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel);
+        return new Usuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel, ConvenioAdmin.getInstance().getConvenio(0));
     }
 
     boolean modUsuario(Usuario objU) {
         if (this.colUsr.containsKey(objU.getCI())) {
+            Usuario u = this.colUsr.get(objU.getCI());
+            objU.setConvenio(u.getConvenio());
             this.colUsr.put(objU.getCI(), objU);
             objU.modifcar(objU);
             return true;
@@ -105,6 +121,54 @@ public class UsuarioAdmin {
         return this.colUsr;
     }
 
+    ArrayList<Usuario> getUsuariosParaPromocion(int edadMax, int diasRegistroMax, int cantidadMax) {
+        ArrayList<Usuario> arr = new ArrayList(cantidadMax);
+        for (Usuario objU : this.colUsr.values()) {
+                        GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+            int edadUsr = cal.getTime().getYear() - objU.getFechaNac().getTime().getYear();
+            //diasRegUsr hay que pasarlo a dias porque es un long.
+            long fechaRegistroMili = objU.getFechaRegistro().getTime().getTime();
+
+            long hoyMili = cal.getTimeInMillis();
+            long diasRegUsrMili = hoyMili - fechaRegistroMili;
+            int diasRegUsr = (int) ((diasRegUsrMili * 1.1574074074) / 100000000);
+            if (edadUsr <= edadMax && diasRegUsr <= diasRegistroMax) {
+                arr.add(objU);
+            }
+        }
+        while (arr.size() > cantidadMax) {
+            int gastoMin = Integer.MAX_VALUE;
+            Usuario usrElegido = null;
+            for (Usuario u : arr) {
+                Date fecha = new Date(1, 1, 1900);
+                int gastoUsr = CompraAdmin.getInstance().calcularGastoUsuario(fecha, GregorianCalendar.getInstance().getTime(), u);
+                if (gastoUsr <= gastoMin) {
+                    usrElegido = u;
+                }
+
+            }
+            arr.remove(usrElegido);
+        }
+        return arr;
+    }
+
+//    void asd(int cantidadMax) {
+//        ArrayList<Usuario> arr = new ArrayList(cantidadMax);
+//        while (arr.size() > cantidadMax) {
+//            int gastoMin = Integer.MAX_VALUE;
+//            Usuario usrElegido = null;
+//            for (Usuario u : arr) {
+//                Date fecha = new Date(1, 1, 1900);
+//                int gastoUsr = CompraAdmin.getInstance().calcularGastoUsuario(fecha, GregorianCalendar.getInstance().getTime(), u);
+//                if (gastoUsr <= gastoMin) {
+//                    usrElegido = u;
+//                }
+//
+//            }
+//            arr.remove(usrElegido);
+//        }
+//    }
+
     ArrayList getUsuariosPorEdad(int eMin, int eMax) {
         ArrayList arr = new ArrayList();
         int cont = 0;
@@ -116,13 +180,13 @@ public class UsuarioAdmin {
                 Date ini = new Date(hoy.getTime());
                 ini.setYear(ini.getYear() - 1);
                 int gasto = CompraAdmin.getInstance().calcularGastoUsuario(ini, hoy, objU);
-                Object[] usr = {objU.getCI(),objU.getNom(), edadUsr, objU.getConvenio().getTipo(), gasto};
+                Object[] usr = {objU.getCI(), objU.getNom(), edadUsr, objU.getConvenio().getTipo(), gasto};
                 arr.add(usr);
             }
         }
         return arr;
     }
-    
+
     HashMap<Integer, Usuario> getUsuariosMasGasto(Date ini, Date fin) {
         HashMap<Integer, Usuario> colUsrGasto = new HashMap<>();
         int max = 0;
@@ -137,5 +201,5 @@ public class UsuarioAdmin {
             }
         }
         return colUsrGasto;
-    } 
+    }
 }

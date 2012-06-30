@@ -8,13 +8,13 @@ package exceptions;
  *
  * @author Administrador
  */
-public class NombreRepetidoException extends Exception {
+public class IDRepetidoException extends Exception {
 
-    public NombreRepetidoException() {
-        super("El nombre elegido está en uso");
+    public IDRepetidoException() {
+        super("El ID elegido está en uso");
     }
 
-    public NombreRepetidoException(String string) {
+    public IDRepetidoException(String string) {
         super(string);
     }
 }

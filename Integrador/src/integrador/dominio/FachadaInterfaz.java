@@ -4,9 +4,7 @@
  */
 package integrador.dominio;
 
-import exceptions.EstacionTieneLineaException;
-import exceptions.FormatoLineaIncorrectoException;
-import exceptions.NombreRepetidoException;
+import exceptions.*;
 import java.rmi.NoSuchObjectException;
 import java.util.*;
 
@@ -45,6 +43,10 @@ public class FachadaInterfaz extends Observable {
 
     public HashMap<String, Estacion> getEstaciones() {
         return objEA.getEstaciones();
+    }
+    
+    public HashMap<String, Estacion> getEstacionesCercanas(int CI) {
+        return objEA.getEstacionesCercanas(objUA.getUsuario(CI));
     }
 
     public HashMap<String, Estacion> getEstacionesLinea(String nom) {
@@ -116,7 +118,7 @@ public class FachadaInterfaz extends Observable {
     //************** Convenios ****************************//
     private ConvenioAdmin objCA = ConvenioAdmin.getInstance();
 
-    public boolean altaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+    public boolean altaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) throws NombreRepetidoException {
         if (objCA.altaConvenio(objCA.crearConvenio(tipo, nom, fecha, valor, tipopago))) {
             setChanged();
             notifyObservers("Convenio");
@@ -125,7 +127,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean bajaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) {
+    public boolean bajaConvenio(Integer tipo, String nom, GregorianCalendar fecha, Integer valor, boolean tipopago) throws UsuariosAsociadosException {
         if (objCA.bajaConvenio(objCA.crearConvenio(tipo, nom, fecha, valor, tipopago))) {
             setChanged();
             notifyObservers("Convenio");
@@ -137,6 +139,10 @@ public class FachadaInterfaz extends Observable {
     public HashMap<Integer, Convenio> getConvenios() {
         return objCA.getConvenios();
     }
+    
+    public HashMap<Integer, Convenio> getConveniosVigentes(int año) {
+        return objCA.getConveniosVigentes(año);
+    }
 
     public boolean modConvenio(Integer tipo, Integer precioNuevo) {
         return this.objCA.modConvenio(tipo, precioNuevo);
@@ -144,7 +150,7 @@ public class FachadaInterfaz extends Observable {
     //***************** Usuarios *************************//
     private UsuarioAdmin objUA = UsuarioAdmin.getInstance();
 
-    public boolean altaUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) {
+    public boolean altaUsuario(Integer CI, String nom, GregorianCalendar fechaNac, String dir, String barrio, Integer CP, String mail, Integer tel) throws NombreRepetidoException, IDRepetidoException {
         if (objUA.altaUsuario(objUA.crearUsuario(CI, nom, fechaNac, dir, barrio, CP, mail, tel))) {
             setChanged();
             notifyObservers("Usuario");

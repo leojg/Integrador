@@ -146,7 +146,7 @@ public class AsignarConvenios extends javax.swing.JFrame {
         try {
             srow = tableCon.getSelectedRow();
             if (srow != -1) {
-                objFI.modUsrConv((Integer) tableCon.getValueAt(srow, 0), objU.getCI());
+                objFI.modUsrConv(objU.getCI(),(Integer) tableCon.getValueAt(srow, 0));
                 JOptionPane.showMessageDialog(rootPane, "Operacion Exitosa");
             }
             this.setVisible(false);

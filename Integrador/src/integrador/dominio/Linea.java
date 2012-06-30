@@ -34,6 +34,7 @@ public class Linea implements IPersistente {
         this.nom = nom;
         this.colEstaciones = new HashMap<>();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
+                this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
     }
 
     boolean AgregarEstacion(Estacion objE) {
