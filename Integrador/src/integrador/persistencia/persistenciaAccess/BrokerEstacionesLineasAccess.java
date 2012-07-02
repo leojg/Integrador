@@ -31,9 +31,20 @@ public class BrokerEstacionesLineasAccess extends Broker {
     @Override
     public String getInsertCommand(Object arg, Object aux) {
         Linea objL = (Linea) aux;
-        Estacion objE = (Estacion) arg;
-        return "INSERT INTO EstacionesLineas (linNom,estNom)VALUES('" + objL.getNom()
-                + "','" + objE.getNom() + "')";
+        Integer next = null;
+        Integer ant = null;
+        NodoBinario nb = (NodoBinario) arg;
+        Estacion objE = (Estacion) nb.getDato();
+        if (nb.getIzquierdo() != null) {
+           Estacion estant = (Estacion) nb.getIzquierdo().getDato();
+           ant = estant.getId();
+        }
+        if (nb.getDerecho() != null) {
+            Estacion estnext = (Estacion) nb.getDerecho().getDato();
+            next =  estnext.getId();
+        }
+        return "INSERT INTO EstacionesLineas (lin_id,est_id,ant_id,next_id)VALUES(" + objL.getId()
+                + "," + objE.getId() + "," + ant + "," + next + ")";
     }
 
     @Override
@@ -47,8 +58,8 @@ public class BrokerEstacionesLineasAccess extends Broker {
     public String getDeleteCommand(Object arg, Object aux) {
         Linea objL = (Linea) aux;
         Estacion objE = (Estacion) arg;
-        return "DELETE FROM EstacionesLineas " + " WHERE linNom='" + objL.getNom()
-                + "' and estNom='" + objE.getNom() + "'";
+        return "DELETE FROM EstacionesLineas " + " WHERE lin_id=" + objL.getId()
+                + " and est_id=" + objE.getId() + "";
     }
 
     @Override
@@ -64,7 +75,7 @@ public class BrokerEstacionesLineasAccess extends Broker {
             if (dato.equals(rs.getInt("lin_id"))) {
                 Object antid = rs.getObject("ant_id");
                 Object nextid = rs.getObject("next_id");
-                
+
                 Estacion objE = new Estacion();
                 objE.setId(rs.getInt("est_id"));
                 NodoBinario ant = null;
@@ -75,7 +86,7 @@ public class BrokerEstacionesLineasAccess extends Broker {
                 }
                 NodoBinario next = null;
                 if (nextid != null) {
-  
+
                     Estacion estNext = new Estacion();
                     estNext.setId((int) nextid);
                     next = new NodoBinario(estNext);

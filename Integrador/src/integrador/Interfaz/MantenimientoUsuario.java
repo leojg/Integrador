@@ -78,7 +78,7 @@ public class MantenimientoUsuario extends Mantenimiento {
     private void setTableUsuarios() throws ParseException {
         Object[] header = {"CI", "Nombre", "Convenio", "Barrio", "Direccion", "Telefono",
             "Código Postal", "EMail", "Fecha de Registro", "Fecha de Nacimiento"};
-        Utilitaria.asd(tableUsr, objFI.getUsuarios(), header);
+        Utilitaria.asd(tableUsr, objFI.getUsuarios(), header,-1);
         setTableUsr();
     }
 

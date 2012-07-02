@@ -43,7 +43,31 @@ public class NodoBinario <AnyType> implements IPersistente
         derecho = der;
         altura = 0;
     }
-    
+
+    public AnyType getDato() {
+        return dato;
+    }
+
+    public void setDato(AnyType dato) {
+        this.dato = dato;
+    }
+
+    public NodoBinario<AnyType> getDerecho() {
+        return derecho;
+    }
+
+    public void setDerecho(NodoBinario<AnyType> derecho) {
+        this.derecho = derecho;
+    }
+
+    public NodoBinario<AnyType> getIzquierdo() {
+        return izquierdo;
+    }
+
+    public void setIzquierdo(NodoBinario<AnyType> izquierdo) {
+        this.izquierdo = izquierdo;
+    }
+        
     @Override
     public void guardar(Object arg) {
         throw new UnsupportedOperationException("Not supported yet.");

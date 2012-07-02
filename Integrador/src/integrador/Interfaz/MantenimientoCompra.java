@@ -74,16 +74,7 @@ public class MantenimientoCompra extends Mantenimiento {
     private void setTableCompras() throws ParseException {
         // Utilitaria.cargarJTable(tableComp, "Compra", null);
         Object[] header = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
-        Object[][] datos = new Object[objFI.getCompras().size()][5];
-        int cont = 0;
-        for (Compra objC : objFI.getCompras().values()) {
-            datos[cont][0] = objC.getId();
-            datos[cont][1] = objC.getObjU().getCI();
-            datos[cont][2] = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
-            datos[cont][3] = objC.getCantidadTickets();
-            cont++;
-        }
-        Utilitaria.asd(tableComp, datos, header);
+        Utilitaria.asd(tableComp, objFI.getCompras(), header,-1);
     }
 
     private void setBtnAlta() {

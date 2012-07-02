@@ -28,7 +28,7 @@ public class LineasAsociadas extends javax.swing.JFrame {
         this.lblEstacion.setText(this.objE.getNom());
         this.objFI = objFI;
         Object[] header = {"Nombre de Linea"};
-        Utilitaria.asd(tableLineasEst, objFI.getLineasEsacion(objE.getNom()),header);
+        Utilitaria.asd(tableLineasEst, objFI.getLineasEsacion(objE.getNom()),header,0);
     }
 
 

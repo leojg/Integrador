@@ -72,7 +72,7 @@ public class MantenimientoEstacion extends Mantenimiento {
     private void setTableEstaciones() throws ParseException {
         //  Utilitaria.cargarJTable(tableEst, "Estacion", null);
         Object[] headers = {"Nombre", "Codigo Postal"};
-        Utilitaria.asd(tableEst, objFI.getEstaciones(), headers);
+        Utilitaria.asd(tableEst, objFI.getEstaciones(), headers,0);
     }
 
     private void setBtnAlta() {

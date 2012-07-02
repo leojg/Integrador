@@ -100,7 +100,18 @@ public class LineaAdmin {
         }
         return colLineasEstacion;
     }
-
+    
+    public int getNumeroEstacionesLineas() {
+        int num = 0;
+        for (Linea objL : this.colLineas.values()) {
+            for (Estacion objE : objL.getColEstaciones().values()) {
+                num ++;
+            }
+            num ++;
+        }
+        return num;
+    }
+    
     public int getNumLinea() {
         return numLinea;
     }

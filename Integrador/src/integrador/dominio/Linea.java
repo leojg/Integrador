@@ -5,6 +5,7 @@
 package integrador.dominio;
 
 import exceptions.ElementoNoEncontradoException;
+import exceptions.EstacionTieneLineaException;
 import integrador.persistencia.Broker;
 import integrador.persistencia.FachadaBaseDeDatos;
 import java.util.ArrayList;
@@ -55,6 +56,7 @@ public class Linea implements IPersistente {
                     }
                 }
             }
+            objBEstacionesLineas.guardar(nb, this);
         }
         return false;
     }
@@ -103,6 +105,28 @@ public class Linea implements IPersistente {
             colEst.put(objE.getNom(), objE);
         }
         return colEst;
+    }
+    
+    int  getPosicionEstacion(Estacion objE) {
+        if (getColEstaciones().containsKey(objE.getNom())) {
+            int pos = 0;
+            for (NodoBinario nb : this.colEstaciones) {
+                if (nb.dato == objE) {
+                    pos = calcularPosicion(nb, pos);
+                }
+            }
+            
+        return pos;
+        }
+        return -1;
+    }
+    
+    private int calcularPosicion(NodoBinario nb, int pos) {
+        if (nb.izquierdo != null) {
+        pos += 1;
+        pos = calcularPosicion(nb.izquierdo, pos);
+        }
+        return pos;
     }
 
     boolean QuitarEstacion(Estacion objE) {

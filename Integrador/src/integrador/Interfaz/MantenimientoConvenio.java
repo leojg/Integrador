@@ -68,7 +68,7 @@ public class MantenimientoConvenio extends Mantenimiento {
     private void setTableConvenios() throws ParseException {
         //Utilitaria.cargarJTable(tableCon, "Convenio", null);
         Object[] header = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
-        Utilitaria.asd(tableCon, objFI.getConvenios(), header);
+        Utilitaria.asd(tableCon, objFI.getConvenios(), header,1);
     }
 
     private void setBtnAlta() {

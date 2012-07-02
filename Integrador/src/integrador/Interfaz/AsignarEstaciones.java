@@ -34,8 +34,8 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     }
 
     private void setTables() {
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);    }
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -169,8 +169,8 @@ public class AsignarEstaciones extends javax.swing.JFrame {
         srow = tableEstSinAsignar.getSelectedRow();
         if (srow != -1) {
             objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
 
         } else {
             JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Disponibles\" para continuar");
@@ -182,8 +182,8 @@ public class AsignarEstaciones extends javax.swing.JFrame {
         srow = tableEstAsignadas.getSelectedRow();
         if (srow != -1) {
             objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
         } else {
             JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Asignadas\" para continuar");
         }

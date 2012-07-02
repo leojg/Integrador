@@ -26,21 +26,15 @@ public class AsignarConvenios extends javax.swing.JFrame {
      * Creates new form AsignarConvenios
      */
     public AsignarConvenios(Usuario objU, FachadaInterfaz objFI) {
-        try {
-            initComponents();
-            this.objU = objU;
-            this.objFI = objFI;
-            this.lblNom.setText(objU.getNom());
-            this.lblCI.setText(objU.getCI().toString());
-            if (objU.getConvenio() == null) {
-                this.lblConv.setText("Sin Convenio");
-            } else {
-                this.lblConv.setText(objU.getConvenio().getNom());
-            }
-            Utilitaria.cargarJTable(tableCon, "Convenio");
-        } catch (ParseException ex) {
-            Logger.getLogger(AsignarConvenios.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        initComponents();
+        this.objU = objU;
+        this.objFI = objFI;
+        this.lblNom.setText(objU.getNom());
+        this.lblCI.setText(objU.getCI().toString());
+        Object[] headerCon = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
+        Utilitaria.asd(tableCon, objFI.getConvenios(), headerCon,1);
+
     }
 
     /**
@@ -146,7 +140,7 @@ public class AsignarConvenios extends javax.swing.JFrame {
         try {
             srow = tableCon.getSelectedRow();
             if (srow != -1) {
-                objFI.modUsrConv(objU.getCI(),(Integer) tableCon.getValueAt(srow, 0));
+                objFI.modUsrConv(objU.getCI(), (Integer) tableCon.getValueAt(srow, 0));
                 JOptionPane.showMessageDialog(rootPane, "Operacion Exitosa");
             }
             this.setVisible(false);

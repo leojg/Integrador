@@ -89,63 +89,6 @@ public class Utilitaria {
      * @param id
      * @param datos
      */
-    public static void cargarJTable(JTable table, String id, Object[] datos) throws ParseException {
-        if ("Compra".equals(id)) {
-            setTableCompras(table, datos);
-        }
-    }
-
-    public static void cargarJTable(JTable table, String id) throws ParseException {
-        if ("Compra".equals(id)) {
-            setTableCompras(table, null);
-        }
-    }
-
-//    private static void setTableLineas(JTable table, Object[] datos) {
-//        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-//        Object[] cn = {"Nombre Linea", "Nombre Estacion", "Codigo Postal"};
-//        Modelo.setColumnIdentifiers(cn);
-//        Modelo.setRowCount(0);
-//        if (datos != null) {
-//            for (Object Obj0 : datos) {
-//                Linea ObjL = (Linea) Obj0;
-//                Object[] row = {ObjL.getNom()};
-//                Modelo.addRow(row);
-//            }
-//        } else {
-//            for (Linea ObjL : objFI.getLineas().values()) {
-//                Object[] row = {ObjL.getNom()};
-//                Modelo.addRow(row);
-//                for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
-//                    Object[] row2 = {"", objE.getNom(), objE.getCp()};
-//                    Modelo.addRow(row2);
-//                }
-//            }
-//        }
-//    }
-    private static void setTableCompras(JTable table, Object[] datos) {
-        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        if (datos != null) {
-            for (Object Obj0 : datos) {
-                Compra ObjC = (Compra) Obj0;
-                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarStringHora(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
-                Modelo.addRow(row);
-            }
-        } else {
-            for (Compra ObjC : objFI.getCompras().values()) {
-                Object[] row = {ObjC.getId(), ObjC.getObjU().getCI(), ConvertirGCalendarStringHora(ObjC.getFechaCompra()), ObjC.getCantidadTickets()};
-                Modelo.addRow(row);
-            }
-        }
-        if (Modelo.getRowCount() <= 0) {
-            Object[] row = {"No Existen Datos Disponibles"};
-            Modelo.addRow(row);
-        }
-    }
-
     public static void setTreeLineas(JTree tree) {
         DefaultMutableTreeNode nodoPadre = new DefaultMutableTreeNode("Lineas y Estaciones");
         DefaultTreeModel modelo = new DefaultTreeModel(nodoPadre);
@@ -195,13 +138,15 @@ public class Utilitaria {
     /**
      * Datos debe ser un array multidimensional. En el cual, cada "fila"
      * representa una fila a agregar a la jtable y cada columna un atributo de
-     * esa fila.
+     * esa fila. columnaOrdenadora Indica la columna que se debe emplear para
+     * ordenar la tabla.
      *
      * @param table
      * @param datos
      * @param headers
+     * @param columnaOrdenadora
      */
-    public static void asd(JTable table, Object[][] datos, Object[] headers) {
+    public static void asd(JTable table, Object[][] datos, Object[] headers, int columnaOrdenadora) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
         Modelo.setColumnIdentifiers(headers);
         Modelo.setRowCount(0);
@@ -209,29 +154,31 @@ public class Utilitaria {
             for (int r = 0; r < datos.length; r++) {
                 Modelo.addRow(datos[r]);
             }
-        }
-        //obtenemos el DefaultTableModel de la tabla y guardamos  
-//su vector de datos en un ArrayList de tipo Object  
-        List<Object[]> lista = ((DefaultTableModel) table.getModel()).getDataVector();
-//ordenamos la lista  
-        Collections.sort(lista, new Comparator() {
 
-            public int compare(Object o1, Object o2) {
-                //el objeto o1 y o2 representan una fila de la tabla dentro de la lista  
-                //casteamos los objetos o1 y o2 para poder guardarlos dentro de otro ArrayList de tipo Object  
-                List<Object> fila1 = (List<Object>) o1;
-                List<Object> fila2 = (List<Object>) o2;
-                //ahora obtenemos los valores de de la fila  
-                //en este caso obtenemos el valor de la columna Nombre  
-                //dentro de la lista la columna nombre es el indice 1  
-                //por eso hacemos un fila1.get(1)  
-                String nombre1 = String.valueOf(fila1.get(1));
-                String nombre2 = String.valueOf(fila2.get(1));
-                return nombre1.compareToIgnoreCase(nombre2);
-            }
-        });
+            if (columnaOrdenadora >= 0) {
+                List<Object[]> lista = ((DefaultTableModel) table.getModel()).getDataVector();
+//ordenamos la lista  
+                Collections.sort(lista, new Comparator() {
+
+                    public int compare(Object o1, Object o2) {
+                        //el objeto o1 y o2 representan una fila de la tabla dentro de la lista  
+                        //casteamos los objetos o1 y o2 para poder guardarlos dentro de otro ArrayList de tipo Object  
+                        List<Object> fila1 = (List<Object>) o1;
+                        List<Object> fila2 = (List<Object>) o2;
+                        //ahora obtenemos los valores de de la fila  
+                        //en este caso obtenemos el valor de la columna Nombre  
+                        //dentro de la lista la columna nombre es el indice 1  
+                        //por eso hacemos un fila1.get(1)  
+                        String nombre1 = String.valueOf(fila1.get(1));
+                        String nombre2 = String.valueOf(fila2.get(1));
+                        return nombre1.compareToIgnoreCase(nombre2);
+                    }
+                });
 //el ultimo paso es repintar la tabla  
-        table.repaint();
+                table.repaint();
+
+            }
+        }
 
     }
 }

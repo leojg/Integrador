@@ -75,6 +75,22 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
+    public Object[][] getEstacionesLineas() {
+        Object[][] datos = new Object[objLA.getNumeroEstacionesLineas()][3];
+        int cont = 0;
+        for (Linea ObjL : objLA.getLineas().values()) {
+            datos[cont][0] = ObjL.getNom();
+            cont++;
+            for (Estacion objE : ObjL.getColEstaciones().values()) {
+                datos[cont][0] = "Parada Nº:" + ObjL.getPosicionEstacion(objE);
+                datos[cont][1] = objE.getNom();
+                datos[cont][2] = objE.getCp();
+                cont++;
+            }
+        }
+        return datos;
+    }
+
     public Object[][] getEstacionesNoEstanEnLinea(String nom) {
         Object[][] datos = new Object[objEA.getEstacionesNoEstanEnLinea(objLA.getLinea(nom)).size()][2];
         int cont = 0;
@@ -245,7 +261,20 @@ public class FachadaInterfaz extends Observable {
     public Usuario getUsuario(Integer CI) {
         return this.objUA.getUsuario(CI);
     }
-
+    /**
+     * Retorna un array con los atributos del usuario buscado.
+     * @param CI
+     * @return 
+     */
+    public Object[] getUsuarioArray(Integer CI) {
+        Usuario objU = this.getUsuario(CI);
+        Object[] arrUsr = {objU.getCI(),objU.getNom(),objU.getConvenio().getNom(),objU.getBarrio(),
+        objU.getDir(),objU.getTel(),objU.getCP(),objU.getMail(),
+        Utilitaria.ConvertirGCalendarString(objU.getFechaRegistro()),
+        Utilitaria.ConvertirGCalendarString(objU.getFechaNac())};
+        return arrUsr;
+    }
+    
     public Object[][] getUsuarios() {
         Object[][] datos = new Object[objUA.getUsuarios().size()][10];
         int cont = 0;
@@ -284,26 +313,37 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public ArrayList getUsuariosPorEdad(int eMin, int eMax) {
-        return this.objUA.getUsuariosPorEdad(eMin, eMax);
+    public Object[][] getUsuariosPorEdad(int eMin, int eMax) {
+        Object[][] datos = new Object[objUA.getUsuariosPorEdad(eMin, eMax).size()][5];
+        int cont = 0;
+        for (Object o : objUA.getUsuariosPorEdad(eMin, eMax)) {
+            Object[] arr = (Object[]) o;
+            datos[cont][0] = arr[0];
+            datos[cont][1] = arr[1];
+            datos[cont][2] = arr[2];
+            datos[cont][3] = arr[3];
+            datos[cont][4] = arr[4];
+            cont++;
+        }
+        return datos;
     }
 
     public Object[][] getUsuariosParaPromocion(Integer edadMax, Integer diasRegistroMax, Integer cantidadMax) {
-                        Object[][] datos = new Object[objUA.getUsuariosParaPromocion(edadMax, diasRegistroMax, cantidadMax).size()][10];
-                int cont = 0;
-                for (Usuario objU : objUA.getUsuariosParaPromocion(edadMax, diasRegistroMax, cantidadMax)) {
-                    datos[cont][0] = objU.getCI();
-                    datos[cont][1] = objU.getNom();
-                    datos[cont][2] = objU.getConvenio().getNom();
-                    datos[cont][3] = objU.getBarrio();
-                    datos[cont][4] = objU.getDir();
-                    datos[cont][5] = objU.getTel();
-                    datos[cont][6] = objU.getCP();
-                    datos[cont][7] = objU.getMail();
-                    datos[cont][8] = Utilitaria.ConvertirGCalendarString(objU.getFechaRegistro());
-                    datos[cont][9] = Utilitaria.ConvertirGCalendarString(objU.getFechaNac());
-                    cont++;
-                }
+        Object[][] datos = new Object[objUA.getUsuariosParaPromocion(edadMax, diasRegistroMax, cantidadMax).size()][10];
+        int cont = 0;
+        for (Usuario objU : objUA.getUsuariosParaPromocion(edadMax, diasRegistroMax, cantidadMax)) {
+            datos[cont][0] = objU.getCI();
+            datos[cont][1] = objU.getNom();
+            datos[cont][2] = objU.getConvenio().getNom();
+            datos[cont][3] = objU.getBarrio();
+            datos[cont][4] = objU.getDir();
+            datos[cont][5] = objU.getTel();
+            datos[cont][6] = objU.getCP();
+            datos[cont][7] = objU.getMail();
+            datos[cont][8] = Utilitaria.ConvertirGCalendarString(objU.getFechaRegistro());
+            datos[cont][9] = Utilitaria.ConvertirGCalendarString(objU.getFechaNac());
+            cont++;
+        }
         return datos;
     }
 
@@ -339,11 +379,21 @@ public class FachadaInterfaz extends Observable {
     }
 
     public Compra getCompra(Long id) {
+
         return objCoA.getCompra(id);
     }
 
-    public HashMap<Long, Compra> getCompras() {
-        return objCoA.getCompras();
+    public Object[][] getCompras() {
+        Object[][] datos = new Object[objCoA.getCompras().size()][5];
+        int cont = 0;
+        for (Compra objC : objCoA.getCompras().values()) {
+            datos[cont][0] = objC.getId();
+            datos[cont][1] = objC.getObjU().getCI();
+            datos[cont][2] = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
+            datos[cont][3] = objC.getCantidadTickets();
+            cont++;
+        }
+        return datos;
     }
 
     public Long getUltimoIDCompra() {

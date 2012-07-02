@@ -304,60 +304,25 @@ public class Reporte extends Mantenimiento {
                 } else {
                     header = new MessageFormat("Listado de Usuarios por Edad");
                     footer = new MessageFormat("Edad acotada entre:" + txtParam1.getText() + " y " + txtParam2.getText());
-                    Object[][] datos = new Object[objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())).size()][5];
-                    int cont = 0;
-                    for (Object o : objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()),
-                            Integer.parseInt(txtParam2.getText()))) {
-                        Object[] arr = (Object[]) o;
-                        datos[cont][0] = arr[0];
-                        datos[cont][1] = arr[1];
-                        datos[cont][2] = arr[2];
-                        datos[cont][3] = arr[3];
-                        datos[cont][4] = arr[4];
-                        cont++;
-                    }
-                    Utilitaria.asd(tableReporte, datos, headerUsrGasto);
-
+                    Utilitaria.asd(tableReporte, objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsrGasto,1);
                 }
                 break;
             case "Lineas y sus Estaciones":
-
-//                    header = new MessageFormat("Listado de Lineas y sus Estaciones");
-//                    footer = new MessageFormat("");
-
-//                    Object[][] datos = new Object[objFI.getEstaciones().size()][3];
-//                    int cont = 0;
-//                    for (Linea ObjL : objFI.getLineas().values()) {
-//                        Object[] row = {ObjL.getNom()};
-//                        datos[cont][0] = ObjL;
-//                        cont++;
-//                        for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
-//                            Object[] row2 = {"", objE.getNom(), objE.getCp()};
-//                            datos[cont][0] = row2;
-//                            cont++;
-//                        }
-//                        cont++;
-//                    }
-//                Utilitaria.asd(tableReporte, datos, headerTable);
+                Utilitaria.asd(tableReporte, objFI.getEstacionesLineas(), headerLineaEstiones,-1);
 
                 break;
             case "Listado de Estaciones":
-                try {
-                    header = new MessageFormat("Listado de Estaciones");
-                    footer = new MessageFormat("");
-                    Utilitaria.cargarJTable(tableReporte, "Estacion");
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                header = new MessageFormat("Listado de Estaciones");
+                footer = new MessageFormat("");
+                Utilitaria.asd(tableReporte, objFI.getEstaciones(), headersEst,0);
                 break;
             case "Consulta de Usuario":
                 try {
                     header = new MessageFormat("Consulta de Usuario segun CI:" + txtParam1.getText());
                     footer = new MessageFormat("");
-                    Object[] arr = {objFI.getUsuario(Integer.parseInt(txtParam1.getText()))};
-                    Utilitaria.cargarJTable(tableReporte, "Usuario", arr);
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
+                    Object[][] aux = new Object[1][1];
+                    aux[0] = objFI.getUsuarioArray(Integer.parseInt(txtParam1.getText()));
+                    Utilitaria.asd(tableReporte,aux, headerUsr,1);
                 } catch (NullPointerException ex) {
                     JOptionPane.showMessageDialog(rootPane, "No existen usuarios con esa CI");
                 }
@@ -366,29 +331,29 @@ public class Reporte extends Mantenimiento {
                 header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
                 footer = new MessageFormat("Estación:" + txtParam1.getText());
                 Object[] heardLinea = {"Nombre de Linea"};
-                Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea);
+                Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea,0);
                 break;
             case "Usuarios con más Consumo":
                 header = new MessageFormat("Listado de Usuarios con mayor Consumo");
                 footer = new MessageFormat("Periodo entre" + calFecha1.getDate() + " - " + calFecha2.getDate());
-                Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr);
+                Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr,1);
                 break;
             case "Consulta de Promocion":
                 header = new MessageFormat("Listado de Usuarios aplicables a promocion");
                 footer = new MessageFormat("Edad Maxima: " + txtEdadPromo.getText() + " - Tiempo Registrado: "
                         + txtParam1.getText() + " - Cantidad de Usuarios Maxima:" + txtParam2.getText());
                 Utilitaria.asd(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
-                        Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr);
+                        Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr,1);
                 break;
             case "Convenios Antiguos":
                 header = new MessageFormat("Listado de Convenios anteriores a:" + txtParam1.getText());
                 footer = new MessageFormat("");
-                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon);
+                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon,1);
                 break;
             case "Listado de Estaciones Cercanas":
                 header = new MessageFormat("Listado de Estaciones Cercanas");
                 footer = new MessageFormat("CI de Usuario:" + txtParam1.getText());
-                Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst);
+                Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst,0);
                 break;
         }
     }//GEN-LAST:event_btnReporteActionPerformed
