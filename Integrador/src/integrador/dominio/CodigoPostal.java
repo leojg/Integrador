@@ -16,12 +16,10 @@ import java.util.ArrayList;
 public class CodigoPostal implements IPersistente {
 
     private Integer cp;
-    private String nom;
     private Broker objB;
 
-    public CodigoPostal(Integer cp, String nom) {
+    public CodigoPostal(Integer cp) {
         this.cp = cp;
-        this.nom = nom;
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
     }
 
@@ -37,36 +35,28 @@ public class CodigoPostal implements IPersistente {
         this.cp = cp;
     }
 
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     @Override
     public void guardar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.guardar(arg,null);
     }
 
     @Override
     public void modifcar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.modificar();
     }
 
     @Override
     public void eliminar(Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.objB.eliminar(arg,null);
     }
 
     @Override
     public ArrayList obtenerTodos() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.objB.obtenerTodos();
     }
 
     @Override
     public ArrayList obtenerTodos(Object aux) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.objB.obtenerTodos(aux);
     }
 }

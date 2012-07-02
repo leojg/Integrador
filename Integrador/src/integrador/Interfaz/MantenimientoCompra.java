@@ -6,6 +6,7 @@ package integrador.Interfaz;
 
 import exceptions.NombreRepetidoException;
 import integrador.Utilitaria;
+import integrador.dominio.Compra;
 import integrador.dominio.FachadaInterfaz;
 import integrador.dominio.Usuario;
 import java.awt.event.ActionEvent;
@@ -71,7 +72,18 @@ public class MantenimientoCompra extends Mantenimiento {
     }
 
     private void setTableCompras() throws ParseException {
-        Utilitaria.cargarJTable(tableComp, "Compra", null);
+        // Utilitaria.cargarJTable(tableComp, "Compra", null);
+        Object[] header = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
+        Object[][] datos = new Object[objFI.getCompras().size()][5];
+        int cont = 0;
+        for (Compra objC : objFI.getCompras().values()) {
+            datos[cont][0] = objC.getId();
+            datos[cont][1] = objC.getObjU().getCI();
+            datos[cont][2] = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
+            datos[cont][3] = objC.getCantidadTickets();
+            cont++;
+        }
+        Utilitaria.asd(tableComp, datos, header);
     }
 
     private void setBtnAlta() {
@@ -80,7 +92,7 @@ public class MantenimientoCompra extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    objFI.altaCompra(Long.parseLong(lblID.getText()), Integer.parseInt(txtUsr.getText()), (GregorianCalendar) GregorianCalendar.getInstance(), Integer.parseInt(txtCantTickets.getText()));
+                    objFI.altaCompra(Long.parseLong(lblID.getText()), Integer.parseInt(txtUsr.getText()), (GregorianCalendar) calCompra.getCalendar(), Integer.parseInt(txtCantTickets.getText()));
                     JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(rootPane, "El Importe y el CI de usuario deben ser Numericos");
@@ -119,6 +131,8 @@ public class MantenimientoCompra extends Mantenimiento {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
+        calCompra = new org.freixas.jcalendar.JCalendarCombo();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -226,6 +240,8 @@ public class MantenimientoCompra extends Mantenimiento {
                 .addContainerGap())
         );
 
+        jLabel11.setText("Fecha de Realizacion");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -244,9 +260,13 @@ public class MantenimientoCompra extends Mantenimiento {
                         .addGap(18, 18, 18)
                         .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel11))
                         .addGap(18, 18, 18)
-                        .addComponent(txtCantTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(calCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCantTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(panelUsr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(76, Short.MAX_VALUE))
@@ -269,7 +289,11 @@ public class MantenimientoCompra extends Mantenimiento {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(txtCantTickets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtCantTickets, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(calCompra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))))
                 .addContainerGap(317, Short.MAX_VALUE))
         );
 
@@ -294,8 +318,10 @@ public class MantenimientoCompra extends Mantenimiento {
     }//GEN-LAST:event_btnSearchActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSearch;
+    private org.freixas.jcalendar.JCalendarCombo calCompra;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

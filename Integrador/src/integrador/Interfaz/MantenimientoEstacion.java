@@ -5,8 +5,10 @@
 package integrador.Interfaz;
 
 import exceptions.EstacionTieneLineaException;
+import exceptions.NoExisteCPException;
 import exceptions.NombreRepetidoException;
 import integrador.Utilitaria;
+import integrador.dominio.CodigoPostal;
 import integrador.dominio.Estacion;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
@@ -47,7 +49,6 @@ public class MantenimientoEstacion extends Mantenimiento {
         btnMod.setVisible(false);
     }
 
-    
     @Override
     public void update(Observable o, Object o1) {
         if (o.getClass() == FachadaInterfaz.class && o1.equals("Estacion")) {
@@ -58,24 +59,20 @@ public class MantenimientoEstacion extends Mantenimiento {
             }
         }
     }
-        
+
     private void setComponents() throws ParseException {
         setBtnAlta();
         setBtnBaja();
         setTableEstaciones();
+        for (CodigoPostal objCP : this.objFI.getCPs().values()) {
+            this.comboCP.addItem(objCP.getCp());
+        }
     }
 
     private void setTableEstaciones() throws ParseException {
-      //  Utilitaria.cargarJTable(tableEst, "Estacion", null);
-        Object[] headers = {"Nombre","Codigo Postal"};
-        Object[][] datos = new Object[ objFI.getEstaciones().size()][2];
-        int cont = 0;
-        for (Estacion objE : objFI.getEstaciones().values()) {
-            datos[cont][0] = objE.getNom();
-            datos[cont][1] = objE.getCp();
-            cont++;
-        }
-   Utilitaria.asd(tableEst, datos,headers);
+        //  Utilitaria.cargarJTable(tableEst, "Estacion", null);
+        Object[] headers = {"Nombre", "Codigo Postal"};
+        Utilitaria.asd(tableEst, objFI.getEstaciones(), headers);
     }
 
     private void setBtnAlta() {
@@ -87,7 +84,7 @@ public class MantenimientoEstacion extends Mantenimiento {
                     if ("".equals(txtNom.getText())) {
                         throw new NullPointerException();
                     }
-                    objFI.altaEstacion(txtNom.getText(), Integer.parseInt(txtCP.getText()));
+                    objFI.altaEstacion(txtNom.getText(), Integer.parseInt(comboCP.getSelectedItem().toString()));
 
                     JOptionPane.showMessageDialog(lblCP, "Operación Exitosa");
                     try {
@@ -95,10 +92,10 @@ public class MantenimientoEstacion extends Mantenimiento {
                     } catch (ParseException ex) {
                         Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (NombreRepetidoException ex) {
+                } catch (NoExisteCPException | NombreRepetidoException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } catch (NumberFormatException ex) {
-                    if ("".equals(txtCP.getText())) {
+                    if ("".equals(comboCP.getSelectedItem().toString())) {
                         JOptionPane.showMessageDialog(rootPane, "No se ha ingresado el codigo postal", null, WIDTH);
                     } else {
                         JOptionPane.showMessageDialog(rootPane, "El codigo postal posee un formato incorrecto", null, WIDTH);
@@ -143,10 +140,10 @@ public class MantenimientoEstacion extends Mantenimiento {
     private void initComponents() {
 
         txtNom = new javax.swing.JTextField();
-        txtCP = new javax.swing.JTextField();
         lblNom = new javax.swing.JLabel();
         lblCP = new javax.swing.JLabel();
         btnVerLineas = new javax.swing.JButton();
+        comboCP = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -170,19 +167,15 @@ public class MantenimientoEstacion extends Mantenimiento {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(lblCP)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(lblNom)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtNom, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnVerLineas)
-                        .addGap(93, 350, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblNom)
+                            .addComponent(lblCP))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNom, javax.swing.GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
+                            .addComponent(comboCP, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnVerLineas))
+                .addContainerGap(324, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +187,7 @@ public class MantenimientoEstacion extends Mantenimiento {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCP)
-                    .addComponent(txtCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboCP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(btnVerLineas)
                 .addContainerGap(242, Short.MAX_VALUE))
@@ -221,9 +214,9 @@ public class MantenimientoEstacion extends Mantenimiento {
     }//GEN-LAST:event_btnVerLineasActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVerLineas;
+    private javax.swing.JComboBox comboCP;
     private javax.swing.JLabel lblCP;
     private javax.swing.JLabel lblNom;
-    private javax.swing.JTextField txtCP;
     private javax.swing.JTextField txtNom;
     // End of variables declaration//GEN-END:variables
 }

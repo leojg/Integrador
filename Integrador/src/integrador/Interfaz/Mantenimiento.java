@@ -122,6 +122,8 @@ public class Mantenimiento extends Main  implements Observer {
         tableItems.setMinimumSize(new java.awt.Dimension(450, 64));
         scrollPanelTable.setViewportView(tableItems);
 
+        panelBtns.setOpaque(false);
+
         btnMod.setText("Modificar");
 
         btnBaja.setText("Eliminar");

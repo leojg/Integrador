@@ -5,8 +5,7 @@
 package integrador.Interfaz;
 
 import integrador.Utilitaria;
-import integrador.dominio.Convenio;
-import integrador.dominio.FachadaInterfaz;
+import integrador.dominio.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterException;
@@ -33,6 +32,12 @@ public class Reporte extends Mantenimiento {
     private MessageFormat header;
     private MessageFormat footer;
     int srow = -1;
+    Object[] headersEst = {"Nombre", "Codigo Postal"};
+    Object[] headerUsrGasto = {"CI", "Nombre", "Edad", "Tipo de Convenio", "Gasto"};
+    Object[] headerLineaEstiones = {"Nombre Linea", "Nombre Estacion", "Codigo Postal"};
+    Object[] headerUsr = {"CI", "Nombre", "Convenio", "Barrio", "Direccion", "Telefono",
+        "Código Postal", "EMail", "Fecha de Registro", "Fecha de Nacimiento"};
+    Object[] headerCon = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
 
     /**
      * Creates new form Reporte
@@ -102,8 +107,8 @@ public class Reporte extends Mantenimiento {
                 this.calFecha2.setVisible(true);
                 break;
             case "Consulta de Promocion":
-                this.lblParam1.setText("Inicio");
-                this.lblParam2.setText("Fin");
+                this.lblParam1.setText("Dias Registrado");
+                this.lblParam2.setText("Cantidad Maxima de Usuarios");
                 this.lblEMaxPromo.setVisible(true);
                 this.lblParam1.setVisible(true);
                 this.lblParam2.setVisible(true);
@@ -122,42 +127,6 @@ public class Reporte extends Mantenimiento {
                 this.txtParam1.setVisible(true);
                 break;
         }
-    }
-
-    private void setJtableUsrPorEdad() {
-        ArrayList datos = objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText()));
-        DefaultTableModel Modelo = (DefaultTableModel) tableReporte.getModel();
-        Object[] cn = {"CI", "Nombre", "Edad", "Tipo de Convenio", "Gasto"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        for (Object o : datos) {
-            Object[] row;
-            Object[] usrArr = (Object[]) o;
-            Modelo.addRow(usrArr);
-        }
-        //obtenemos el DefaultTableModel de la tabla y guardamos  
-//su vector de datos en un ArrayList de tipo Object  
-        List<Object[]> lista = ((DefaultTableModel) tableReporte.getModel()).getDataVector();
-//ordenamos la lista  
-        Collections.sort(lista, new Comparator() {
-
-            public int compare(Object o1, Object o2) {
-                //el objeto o1 y o2 representan una fila de la tabla dentro de la lista  
-                //casteamos los objetos o1 y o2 para poder guardarlos dentro de otro ArrayList de tipo Object  
-                List<Object> fila1 = (List<Object>) o1;
-                List<Object> fila2 = (List<Object>) o2;
-                //ahora obtenemos los valores de de la fila  
-                //en este caso obtenemos el valor de la columna Nombre  
-                //dentro de la lista la columna nombre es el indice 1  
-                //por eso hacemos un fila1.get(1)  
-                String nombre1 = String.valueOf(fila1.get(1));
-                String nombre2 = String.valueOf(fila2.get(1));
-                return nombre1.compareToIgnoreCase(nombre2);
-            }
-        });
-//el ultimo paso es repintar la tabla  
-        tableReporte.repaint();
-
     }
 
     /**
@@ -335,17 +304,42 @@ public class Reporte extends Mantenimiento {
                 } else {
                     header = new MessageFormat("Listado de Usuarios por Edad");
                     footer = new MessageFormat("Edad acotada entre:" + txtParam1.getText() + " y " + txtParam2.getText());
-                    setJtableUsrPorEdad();
+                    Object[][] datos = new Object[objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())).size()][5];
+                    int cont = 0;
+                    for (Object o : objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()),
+                            Integer.parseInt(txtParam2.getText()))) {
+                        Object[] arr = (Object[]) o;
+                        datos[cont][0] = arr[0];
+                        datos[cont][1] = arr[1];
+                        datos[cont][2] = arr[2];
+                        datos[cont][3] = arr[3];
+                        datos[cont][4] = arr[4];
+                        cont++;
+                    }
+                    Utilitaria.asd(tableReporte, datos, headerUsrGasto);
+
                 }
                 break;
             case "Lineas y sus Estaciones":
-                try {
-                    header = new MessageFormat("Listado de Lineas y sus Estaciones");
-                    footer = new MessageFormat("");
-                    Utilitaria.cargarJTable(tableReporte, "Linea");
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
+
+//                    header = new MessageFormat("Listado de Lineas y sus Estaciones");
+//                    footer = new MessageFormat("");
+
+//                    Object[][] datos = new Object[objFI.getEstaciones().size()][3];
+//                    int cont = 0;
+//                    for (Linea ObjL : objFI.getLineas().values()) {
+//                        Object[] row = {ObjL.getNom()};
+//                        datos[cont][0] = ObjL;
+//                        cont++;
+//                        for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
+//                            Object[] row2 = {"", objE.getNom(), objE.getCp()};
+//                            datos[cont][0] = row2;
+//                            cont++;
+//                        }
+//                        cont++;
+//                    }
+//                Utilitaria.asd(tableReporte, datos, headerTable);
+
                 break;
             case "Listado de Estaciones":
                 try {
@@ -369,44 +363,32 @@ public class Reporte extends Mantenimiento {
                 }
                 break;
             case "Consulta de Estacion":
-                try {
-                    header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
-                    footer = new MessageFormat("Estación:" + txtParam1.getText());
-                    Utilitaria.cargarJTable(tableReporte, "Linea", objFI.getLineasEsacion(txtParam1.getText()).values().toArray());
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
+                footer = new MessageFormat("Estación:" + txtParam1.getText());
+                Object[] heardLinea = {"Nombre de Linea"};
+                Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea);
                 break;
             case "Usuarios con más Consumo":
-                try {
-                    header = new MessageFormat("Listado de Usuarios con mayor Consumo");
-                    footer = new MessageFormat("Periodo entre" + calFecha1.getDate() + " - " + calFecha2.getDate());
-                    Utilitaria.cargarJTable(tableReporte, "Usuario", objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()).values().toArray());
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
+                header = new MessageFormat("Listado de Usuarios con mayor Consumo");
+                footer = new MessageFormat("Periodo entre" + calFecha1.getDate() + " - " + calFecha2.getDate());
+                Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr);
                 break;
             case "Consulta de Promocion":
-
+                header = new MessageFormat("Listado de Usuarios aplicables a promocion");
+                footer = new MessageFormat("Edad Maxima: " + txtEdadPromo.getText() + " - Tiempo Registrado: "
+                        + txtParam1.getText() + " - Cantidad de Usuarios Maxima:" + txtParam2.getText());
+                Utilitaria.asd(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
+                        Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr);
                 break;
             case "Convenios Antiguos":
-                try {
-                    header = new MessageFormat("Listado de Convenios anteriores a:" + txtParam1.getText());
-                    footer = new MessageFormat("");
-                    Utilitaria.cargarJTable(tableReporte, "Convenio", objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())).values().toArray());
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                header = new MessageFormat("Listado de Convenios anteriores a:" + txtParam1.getText());
+                footer = new MessageFormat("");
+                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon);
                 break;
             case "Listado de Estaciones Cercanas":
-                try {
-                    header = new MessageFormat("Listado de Estaciones Cercanas");
-                    footer = new MessageFormat("CI de Usuario:" + txtParam1.getText());
-                    Utilitaria.cargarJTable(tableReporte, "Estacion", objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())).values().toArray());
-                } catch (ParseException ex) {
-                    Logger.getLogger(Reporte.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                header = new MessageFormat("Listado de Estaciones Cercanas");
+                footer = new MessageFormat("CI de Usuario:" + txtParam1.getText());
+                Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst);
                 break;
         }
     }//GEN-LAST:event_btnReporteActionPerformed

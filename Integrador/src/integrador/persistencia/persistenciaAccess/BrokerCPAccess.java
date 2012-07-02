@@ -22,14 +22,14 @@ import java.util.GregorianCalendar;
 //
 public class BrokerCPAccess extends Broker {
 
-    public BrokerCPAccess(Compra objC) {
+    public BrokerCPAccess(CodigoPostal objC) {
         super(objC);
     }
 
     @Override
     public String getInsertCommand(Object arg, Object aux) {
         CodigoPostal objC = (CodigoPostal) arg;
-        return "INSERT INTO CodigosPostales ("+ objC.getNom() +")";
+        return "INSERT INTO CodigosPostales ("+ objC.getCp() +")";
     }
 
     @Override

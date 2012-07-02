@@ -40,6 +40,7 @@ public class LineaAdmin {
         if (!this.colLineas.containsKey(objL.getNom())) {
             this.colLineas.put(objL.getNom(), objL);
             objL.guardar(objL);
+            setNumLinea(objL.getId() + 1);
             return true;
         }
         return false;
@@ -59,6 +60,7 @@ public class LineaAdmin {
         for (Object o : objL.obtenerTodos(objL)) {
             objL = (Linea) o;
             this.colLineas.put(objL.getNom(), objL);
+            setNumLinea(objL.getId() + 1);
             objL.cargarEstacionesLineas();
         }
     }
@@ -92,7 +94,7 @@ public class LineaAdmin {
     HashMap<String, Linea> getLineasEstacion(Estacion objE) {
         HashMap<String, Linea> colLineasEstacion = new HashMap<>();
         for (Linea objL : colLineas.values()) {
-            if (!objL.tieneEstacion(objE)) {
+            if (objL.tieneEstacion(objE)) {
                 colLineasEstacion.put(objL.getNom(), objL);
             }
         }

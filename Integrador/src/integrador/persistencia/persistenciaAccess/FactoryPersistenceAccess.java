@@ -31,6 +31,8 @@ public class FactoryPersistenceAccess extends FactoryPersistence {
                 return new BrokerUsuariosAccess((Usuario) objP);
             } else if (objP.getClass() == Compra.class) {
                 return new BrokerComprasAccess((Compra) objP);
+            } else if (objP.getClass() == CodigoPostal.class) {
+                return new BrokerCPAccess((CodigoPostal) objP);
             }
             return null;
         } else if (objP.getClass() == Linea.class && arg.getClass() == Estacion.class) {

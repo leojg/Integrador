@@ -21,25 +21,21 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     private FachadaInterfaz objFI;
     private Linea objL;
     private int srow = -1;
+    private Object[] headers = {"Nombre", "Codigo Postal"};
 
     /**
      * Creates new form AsignarEstaciones
      */
-    public AsignarEstaciones(Linea objL, FachadaInterfaz objFI ) {
-        try {
+    public AsignarEstaciones(Linea objL, FachadaInterfaz objFI) {
             initComponents();
             this.objL = objL;
             this.objFI = objFI;
             setTables();
-        } catch (ParseException ex) {
-            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
-    private void setTables() throws ParseException {
-        Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-        Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
-    }
+    private void setTables() {
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -169,33 +165,27 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        try {
-            srow = tableEstSinAsignar.getSelectedRow();
-            if (srow != -1) {
-             objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
-            Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-            Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
+
+        srow = tableEstSinAsignar.getSelectedRow();
+        if (srow != -1) {
+            objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);
+
         } else {
-                JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Disponibles\" para continuar");
-            }
-            } catch (ParseException ex) {
-            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Disponibles\" para continuar");
         }
+
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
-        try {
-            
-            srow = tableEstAsignadas.getSelectedRow();
+        srow = tableEstAsignadas.getSelectedRow();
         if (srow != -1) {
             objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
-    Utilitaria.cargarJTable(tableEstSinAsignar, "Estacion",  objFI.getEstacionesNoEstanEnLinea(objL.getNom()).values().toArray());
-            Utilitaria.cargarJTable(tableEstAsignadas, "Estacion",  objFI.getEstacionesLinea(objL.getNom()).values().toArray());
-          } else {
-                JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Asignadas\" para continuar");
-            }
-        } catch (ParseException ex) {
-            Logger.getLogger(AsignarEstaciones.class.getName()).log(Level.SEVERE, null, ex);
+            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers);
+            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers);
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Asignadas\" para continuar");
         }
     }//GEN-LAST:event_btnQuitarActionPerformed
 

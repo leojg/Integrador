@@ -61,7 +61,6 @@ public class MantenimientoLinea extends Mantenimiento {
 
     private void setTreeLineas() {
         jScrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
         Utilitaria.setTreeLineas(treeLineas);
     }
 

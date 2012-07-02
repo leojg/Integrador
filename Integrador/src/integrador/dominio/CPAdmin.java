@@ -24,6 +24,7 @@ public class CPAdmin {
     public static CPAdmin getInstance() {
         if (instance == null) {
             CPAdmin.instance = new CPAdmin();
+            instance.cagarCP();
         }
         return instance;
     }

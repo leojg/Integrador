@@ -30,7 +30,7 @@ public class BrokerEstacionesAccess extends Broker {
     @Override
     public String getInsertCommand(Object arg, Object aux) {
         Estacion objE = (Estacion) arg;
-        return "INSERT INTO Estaciones (est_id,est_nom,est_cp)VALUES(" + objE.getId() + ",'" + objE.getNom() + "'," + objE.getCp() + ")";
+        return "INSERT INTO Estaciones (est_nom,cp_num)VALUES('" + objE.getNom() + "'," + objE.getCp() + ")";
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BrokerEstacionesAccess extends Broker {
     @Override
     public String getDeleteCommand(Object arg, Object aux) {
         Estacion objE = (Estacion) arg;
-        return "UPDATE Estaciones SET est_act=0 WHERE est_id='" + objE.getId() + "'";
+        return "UPDATE Estaciones SET est_act=0 WHERE est_id=" + objE.getId();
     }
 
     @Override
@@ -58,7 +58,6 @@ public class BrokerEstacionesAccess extends Broker {
             objE.setNom(rs.getString("est_nom").toLowerCase());
             objE.setCp(rs.getInt("cp_num"));
             objE.setId(rs.getInt("est_id"));
-         
         } catch (SQLException e) {
             System.out.println("Error al obtener");
         }

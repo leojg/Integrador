@@ -26,7 +26,7 @@ public class EstacionAdmin {
     }
 
     public static EstacionAdmin getInstance() {
-                if (instance == null) {
+        if (instance == null) {
             instance = new EstacionAdmin();
             instance.cargarEstaciones();
         }
@@ -37,6 +37,7 @@ public class EstacionAdmin {
         if (!this.colEstacion.containsKey(objE.getNom())) {
             this.colEstacion.put(objE.getNom(), objE);
             objE.guardar(objE);
+            setNumEst(objE.getId() + 1);
             return true;
         }
         throw new NombreRepetidoException();
@@ -59,6 +60,7 @@ public class EstacionAdmin {
         for (Object o : objE.obtenerTodos()) {
             Estacion e = (Estacion) o;
             this.colEstacion.put(e.getNom(), e);
+            setNumEst(e.getId() + 1);
         }
     }
 
@@ -73,7 +75,7 @@ public class EstacionAdmin {
     Estacion crearEstacion(String nom, Integer cp) throws NoExisteCPException {
         nom = nom.toLowerCase();
         if (CPAdmin.getInstance().existeCP(cp) == true) {
-        return new Estacion(nom, cp, numEst);
+            return new Estacion(nom, cp, numEst);
         }
         throw new NoExisteCPException();
     }
@@ -90,7 +92,7 @@ public class EstacionAdmin {
     Estacion getEstacion(String nom) {
         return this.colEstacion.get(nom);
     }
-    
+
     Estacion getEstacion(Integer id) throws ElementoNoEncontradoException {
         for (Estacion objE : this.colEstacion.values()) {
             if (objE.getId() == id) {
@@ -98,7 +100,7 @@ public class EstacionAdmin {
             }
         }
         throw new ElementoNoEncontradoException();
-    } 
+    }
 
     HashMap<String, Estacion> getEstaciones() {
         return this.colEstacion;
@@ -117,7 +119,7 @@ public class EstacionAdmin {
     HashMap<String, Estacion> getEstacionesCercanas(Usuario objU) {
         HashMap<String, Estacion> colEst = new HashMap<>();
         for (Estacion objE : this.colEstacion.values()) {
-            int cp = objU.getCP(); 
+            int cp = objU.getCP();
             if (cp == objE.getCp()) {
                 colEst.put(objE.getNom(), objE);
             }
@@ -130,9 +132,8 @@ public class EstacionAdmin {
     }
 
     public void setNumEst(int numEst) {
-       if (this.numEst <= numEst)
-           this.numEst = numEst;
+        if (this.numEst <= numEst) {
+            this.numEst = numEst;
+        }
     }
-    
-    
 }

@@ -7,10 +7,7 @@ package integrador;
 import integrador.dominio.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.GregorianCalendar;
+import java.util.*;
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
@@ -93,155 +90,39 @@ public class Utilitaria {
      * @param datos
      */
     public static void cargarJTable(JTable table, String id, Object[] datos) throws ParseException {
-        if ("Estacion".equals(id)) {
-            setTableEstaciones(table, datos);
-        } else if ("Linea".equals(id)) {
-            setTableLineas(table, datos);
-        } else if ("Convenio".equals(id)) {
-            setTableConvenios(table, datos);
-        } else if ("Usuario".equals(id)) {
-            setTableUsuarios(table, datos);
-        } else if ("Compra".equals(id)) {
+        if ("Compra".equals(id)) {
             setTableCompras(table, datos);
         }
     }
 
     public static void cargarJTable(JTable table, String id) throws ParseException {
-        if ("Estacion".equals(id)) {
-            setTableEstaciones(table, null);
-        } else if ("Linea".equals(id)) {
-            setTableLineas(table, null);
-        } else if ("Convenio".equals(id)) {
-            setTableConvenios(table, null);
-        } else if ("Usuario".equals(id)) {
-            setTableUsuarios(table, null);
-        } else if ("Compra".equals(id)) {
+        if ("Compra".equals(id)) {
             setTableCompras(table, null);
         }
     }
 
-    private static void setTableEstaciones(JTable table, Object[] datos) {
-        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"Nombre", "Codigo Postal"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        if (datos != null) {
-            for (Object Obj0 : datos) {
-                Estacion ObjE = (Estacion) Obj0;
-                Object[] row = {ObjE.getNom(), ObjE.getCp()};
-                Modelo.addRow(row);
-            }
-        } else {
-            for (Estacion ObjE : objFI.getEstaciones().values()) {
-                Object[] row = {ObjE.getNom(), ObjE.getCp()};
-                Modelo.addRow(row);
-            }
-        }
-        if (Modelo.getRowCount() <= 0) {
-            Object[] row = {"No Existen Datos Disponibles"};
-            Modelo.addRow(row);
-        }
-    }
-
-    private static void setTableLineas(JTable table, Object[] datos) {
-        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"Nombre Linea", "Nombre Estacion", "Codigo Postal"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        if (datos != null) {
-            for (Object Obj0 : datos) {
-                Linea ObjL = (Linea) Obj0;
-                Object[] row = {ObjL.getNom()};
-                Modelo.addRow(row);
-            }
-        } else {
-            for (Linea ObjL : objFI.getLineas().values()) {
-                Object[] row = {ObjL.getNom()};
-                Modelo.addRow(row);
-                for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
-                    Object[] row2 = {"", objE.getNom(), objE.getCp()};
-                    Modelo.addRow(row2);
-                }
-            }
-        }
-    }
-
-    private static void setTableConvenios(JTable table, Object[] datos) throws ParseException {
-        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        if (datos != null) {
-            for (Object Obj0 : datos) {
-                Convenio ObjC = (Convenio) Obj0;
-                String tp;
-                if (ObjC.getTipoPago() == false) {
-                    tp = "Mensual";
-                } else {
-                    tp = "Por Compra";
-                }
-                Object[] row = {ObjC.getTipo(), ObjC.getNom(), tp, ObjC.getValor(), ConvertirGCalendarString(ObjC.getFechaIni())};
-                Modelo.addRow(row);
-            }
-        } else {
-            for (Convenio ObjC : objFI.getConvenios().values()) {
-                String tp;
-                if (ObjC.getTipoPago() == false) {
-                    tp = "Mensual";
-                } else {
-                    tp = "Por Compra";
-                }
-
-                Object[] row = {ObjC.getTipo(), ObjC.getNom(), tp, ObjC.getValor(), ConvertirGCalendarString(ObjC.getFechaIni())};
-                Modelo.addRow(row);
-            }
-        }
-        if (Modelo.getRowCount() <= 0) {
-            Object[] row = {"No Existen Datos Disponibles"};
-            Modelo.addRow(row);
-        }
-    }
-
-    private static void setTableUsuarios(JTable table, Object[] datos) {
-        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
-        Object[] cn = {"CI", "Nombre", "Convenio", "Barrio", "Direccion", "Telefono",
-            "Código Postal", "EMail", "Fecha de Registro", "Fecha de Nacimiento"};
-        Modelo.setColumnIdentifiers(cn);
-        Modelo.setRowCount(0);
-        if (datos != null) {
-            for (Object Obj0 : datos) {
-                Usuario objU = (Usuario) Obj0;
-//                String convenioNom;
-//                if (objU.getConvenio() == null) {
-//                    convenioNom = "Sin Convenio";
-//                } else {
-//                    convenioNom = objU.getConvenio().getNom();
+//    private static void setTableLineas(JTable table, Object[] datos) {
+//        DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
+//        Object[] cn = {"Nombre Linea", "Nombre Estacion", "Codigo Postal"};
+//        Modelo.setColumnIdentifiers(cn);
+//        Modelo.setRowCount(0);
+//        if (datos != null) {
+//            for (Object Obj0 : datos) {
+//                Linea ObjL = (Linea) Obj0;
+//                Object[] row = {ObjL.getNom()};
+//                Modelo.addRow(row);
+//            }
+//        } else {
+//            for (Linea ObjL : objFI.getLineas().values()) {
+//                Object[] row = {ObjL.getNom()};
+//                Modelo.addRow(row);
+//                for (Estacion objE : objFI.getEstacionesLinea(ObjL.getNom()).values()) {
+//                    Object[] row2 = {"", objE.getNom(), objE.getCp()};
+//                    Modelo.addRow(row2);
 //                }
-                Object[] row = {objU.getCI(), objU.getNom(), objU.getConvenio().getNom(), objU.getBarrio(),
-                    objU.getDir(), objU.getTel(), objU.getCP(), objU.getMail(),
-                    ConvertirGCalendarString(objU.getFechaRegistro()), ConvertirGCalendarString(objU.getFechaNac())};
-                Modelo.addRow(row);
-            }
-        } else {
-            for (Usuario objU : objFI.getUsuarios().values()) {
-//                String convenioNom;
-//                if (objU.getConvenio() == null) {
-//                    convenioNom = "Sin Convenio";
-//                } else {
-//                    convenioNom = objU.getConvenio().getNom();
-//                }
-                Object[] row = {objU.getCI(), objU.getNom(), objU.getConvenio().getNom(), objU.getBarrio(),
-                    objU.getDir(), objU.getTel(), objU.getCP(), objU.getMail(),
-                    ConvertirGCalendarString(objU.getFechaRegistro()), ConvertirGCalendarString(objU.getFechaNac())};
-                Modelo.addRow(row);
-            }
-        }
-        if (Modelo.getRowCount() <= 0) {
-            Object[] row = {"No Existen Datos Disponibles"};
-            Modelo.addRow(row);
-        }
-    }
-
+//            }
+//        }
+//    }
     private static void setTableCompras(JTable table, Object[] datos) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
         Object[] cn = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
@@ -271,13 +152,15 @@ public class Utilitaria {
         int contLinea = 0;
 
 
-        for (Linea objL : objFI.getLineas().values()) {
-            DefaultMutableTreeNode nodoLinea = new DefaultMutableTreeNode(objL.getNom());
+        for (Object l : objFI.getLineas()) {
+            Object[] arrLin = (Object[]) l;
+            DefaultMutableTreeNode nodoLinea = new DefaultMutableTreeNode(arrLin[0]);
             modelo.insertNodeInto(nodoLinea, nodoPadre, contLinea);
             contLinea++;
             int contEst = 0;
-            for (Estacion objE : objFI.getEstacionesLinea(objL.getNom()).values()) {
-                DefaultMutableTreeNode nodoEst = new DefaultMutableTreeNode(objE.getNom());
+            for (Object o : objFI.getEstacionesLinea(arrLin[0].toString())) {
+                Object[] arr = (Object[]) o;
+                DefaultMutableTreeNode nodoEst = new DefaultMutableTreeNode(arr[0]);
                 modelo.insertNodeInto(nodoEst, nodoLinea, contEst);
                 contEst++;
             }
@@ -318,7 +201,7 @@ public class Utilitaria {
      * @param datos
      * @param headers
      */
-   public static void asd(JTable table, Object[][] datos, Object[] headers) {
+    public static void asd(JTable table, Object[][] datos, Object[] headers) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
         Modelo.setColumnIdentifiers(headers);
         Modelo.setRowCount(0);
@@ -327,5 +210,28 @@ public class Utilitaria {
                 Modelo.addRow(datos[r]);
             }
         }
+        //obtenemos el DefaultTableModel de la tabla y guardamos  
+//su vector de datos en un ArrayList de tipo Object  
+        List<Object[]> lista = ((DefaultTableModel) table.getModel()).getDataVector();
+//ordenamos la lista  
+        Collections.sort(lista, new Comparator() {
+
+            public int compare(Object o1, Object o2) {
+                //el objeto o1 y o2 representan una fila de la tabla dentro de la lista  
+                //casteamos los objetos o1 y o2 para poder guardarlos dentro de otro ArrayList de tipo Object  
+                List<Object> fila1 = (List<Object>) o1;
+                List<Object> fila2 = (List<Object>) o2;
+                //ahora obtenemos los valores de de la fila  
+                //en este caso obtenemos el valor de la columna Nombre  
+                //dentro de la lista la columna nombre es el indice 1  
+                //por eso hacemos un fila1.get(1)  
+                String nombre1 = String.valueOf(fila1.get(1));
+                String nombre2 = String.valueOf(fila2.get(1));
+                return nombre1.compareToIgnoreCase(nombre2);
+            }
+        });
+//el ultimo paso es repintar la tabla  
+        table.repaint();
+
     }
 }

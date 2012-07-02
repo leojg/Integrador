@@ -7,6 +7,7 @@ package integrador.Interfaz;
 import exceptions.NombreRepetidoException;
 import exceptions.UsuariosAsociadosException;
 import integrador.Utilitaria;
+import integrador.dominio.Convenio;
 import integrador.dominio.FachadaInterfaz;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,7 +66,9 @@ public class MantenimientoConvenio extends Mantenimiento {
     }
 
     private void setTableConvenios() throws ParseException {
-        Utilitaria.cargarJTable(tableCon, "Convenio", null);
+        //Utilitaria.cargarJTable(tableCon, "Convenio", null);
+        Object[] header = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
+        Utilitaria.asd(tableCon, objFI.getConvenios(), header);
     }
 
     private void setBtnAlta() {
@@ -120,12 +123,12 @@ public class MantenimientoConvenio extends Mantenimiento {
                     JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
                     setTableConvenios();
                 } catch (UsuariosAsociadosException ex) {
-                    JOptionPane.showMessageDialog(rootPane,ex.getMessage());
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } catch (ParseException ex) {
                     Logger.getLogger(MantenimientoConvenio.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ArrayIndexOutOfBoundsException ex) {
                     JOptionPane.showMessageDialog(rootPane, "Seleccione un Convenio para continuar");
-                } 
+                }
             }
         });
     }

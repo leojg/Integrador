@@ -34,16 +34,15 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="18" pref="18" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblCP" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="txtCP" min="-2" pref="61" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblNom" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCP" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="lblNom" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="txtNom" min="-2" pref="61" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtNom" pref="61" max="32767" attributes="0"/>
+                          <Component id="comboCP" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="btnVerLineas" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -63,7 +62,7 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblCP" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtCP" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="comboCP" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="btnVerLineas" min="-2" max="-2" attributes="0"/>
@@ -74,8 +73,6 @@
   </Layout>
   <SubComponents>
     <Component class="javax.swing.JTextField" name="txtNom">
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtCP">
     </Component>
     <Component class="javax.swing.JLabel" name="lblNom">
       <Properties>
@@ -94,6 +91,13 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVerLineasActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="comboCP">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
