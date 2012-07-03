@@ -7,10 +7,7 @@ package integrador.Interfaz;
 import integrador.dominio.FachadaInterfaz;
 import java.util.Observable;
 import java.util.Observer;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.*;
 
 /**
  *
@@ -28,6 +25,8 @@ public class Mantenimiento extends Main  implements Observer {
         this.objFI = new FachadaInterfaz();
         this.setMaximumSize(this.getPreferredSize());
         objFI.addObserver(this);
+        tableItems.getTableHeader().setReorderingAllowed(false) ;
+        tableItems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);  
     }
 
     public JScrollPane getScrollPanelTable() {

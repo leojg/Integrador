@@ -4,6 +4,7 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
 import exceptions.IDRepetidoException;
 import exceptions.NoExisteCPException;
 import exceptions.NombreRepetidoException;
@@ -171,16 +172,20 @@ public class MantenimientoUsuario extends Mantenimiento {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 if (tableUsr.getSelectedRow() >= 0) {
-                    srow = tableUsr.getSelectedRow();
-                    Usuario objU = objFI.getUsuario((Integer) tableUsr.getValueAt(srow, 0));
-                    txtCI.setText(objU.getCI().toString());
-                    txtNom.setText(objU.getNom());
-                    comboCP.setSelectedItem(objU.getCP().toString());
-                    txtTel.setText(objU.getTel().toString());
-                    txtMail.setText(objU.getMail());
-                    txtBarrio.setText(objU.getBarrio());
-                    txtDir.setText(objU.getDir());
-                    calFNac.setDate(objU.getFechaNac().getTime());
+                    try {
+                        srow = tableUsr.getSelectedRow();
+                        Usuario objU = objFI.getUsuario((Integer) tableUsr.getValueAt(srow, 0));
+                        txtCI.setText(objU.getCI().toString());
+                        txtNom.setText(objU.getNom());
+                        comboCP.setSelectedItem(objU.getCP().toString());
+                        txtTel.setText(objU.getTel().toString());
+                        txtMail.setText(objU.getMail());
+                        txtBarrio.setText(objU.getBarrio());
+                        txtDir.setText(objU.getDir());
+                        calFNac.setDate(objU.getFechaNac().getTime());
+                    } catch (ElementoNoEncontradoException ex) {
+                        Logger.getLogger(MantenimientoUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } else {
                     txtCI.setEditable(true);
                     txtCI.setText("");
@@ -348,8 +353,12 @@ public class MantenimientoUsuario extends Mantenimiento {
     private void btnConvenioUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConvenioUsuarioActionPerformed
         srow = tableUsr.getSelectedRow();
         if (srow != -1) {
-            AsignarConvenios frmAC = new AsignarConvenios(objFI.getUsuario((Integer) tableUsr.getValueAt(srow, 0)), objFI);
-            frmAC.setVisible(true);
+            try {
+                AsignarConvenios frmAC = new AsignarConvenios(objFI.getUsuario((Integer) tableUsr.getValueAt(srow, 0)), objFI);
+                frmAC.setVisible(true);
+            } catch (ElementoNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Seleccione un Usuario primero.");
         }

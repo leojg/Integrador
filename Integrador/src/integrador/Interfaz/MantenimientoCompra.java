@@ -4,6 +4,7 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
 import exceptions.NombreRepetidoException;
 import integrador.Utilitaria;
 import integrador.dominio.Compra;
@@ -74,7 +75,7 @@ public class MantenimientoCompra extends Mantenimiento {
     private void setTableCompras() throws ParseException {
         // Utilitaria.cargarJTable(tableComp, "Compra", null);
         Object[] header = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
-        Utilitaria.asd(tableComp, objFI.getCompras(), header,-1);
+        Utilitaria.asd(tableComp, objFI.getCompras(), header, -1);
     }
 
     private void setBtnAlta() {
@@ -85,6 +86,8 @@ public class MantenimientoCompra extends Mantenimiento {
                 try {
                     objFI.altaCompra(Long.parseLong(lblID.getText()), Integer.parseInt(txtUsr.getText()), (GregorianCalendar) calCompra.getCalendar(), Integer.parseInt(txtCantTickets.getText()));
                     JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
+                } catch (ElementoNoEncontradoException ex) {
+                    Logger.getLogger(MantenimientoCompra.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(rootPane, "El Importe y el CI de usuario deben ser Numericos");
                 }
@@ -292,19 +295,23 @@ public class MantenimientoCompra extends Mantenimiento {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        try {
+            if (Utilitaria.isNumeric(this.txtUsr.getText())) {
+                Usuario objU = objFI.getUsuario(Integer.parseInt(this.txtUsr.getText()));
 
-        Usuario objU = objFI.getUsuario(Integer.parseInt(this.txtUsr.getText()));
-        if (objU != null) {
-            lblCI.setText(objU.getCI().toString());
-            lblNomUsr.setText(objU.getNom());
-            lblConv.setText(objU.getConvenio().getNom().toString());
-            lblTel.setText(objU.getTel().toString());
-            lblMail.setText(objU.getMail());
-            lblDir.setText(objU.getDir());
-            this.panelUsr.setVisible(true);
-            this.btnAlta.setEnabled(true);
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "No se ha encontrado un usuario");
+                lblCI.setText(objU.getCI().toString());
+                lblNomUsr.setText(objU.getNom());
+                lblConv.setText(objU.getConvenio().getNom().toString());
+                lblTel.setText(objU.getTel().toString());
+                lblMail.setText(objU.getMail());
+                lblDir.setText(objU.getDir());
+                this.panelUsr.setVisible(true);
+                this.btnAlta.setEnabled(true);
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Ingrese un CI numerico, sin puntos ni guiones");
+            }
+        } catch (ElementoNoEncontradoException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
         }
     }//GEN-LAST:event_btnSearchActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables

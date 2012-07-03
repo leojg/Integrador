@@ -39,7 +39,6 @@ public class LineasAsociadas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLineasEst = new javax.swing.JTable();
         btnAtras = new javax.swing.JButton();
-        btnImprimir = new javax.swing.JButton();
         lblEstacion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -64,8 +63,6 @@ public class LineasAsociadas extends javax.swing.JFrame {
             }
         });
 
-        btnImprimir.setText("Imprimir Lista");
-
         lblEstacion.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -77,8 +74,6 @@ public class LineasAsociadas extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(lblEstacion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnImprimir)
-                .addGap(18, 18, 18)
                 .addComponent(btnAtras)
                 .addGap(35, 35, 35))
         );
@@ -88,7 +83,6 @@ public class LineasAsociadas extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnAtras)
-                    .addComponent(btnImprimir)
                     .addComponent(lblEstacion))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -108,7 +102,6 @@ public class LineasAsociadas extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtras;
-    private javax.swing.JButton btnImprimir;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblEstacion;
     private javax.swing.JTable tableLineasEst;

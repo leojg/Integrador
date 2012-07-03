@@ -4,9 +4,12 @@
  */
 package integrador.dominio;
 
+import exceptions.ElementoNoEncontradoException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -24,7 +27,11 @@ public class CompraAdmin {
     public static CompraAdmin getInstance() {
         if (instance == null) {
             instance = new CompraAdmin();
-            instance.cargarCompras();
+            try {
+                instance.cargarCompras();
+            } catch (ElementoNoEncontradoException ex) {
+                Logger.getLogger(CompraAdmin.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return instance;
     }
@@ -43,13 +50,13 @@ public class CompraAdmin {
         Integer gasto = 0;
         for (Compra objC : this.colCompras.values()) {
             if (objC.getObjU().getCI() == objU.getCI() && objC.getFechaCompra().getTime().compareTo(inicio) >= 0 && objC.getFechaCompra().getTime().compareTo(fin) <= 0) {
-                gasto = gasto + (objC.getCantidadTickets() * objU.getConvenio().getValor());
+                gasto = gasto + (objC.getCantidadTickets() * objC.getCosto());
             }
         }
         return gasto;
     }
 
-    void cargarCompras() {
+    void cargarCompras() throws ElementoNoEncontradoException {
         Compra objC = new Compra();
         for (Object o : objC.obtenerTodos()) {
             Compra c = (Compra) o;

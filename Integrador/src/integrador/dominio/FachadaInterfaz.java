@@ -29,7 +29,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException, EstacionTieneLineaException, NoExisteCPException {
+    public boolean bajaEstacion(String nom, Integer cp) throws NoSuchObjectException, EstacionTieneLineaException, NoExisteCPException, ElementoNoEncontradoException {
         if (objEA.bajaEstacion(objEA.getEstacion(nom))) {
             setChanged();
             notifyObservers("Estacion");
@@ -38,7 +38,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public Estacion getEstacion(String nom) {
+    public Estacion getEstacion(String nom) throws ElementoNoEncontradoException {
         return objEA.getEstacion(nom);
     }
 
@@ -53,7 +53,7 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public Object[][] getEstacionesCercanas(int CI) {
+    public Object[][] getEstacionesCercanas(int CI) throws ElementoNoEncontradoException {
         Object[][] datos = new Object[objEA.getEstacionesCercanas(objUA.getUsuario(CI)).size()][2];
         int cont = 0;
         for (Estacion objE : objEA.getEstacionesCercanas(objUA.getUsuario(CI)).values()) {
@@ -117,7 +117,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean agregarEstacionALinea(String nomLinea, String nomEst) {
+    public boolean agregarEstacionALinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException {
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
         if (objL.AgregarEstacion(objE)) {
@@ -153,7 +153,7 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public Object[][] getLineasEsacion(String nom) {
+    public Object[][] getLineasEsacion(String nom) throws ElementoNoEncontradoException{
         Object[][] datos = new Object[objLA.getLineasEstacion(objEA.getEstacion(nom)).size()][1];
         int cont = 0;
         for (Linea objL : objLA.getLineasEstacion(objEA.getEstacion(nom)).values()) {
@@ -163,7 +163,7 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public boolean quitarEstacionDeLinea(String nomLinea, String nomEst) {
+    public boolean quitarEstacionDeLinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException{
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
         if (objL.QuitarEstacion(objE)) {
@@ -249,7 +249,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean bajaUsuario(Integer CI) {
+    public boolean bajaUsuario(Integer CI) throws ElementoNoEncontradoException {
         if (objUA.bajaUsuario(objUA.getUsuario(CI))) {
             setChanged();
             notifyObservers("Usuario");
@@ -258,7 +258,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public Usuario getUsuario(Integer CI) {
+    public Usuario getUsuario(Integer CI) throws ElementoNoEncontradoException {
         return this.objUA.getUsuario(CI);
     }
     /**
@@ -266,7 +266,7 @@ public class FachadaInterfaz extends Observable {
      * @param CI
      * @return 
      */
-    public Object[] getUsuarioArray(Integer CI) {
+    public Object[] getUsuarioArray(Integer CI) throws ElementoNoEncontradoException {
         Usuario objU = this.getUsuario(CI);
         Object[] arrUsr = {objU.getCI(),objU.getNom(),objU.getConvenio().getNom(),objU.getBarrio(),
         objU.getDir(),objU.getTel(),objU.getCP(),objU.getMail(),
@@ -295,9 +295,9 @@ public class FachadaInterfaz extends Observable {
     }
 
     public Object[][] getUsuariosMasGasto(Date ini, Date fin) {
-        Object[][] datos = new Object[objUA.getUsuarios().size()][10];
+        Object[][] datos = new Object[objUA.getUsuariosMasGasto(ini, fin).size()][10];
         int cont = 0;
-        for (Usuario objU : objUA.getUsuarios().values()) {
+        for (Usuario objU : objUA.getUsuariosMasGasto(ini, fin).values()) {
             datos[cont][0] = objU.getCI();
             datos[cont][1] = objU.getNom();
             datos[cont][2] = objU.getConvenio().getNom();
@@ -356,7 +356,7 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean modUsrConv(Integer CI, Integer conTipo) {
+    public boolean modUsrConv(Integer CI, Integer conTipo) throws ElementoNoEncontradoException {
         Convenio objC = objCA.getConvenio(conTipo);
         Usuario objU = objUA.getUsuario(CI);
         if (objUA.modConvenioUsuario(objC, objU)) {
@@ -369,7 +369,7 @@ public class FachadaInterfaz extends Observable {
     //***************** Compras *************************//
     private CompraAdmin objCoA = CompraAdmin.getInstance();
 
-    public boolean altaCompra(Long ID, Integer usrCI, GregorianCalendar fechaCompra, Integer cantidad) {
+    public boolean altaCompra(Long ID, Integer usrCI, GregorianCalendar fechaCompra, Integer cantidad) throws ElementoNoEncontradoException {
         if (objCoA.altaCompra(objCoA.crearCompra(ID, objUA.getUsuario(usrCI), fechaCompra, cantidad))) {
             setChanged();
             notifyObservers("Compra");

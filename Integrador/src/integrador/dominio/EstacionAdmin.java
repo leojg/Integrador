@@ -89,8 +89,10 @@ public class EstacionAdmin {
         return true;
     }
 
-    Estacion getEstacion(String nom) {
+    Estacion getEstacion(String nom) throws ElementoNoEncontradoException {
+        if (this.colEstacion.containsKey(nom))
         return this.colEstacion.get(nom);
+        throw new ElementoNoEncontradoException("No se ha encontrado una estacion coincidente");
     }
 
     Estacion getEstacion(Integer id) throws ElementoNoEncontradoException {

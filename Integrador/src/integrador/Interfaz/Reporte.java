@@ -4,6 +4,7 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
 import integrador.Utilitaria;
 import integrador.dominio.*;
 import java.awt.event.ActionEvent;
@@ -51,6 +52,7 @@ public class Reporte extends Mantenimiento {
         this.btnBaja.setVisible(false);
         this.btnMod.setVisible(false);
         this.btnAlta.setVisible(false);
+        this.btnPrint.setEnabled(false);
         setComponents();
     }
 
@@ -149,8 +151,8 @@ public class Reporte extends Mantenimiento {
         calFecha1 = new org.freixas.jcalendar.JCalendarCombo();
         lblEMaxPromo = new javax.swing.JLabel();
         txtEdadPromo = new javax.swing.JTextField();
-        btnPrint = new javax.swing.JButton();
         btnReporte = new javax.swing.JButton();
+        btnPrint = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -174,13 +176,6 @@ public class Reporte extends Mantenimiento {
         });
 
         lblEMaxPromo.setText("Edad Maxima");
-
-        btnPrint.setText("Imprimir");
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -207,8 +202,7 @@ public class Reporte extends Mantenimiento {
                 .addComponent(lblEMaxPromo)
                 .addGap(6, 6, 6)
                 .addComponent(txtEdadPromo, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnPrint))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,21 +229,23 @@ public class Reporte extends Mantenimiento {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(lblEMaxPromo))
-                            .addComponent(txtEdadPromo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(22, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnPrint))))
+                        .addGap(4, 4, 4)
+                        .addComponent(lblEMaxPromo))
+                    .addComponent(txtEdadPromo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         btnReporte.setText("Generar Reporte");
         btnReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnReporteActionPerformed(evt);
+            }
+        });
+
+        btnPrint.setText("Imprimir");
+        btnPrint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintActionPerformed(evt);
             }
         });
 
@@ -265,9 +261,11 @@ public class Reporte extends Mantenimiento {
                         .addGap(18, 18, 18)
                         .addComponent(cboxReporte, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnReporte))
+                        .addComponent(btnReporte)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnPrint))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +278,9 @@ public class Reporte extends Mantenimiento {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
                         .addComponent(cboxReporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnReporte))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnReporte)
+                        .addComponent(btnPrint)))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(131, Short.MAX_VALUE))
@@ -297,24 +297,25 @@ public class Reporte extends Mantenimiento {
     }//GEN-LAST:event_cboxReporteActionPerformed
 
     private void btnReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReporteActionPerformed
+       try {
         switch (cboxReporte.getSelectedItem().toString()) {
             case "Usuarios Por Edad":
                 if ("".equals(txtParam1.getText()) || "".equals(txtParam2.getText())) {
-                    //JOptionPane.showMessageDialog(rootPane, "Falta ingresar uno o ambos datos requeridos");
+                    JOptionPane.showMessageDialog(rootPane, "Falta ingresar uno o ambos datos requeridos");
                 } else {
                     header = new MessageFormat("Listado de Usuarios por Edad");
                     footer = new MessageFormat("Edad acotada entre:" + txtParam1.getText() + " y " + txtParam2.getText());
-                    Utilitaria.asd(tableReporte, objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsrGasto,1);
+                    Utilitaria.asd(tableReporte, objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsrGasto, 1);
                 }
                 break;
             case "Lineas y sus Estaciones":
-                Utilitaria.asd(tableReporte, objFI.getEstacionesLineas(), headerLineaEstiones,-1);
-
+                header = new MessageFormat("Listado de Lineas y Estaciones");
+                Utilitaria.asd(tableReporte, objFI.getEstacionesLineas(), headerLineaEstiones, -1);
                 break;
             case "Listado de Estaciones":
                 header = new MessageFormat("Listado de Estaciones");
                 footer = new MessageFormat("");
-                Utilitaria.asd(tableReporte, objFI.getEstaciones(), headersEst,0);
+                Utilitaria.asd(tableReporte, objFI.getEstaciones(), headersEst, 0);
                 break;
             case "Consulta de Usuario":
                 try {
@@ -322,40 +323,70 @@ public class Reporte extends Mantenimiento {
                     footer = new MessageFormat("");
                     Object[][] aux = new Object[1][1];
                     aux[0] = objFI.getUsuarioArray(Integer.parseInt(txtParam1.getText()));
-                    Utilitaria.asd(tableReporte,aux, headerUsr,1);
-                } catch (NullPointerException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "No existen usuarios con esa CI");
-                }
+                    Utilitaria.asd(tableReporte, aux, headerUsr, 1);
+                } catch (ElementoNoEncontradoException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                } 
                 break;
             case "Consulta de Estacion":
-                header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
-                footer = new MessageFormat("Estación:" + txtParam1.getText());
-                Object[] heardLinea = {"Nombre de Linea"};
-                Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea,0);
+                if (txtParam1.getText().equals("")) {
+                    JOptionPane.showMessageDialog(rootPane, "Falta ingresar el nombre de estación");
+                } else {
+                    try {
+                        header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
+                        footer = new MessageFormat("Estación:" + txtParam1.getText());
+                        Object[] heardLinea = {"Nombre de Linea"};
+                        Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea, 0);
+                    } catch (ElementoNoEncontradoException ex) {
+                        JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                    }
+                }
                 break;
             case "Usuarios con más Consumo":
                 header = new MessageFormat("Listado de Usuarios con mayor Consumo");
                 footer = new MessageFormat("Periodo entre" + calFecha1.getDate() + " - " + calFecha2.getDate());
-                Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr,1);
+                if (objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()).length > 0) {
+                    Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr, 1);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "No existen registros del periodo de tiempo solicitado");
+                }
                 break;
             case "Consulta de Promocion":
-                header = new MessageFormat("Listado de Usuarios aplicables a promocion");
-                footer = new MessageFormat("Edad Maxima: " + txtEdadPromo.getText() + " - Tiempo Registrado: "
-                        + txtParam1.getText() + " - Cantidad de Usuarios Maxima:" + txtParam2.getText());
-                Utilitaria.asd(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
-                        Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr,1);
-                break;
+                try {
+                    header = new MessageFormat("Listado de Usuarios aplicables a promocion");
+                    footer = new MessageFormat("Edad Maxima: " + txtEdadPromo.getText() + " - Tiempo Registrado: "
+                            + txtParam1.getText() + " - Cantidad de Usuarios Maxima:" + txtParam2.getText());
+                    Utilitaria.asd(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
+                            Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr, 1);
+                    break;
+                } catch (NullPointerException  ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Uno o mas datos requeridos no fue ingresado");
+                }
             case "Convenios Antiguos":
                 header = new MessageFormat("Listado de Convenios anteriores a:" + txtParam1.getText());
                 footer = new MessageFormat("");
-                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon,1);
+                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon, 1);
                 break;
             case "Listado de Estaciones Cercanas":
                 header = new MessageFormat("Listado de Estaciones Cercanas");
                 footer = new MessageFormat("CI de Usuario:" + txtParam1.getText());
-                Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst,0);
+                try {
+                    if (!Utilitaria.isNumeric(txtParam1.getText()) && "".equals(txtParam1.getText())) {
+                        JOptionPane.showMessageDialog(rootPane, "Ingrese un CI Numerico, sin puntos ni guiones.");
+                    } else {
+                        Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst, 0);
+                    }
+                } catch (ElementoNoEncontradoException ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+                }
                 break;
         }
+        if (tableReporte.getRowCount() > 0) {
+            btnPrint.setEnabled(true);
+        }
+       } catch (NumberFormatException ex) {
+             JOptionPane.showMessageDialog(rootPane, "Ingrese solamente valores numéricos");
+       }
     }//GEN-LAST:event_btnReporteActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed

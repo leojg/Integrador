@@ -4,6 +4,7 @@
  */
 package integrador.dominio;
 
+import exceptions.ElementoNoEncontradoException;
 import exceptions.IDRepetidoException;
 import exceptions.NoExisteCPException;
 import exceptions.NombreRepetidoException;
@@ -117,8 +118,10 @@ public class UsuarioAdmin {
         return false;
     }
 
-    Usuario getUsuario(Integer CI) {
+    Usuario getUsuario(Integer CI) throws ElementoNoEncontradoException {
+        if (this.colUsr.containsKey(CI))
         return this.colUsr.get(CI);
+        throw new ElementoNoEncontradoException("No se han encontrado usuarios coincidentes");
     }
 
     HashMap<Integer, Usuario> getUsuarios() {
@@ -193,7 +196,7 @@ public class UsuarioAdmin {
 
     HashMap<Integer, Usuario> getUsuariosMasGasto(Date ini, Date fin) {
         HashMap<Integer, Usuario> colUsrGasto = new HashMap<>();
-        int max = 0;
+        int max = 1;
         for (Usuario objU : this.colUsr.values()) {
             int gastoUsr = CompraAdmin.getInstance().calcularGastoUsuario(ini, fin, objU);
             if (max < gastoUsr) {
