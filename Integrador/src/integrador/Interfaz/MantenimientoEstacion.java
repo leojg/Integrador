@@ -4,6 +4,7 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
 import exceptions.EstacionTieneLineaException;
 import exceptions.NoExisteCPException;
 import exceptions.NombreRepetidoException;
@@ -60,19 +61,24 @@ public class MantenimientoEstacion extends Mantenimiento {
         }
     }
 
-    private void setComponents() throws ParseException {
-        setBtnAlta();
-        setBtnBaja();
-        setTableEstaciones();
-        for (CodigoPostal objCP : this.objFI.getCPs().values()) {
-            this.comboCP.addItem(objCP.getCp());
+    @Override
+   public void setComponents(){
+        try {
+            setBtnAlta();
+            setBtnBaja();
+            setTableEstaciones();
+            for (CodigoPostal objCP : this.objFI.getCPs().values()) {
+                this.comboCP.addItem(objCP.getCp());
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void setTableEstaciones() throws ParseException {
         //  Utilitaria.cargarJTable(tableEst, "Estacion", null);
         Object[] headers = {"Nombre", "Codigo Postal"};
-        Utilitaria.asd(tableEst, objFI.getEstaciones(), headers,0);
+        Utilitaria.setJTable(tableEst, objFI.getEstaciones(), headers,0);
     }
 
     private void setBtnAlta() {
@@ -207,6 +213,8 @@ public class MantenimientoEstacion extends Mantenimiento {
                 srow = tableEst.getSelectedRow();
                 LineasAsociadas frmLA = new LineasAsociadas(objFI.getEstacion((String) tableEst.getValueAt(srow, 0)), objFI);
                 frmLA.setVisible(true);
+            } catch (ElementoNoEncontradoException ex) {
+                              JOptionPane.showMessageDialog(rootPane, ex.getMessage());
             } catch (ParseException ex) {
                 Logger.getLogger(MantenimientoEstacion.class.getName()).log(Level.SEVERE, null, ex);
             }

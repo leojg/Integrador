@@ -53,7 +53,8 @@ public class MantenimientoLinea extends Mantenimiento {
         }
     }
 
-    private void setComponents() {
+    @Override
+    public void setComponents() {
         setBtnAlta();
         setBtnBaja();
         setTreeLineas();

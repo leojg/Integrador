@@ -21,13 +21,14 @@ public class Linea implements IPersistente {
 
     private int id;
     private String nom;
-    private ArrayList<NodoBinario> colEstaciones;
     private Broker objB;
+    private HashMap<Integer, ParadaLinea> colEstaciones;
+    private int proximaPosicion = 1;
     Broker objBEstacionesLineas;
 
     public Linea() {
         Estacion objE = new Estacion();
-        this.colEstaciones = new ArrayList<>();
+        this.colEstaciones = new HashMap<>();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
         this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
     }
@@ -36,112 +37,33 @@ public class Linea implements IPersistente {
         Estacion objE = new Estacion();
         this.nom = nom;
         this.id = id;
-        this.colEstaciones = new ArrayList<>();
+        this.colEstaciones = new HashMap<>();
         this.objB = FachadaBaseDeDatos.getInstance().obtenerBroker(this, null);
         this.objBEstacionesLineas = FachadaBaseDeDatos.getInstance().obtenerBroker(this, objE);
     }
 
-    boolean AgregarEstacion(Estacion objE) {
-        if (!tieneEstacion(objE)) {
-            NodoBinario nb = new NodoBinario(objE, null, null);
-            if (colEstaciones.isEmpty()) {
-                colEstaciones.add(nb);
-            } else {
-                for (NodoBinario nb2 : this.colEstaciones) {
-                    if (nb2.derecho == null) {
-                        nb2.derecho = nb;
-                        nb.izquierdo = nb2;
-                        colEstaciones.add(nb);
-                        return true;
-                    }
-                }
-            }
-            objBEstacionesLineas.guardar(nb, this);
-        }
-        return false;
-    }
-
-    boolean tieneEstacion(Estacion objE) {
-        for (NodoBinario nb : this.colEstaciones) {
-            Estacion e = (Estacion) nb.dato;
-            if (e.getNom().equals(objE.getNom())) {
-                return true;
-            }
-        }
-        return false;
-
-    }
-
     public void cargarEstacionesLineas() throws ElementoNoEncontradoException {
         for (Object o : objBEstacionesLineas.obtenerTodos(this.getId())) {
-            NodoBinario nb = (NodoBinario) o;
-            if (nb.dato != null) {
-                Estacion objE = (Estacion) nb.dato;
-                objE = EstacionAdmin.getInstance().getEstacion(objE.getId());
-                nb.dato = objE;
-                if (nb.izquierdo != null) {
-                    Estacion ant = (Estacion) nb.izquierdo.dato;
-                    ant = EstacionAdmin.getInstance().getEstacion(ant.getId());
-                    nb.izquierdo.dato = ant;
-                }
-                if (nb.derecho != null) {
-                    Estacion next = (Estacion) nb.derecho.dato;
-                    next = EstacionAdmin.getInstance().getEstacion(next.getId());
-                    nb.derecho.dato = next;
-                }
-                this.colEstaciones.add(nb);
+            ParadaLinea objP = (ParadaLinea) o;
+            if (objP.getObjE() != null) {
+                Estacion objE = EstacionAdmin.getInstance().getEstacion(objP.getObjE().getId());
+                objP.setObjE(objE);
+                this.colEstaciones.put(objP.getPosicion(), objP);
+                proximaPosicion = objP.getPosicion() + 1;
             }
         }
     }
 
-    ArrayList<NodoBinario> getColNodos() {
-        return colEstaciones;
+    HashMap<Integer, ParadaLinea> getColParadas() {
+        return this.colEstaciones;
     }
-    
+
     HashMap<String, Estacion> getColEstaciones() {
-        HashMap<String, Estacion> colEst = new HashMap<>();
-        for (NodoBinario nb : this.colEstaciones) {
-            Estacion objE = (Estacion) nb.dato;
-            colEst.put(objE.getNom(), objE);
+        HashMap<String, Estacion> arr = new HashMap<>(this.colEstaciones.size());
+        for (ParadaLinea objP : this.colEstaciones.values()) {
+            arr.put(objP.getObjE().getNom(), objP.getObjE());
         }
-        return colEst;
-    }
-    
-    int  getPosicionEstacion(Estacion objE) {
-        if (getColEstaciones().containsKey(objE.getNom())) {
-            int pos = 0;
-            for (NodoBinario nb : this.colEstaciones) {
-                if (nb.dato == objE) {
-                    pos = calcularPosicion(nb, pos);
-                }
-            }
-            
-        return pos;
-        }
-        return -1;
-    }
-    
-    private int calcularPosicion(NodoBinario nb, int pos) {
-        if (nb.izquierdo != null) {
-        pos += 1;
-        pos = calcularPosicion(nb.izquierdo, pos);
-        }
-        return pos;
-    }
-
-    boolean QuitarEstacion(Estacion objE) {
-        for (NodoBinario nb : colEstaciones) {
-            Estacion e = (Estacion) nb.dato;
-            if (e.getNom().equals(objE.getNom())) {
-                NodoBinario anterior = nb.izquierdo;
-                NodoBinario posterior = nb.derecho;
-                colEstaciones.remove(nb);
-                anterior.derecho = posterior;
-                posterior.izquierdo = anterior;
-                return true;
-            }
-        }
-        return false;
+        return arr;
     }
 
     public int getId() {
@@ -178,8 +100,8 @@ public class Linea implements IPersistente {
     @Override
     public void eliminar(Object arg) {
         this.objB.eliminar(arg, null);
-        for (NodoBinario nb : this.colEstaciones) {
-            this.objBEstacionesLineas.eliminar(nb, this);
+        for (ParadaLinea objP : this.colEstaciones.values()) {
+            this.objBEstacionesLineas.eliminar(objP, this);
         }
     }
 
@@ -191,5 +113,59 @@ public class Linea implements IPersistente {
     @Override
     public ArrayList obtenerTodos(Object aux) {
         return this.objB.obtenerTodos(aux);
+    }
+    //Recorrido de Linea
+
+    public boolean tieneEstacion(Estacion objE) {
+        for (ParadaLinea objP : colEstaciones.values()) {
+            if (objE.getNom().equals(objP.getObjE().getNom())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean agregarEstacion(Estacion objE) throws EstacionTieneLineaException {
+        if (!tieneEstacion(objE)) {
+            ParadaLinea objP = new ParadaLinea(this.colEstaciones.size() + 1, objE);
+            colEstaciones.put(objP.getPosicion(), objP);
+            proximaPosicion = this.colEstaciones.size() + 1;
+            this.objBEstacionesLineas.guardar(objP, this);
+            return true;
+        }
+        throw new EstacionTieneLineaException();
+
+    }
+
+    public boolean quitarEstacion(Estacion objE) throws ElementoNoEncontradoException {
+        if (tieneEstacion(objE)) {
+            int poss = getPosicion(objE);
+            colEstaciones.remove(poss);
+            this.objBEstacionesLineas.eliminar(objE, this);
+            for (int i = poss + 1; i <= colEstaciones.size() + 1;) {
+                ParadaLinea objP = this.colEstaciones.get(i);
+                colEstaciones.remove(i);
+                objP.setPosicion(i - 1);
+                colEstaciones.put(objP.getPosicion(), objP);
+                this.objBEstacionesLineas.modificar(objP, this);
+                i++;
+            }
+            proximaPosicion -= 1;
+            return true;
+        }
+        throw new ElementoNoEncontradoException();
+    }
+
+    public Estacion getEstacion(Estacion objE) {
+        return null;
+    }
+
+    public int getPosicion(Estacion objE) {
+        for (ParadaLinea objP : this.colEstaciones.values()) {
+            if (objP.getObjE().getNom().equals(objE.getNom())) {
+                return objP.getPosicion();
+            }
+        }
+        return -1;
     }
 }

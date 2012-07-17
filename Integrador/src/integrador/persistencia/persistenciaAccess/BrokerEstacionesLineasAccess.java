@@ -1,11 +1,7 @@
 package integrador.persistencia.persistenciaAccess;
 
 //
-import integrador.dominio.Estacion;
-import integrador.dominio.IPersistente;
-import integrador.dominio.Linea;
-import integrador.dominio.LineaAdmin;
-import integrador.dominio.NodoBinario;
+import integrador.dominio.*;
 import integrador.persistencia.Broker;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -31,27 +27,17 @@ public class BrokerEstacionesLineasAccess extends Broker {
     @Override
     public String getInsertCommand(Object arg, Object aux) {
         Linea objL = (Linea) aux;
-        Integer next = null;
-        Integer ant = null;
-        NodoBinario nb = (NodoBinario) arg;
-        Estacion objE = (Estacion) nb.getDato();
-        if (nb.getIzquierdo() != null) {
-           Estacion estant = (Estacion) nb.getIzquierdo().getDato();
-           ant = estant.getId();
-        }
-        if (nb.getDerecho() != null) {
-            Estacion estnext = (Estacion) nb.getDerecho().getDato();
-            next =  estnext.getId();
-        }
-        return "INSERT INTO EstacionesLineas (lin_id,est_id,ant_id,next_id)VALUES(" + objL.getId()
-                + "," + objE.getId() + "," + ant + "," + next + ")";
+        ParadaLinea objP = (ParadaLinea) arg;
+        return "INSERT INTO EstacionesLineas (lin_id,est_id,posicion)VALUES(" + objL.getId()
+                + "," + objP.getObjE().getId() + "," + objP.getPosicion() + ")";
     }
 
     @Override
     public String getUpdateCommand(Object arg, Object aux) {
-        Linea objL = (Linea) arg;
-        Estacion objE = (Estacion) aux;
-        return "wut";
+        Linea objL = (Linea) aux;
+        ParadaLinea objP = (ParadaLinea) arg;
+        return "UPDATE EstacionesLineas SET posicion=" + objP.getPosicion()
+                + " WHERE lin_id=" + objL.getId() + " and est_id=" + objP.getObjE().getId();
     }
 
     @Override
@@ -73,28 +59,12 @@ public class BrokerEstacionesLineasAccess extends Broker {
     public void obtenerDesdeResultSet(ResultSet rs, Object aux, Object dato) {
         try {
             if (dato.equals(rs.getInt("lin_id"))) {
-                Object antid = rs.getObject("ant_id");
-                Object nextid = rs.getObject("next_id");
-
+                ParadaLinea objP = (ParadaLinea) aux;
                 Estacion objE = new Estacion();
                 objE.setId(rs.getInt("est_id"));
-                NodoBinario ant = null;
-                if (antid != null) {
-                    Estacion estAnt = new Estacion();
-                    estAnt.setId((int) antid);
-                    ant = new NodoBinario(estAnt);
-                }
-                NodoBinario next = null;
-                if (nextid != null) {
-
-                    Estacion estNext = new Estacion();
-                    estNext.setId((int) nextid);
-                    next = new NodoBinario(estNext);
-                }
-                NodoBinario nb = (NodoBinario) aux;
-
-                nb.setNodo(objE, ant, next);
-
+                int p = rs.getInt("posicion");
+                objP.setObjE(objE);
+                objP.setPosicion(p);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -103,6 +73,6 @@ public class BrokerEstacionesLineasAccess extends Broker {
 
     @Override
     public IPersistente getNuevo() {
-        return new NodoBinario<>();
+        return new ParadaLinea();
     }
 }

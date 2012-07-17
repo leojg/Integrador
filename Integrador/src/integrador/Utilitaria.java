@@ -146,7 +146,7 @@ public class Utilitaria {
      * @param headers
      * @param columnaOrdenadora
      */
-    public static void asd(JTable table, Object[][] datos, Object[] headers, int columnaOrdenadora) {
+    public static void setJTable(JTable table, Object[][] datos, Object[] headers, int columnaOrdenadora) {
         DefaultTableModel Modelo = (DefaultTableModel) table.getModel();
         Modelo.setColumnIdentifiers(headers);
         Modelo.setRowCount(0);

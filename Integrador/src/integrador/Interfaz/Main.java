@@ -59,7 +59,6 @@ public class Main extends javax.swing.JFrame {
         jMenu5 = new javax.swing.JMenu();
         btnExit = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
-        menuInicio = new javax.swing.JMenu();
         menuCompras = new javax.swing.JMenu();
         menuUsuarios = new javax.swing.JMenu();
         menuConvenios = new javax.swing.JMenu();
@@ -87,14 +86,6 @@ public class Main extends javax.swing.JFrame {
                 btnExitActionPerformed(evt);
             }
         });
-
-        menuInicio.setText("Inicio");
-        menuInicio.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                menuInicioMouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(menuInicio);
 
         menuCompras.setText("Compras");
         menuCompras.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -176,14 +167,14 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(504, Short.MAX_VALUE)
+                .addContainerGap(511, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(401, Short.MAX_VALUE)
+                .addContainerGap(404, Short.MAX_VALUE)
                 .addComponent(btnExit)
                 .addContainerGap())
         );
@@ -241,21 +232,6 @@ public class Main extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_menuLineasMouseClicked
-
-    private void menuInicioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuInicioMouseClicked
-        Point p = this.getLocation();
-        Main frmMain = new Main();
-        frmMain.setLocation(p);
-        frmMain.setVisible(true);
-        this.setVisible(false);
-
-        try {
-            this.finalize();
-        } catch (Throwable ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }//GEN-LAST:event_menuInicioMouseClicked
 
     private void menuReportesMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuReportesMouseDragged
     }//GEN-LAST:event_menuReportesMouseDragged
@@ -328,7 +304,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu menuCompras;
     private javax.swing.JMenu menuConvenios;
     private javax.swing.JMenu menuEstaciones;
-    private javax.swing.JMenu menuInicio;
     private javax.swing.JMenu menuLineas;
     private javax.swing.JMenu menuReportes;
     private javax.swing.JMenu menuUsuarios;

@@ -30,7 +30,7 @@ public class BrokerComprasAccess extends Broker {
         Compra objC = (Compra) arg;
         String fechahora = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
         return "INSERT INTO Compras (comp_id,usr_ci,comp_fecha,comp_cantidad,comp_costo) "
-                + "VALUES (" + objC.getId() + "," + objC.getObjU().getCI() + ",#" + fechahora + "#," 
+                + "VALUES (" + objC.getId() + "," + objC.getUsrCI() + ",#" + fechahora + "#," 
                 + objC.getCantidadTickets() + "," + objC.getCosto() + ")";
     }
 
@@ -56,9 +56,7 @@ public class BrokerComprasAccess extends Broker {
         try {
             Compra objC = (Compra) aux;
             objC.setId(rs.getLong("comp_id"));
-            Usuario objU = new Usuario();
-            objU.setCI(rs.getInt("usr_ci"));
-            objC.setObjU(objU);
+            objC.setUsrCI(rs.getInt("usr_ci"));
             java.sql.Timestamp fecha = rs.getTimestamp("comp_fecha");
             GregorianCalendar cal = new GregorianCalendar();
             cal.setTime(fecha);

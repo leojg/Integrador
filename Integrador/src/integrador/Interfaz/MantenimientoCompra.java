@@ -38,21 +38,17 @@ public class MantenimientoCompra extends Mantenimiento {
      * Creates new form MantenimientoCompra
      */
     public MantenimientoCompra() {
-        try {
-            initComponents();
-            this.btnAlta = super.getBtnAlta();
-            this.btnBaja = super.getBtnBaja();
-            this.btnMod = super.getBtnMod();
-            this.tableComp = super.getTableItems();
-            this.setComponents();
-            this.btnBaja.setVisible(false);
-            this.btnMod.setVisible(false);
-            this.btnAlta.setEnabled(false);
-            this.panelUsr.setVisible(false);
-            this.lblID.setText(objFI.getUltimoIDCompra().toString());
-        } catch (ParseException ex) {
-            Logger.getLogger(MantenimientoCompra.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        initComponents();
+        this.btnAlta = super.getBtnAlta();
+        this.btnBaja = super.getBtnBaja();
+        this.btnMod = super.getBtnMod();
+        this.tableComp = super.getTableItems();
+        this.setComponents();
+        this.btnBaja.setVisible(false);
+        this.btnMod.setVisible(false);
+        this.btnAlta.setEnabled(false);
+        this.panelUsr.setVisible(false);
+        this.lblID.setText(objFI.getUltimoIDCompra().toString());
     }
 
     @Override
@@ -67,15 +63,20 @@ public class MantenimientoCompra extends Mantenimiento {
         }
     }
 
-    private void setComponents() throws ParseException {
-        setBtnAlta();
-        setTableCompras();
+    @Override
+    public void setComponents() {
+        try {
+            setBtnAlta();
+            setTableCompras();
+        } catch (ParseException ex) {
+            Logger.getLogger(MantenimientoCompra.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void setTableCompras() throws ParseException {
         // Utilitaria.cargarJTable(tableComp, "Compra", null);
         Object[] header = {"ID", "Usuario CI", "Fecha de Realizacion", "Cantidad de Tickets"};
-        Utilitaria.asd(tableComp, objFI.getCompras(), header, -1);
+        Utilitaria.setJTable(tableComp, objFI.getCompras(), header, -1);
     }
 
     private void setBtnAlta() {
@@ -84,8 +85,14 @@ public class MantenimientoCompra extends Mantenimiento {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    objFI.altaCompra(Long.parseLong(lblID.getText()), Integer.parseInt(txtUsr.getText()), (GregorianCalendar) calCompra.getCalendar(), Integer.parseInt(txtCantTickets.getText()));
-                    JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
+                    GregorianCalendar today = (GregorianCalendar) GregorianCalendar.getInstance();
+                    if (calCompra.getCalendar().compareTo(today) <= 0) {
+                        objFI.altaCompra(Long.parseLong(lblID.getText()), Integer.parseInt(txtUsr.getText()), (GregorianCalendar) calCompra.getCalendar(), Integer.parseInt(txtCantTickets.getText()));
+                        JOptionPane.showMessageDialog(rootPane, "Operación Exitosa");
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "La fecha de compra no puede ser mayor a hoy");
+
+                    }
                 } catch (ElementoNoEncontradoException ex) {
                     Logger.getLogger(MantenimientoCompra.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (NumberFormatException ex) {

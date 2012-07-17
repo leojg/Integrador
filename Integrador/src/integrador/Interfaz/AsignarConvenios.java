@@ -32,8 +32,9 @@ public class AsignarConvenios extends javax.swing.JFrame {
         this.objFI = objFI;
         this.lblNom.setText(objU.getNom());
         this.lblCI.setText(objU.getCI().toString());
+        this.lblConv.setText(objU.getConvenio().getNom());
         Object[] headerCon = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
-        Utilitaria.asd(tableCon, objFI.getConvenios(), headerCon,1);
+        Utilitaria.setJTable(tableCon, objFI.getConvenios(), headerCon,1);
 
     }
 

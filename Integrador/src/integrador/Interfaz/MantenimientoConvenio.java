@@ -57,18 +57,23 @@ public class MantenimientoConvenio extends Mantenimiento {
             }
         }
     }
-
-    private void setComponents() throws ParseException {
-        setBtnAlta();
-        setBtnBaja();
-        setBtnMod();
-        setTableConvenios();
+    
+    @Override
+    public void setComponents(){
+        try {
+            setBtnAlta();
+            setBtnBaja();
+            setBtnMod();
+            setTableConvenios();
+        } catch (ParseException ex) {
+            Logger.getLogger(MantenimientoConvenio.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void setTableConvenios() throws ParseException {
         //Utilitaria.cargarJTable(tableCon, "Convenio", null);
         Object[] header = {"Tipo", "Nombre", "Tipo de Pago", "Valor", "Fecha de Inicio"};
-        Utilitaria.asd(tableCon, objFI.getConvenios(), header,1);
+        Utilitaria.setJTable(tableCon, objFI.getConvenios(), header,1);
     }
 
     private void setBtnAlta() {

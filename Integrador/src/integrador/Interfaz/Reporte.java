@@ -62,7 +62,8 @@ public class Reporte extends Mantenimiento {
         }
     }
 
-    private void setComponents() {
+    @Override
+    public void setComponents() {
         this.lblParam1.setVisible(false);
         this.lblParam2.setVisible(false);
         this.txtParam1.setVisible(false);
@@ -305,17 +306,17 @@ public class Reporte extends Mantenimiento {
                 } else {
                     header = new MessageFormat("Listado de Usuarios por Edad");
                     footer = new MessageFormat("Edad acotada entre:" + txtParam1.getText() + " y " + txtParam2.getText());
-                    Utilitaria.asd(tableReporte, objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsrGasto, 1);
+                    Utilitaria.setJTable(tableReporte, objFI.getUsuariosPorEdad(Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsrGasto, 1);
                 }
                 break;
             case "Lineas y sus Estaciones":
                 header = new MessageFormat("Listado de Lineas y Estaciones");
-                Utilitaria.asd(tableReporte, objFI.getEstacionesLineas(), headerLineaEstiones, -1);
+                Utilitaria.setJTable(tableReporte, objFI.getEstacionesLineas(), headerLineaEstiones, -1);
                 break;
             case "Listado de Estaciones":
                 header = new MessageFormat("Listado de Estaciones");
                 footer = new MessageFormat("");
-                Utilitaria.asd(tableReporte, objFI.getEstaciones(), headersEst, 0);
+                Utilitaria.setJTable(tableReporte, objFI.getEstaciones(), headersEst, 0);
                 break;
             case "Consulta de Usuario":
                 try {
@@ -323,7 +324,7 @@ public class Reporte extends Mantenimiento {
                     footer = new MessageFormat("");
                     Object[][] aux = new Object[1][1];
                     aux[0] = objFI.getUsuarioArray(Integer.parseInt(txtParam1.getText()));
-                    Utilitaria.asd(tableReporte, aux, headerUsr, 1);
+                    Utilitaria.setJTable(tableReporte, aux, headerUsr, 1);
                 } catch (ElementoNoEncontradoException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                 } 
@@ -336,7 +337,7 @@ public class Reporte extends Mantenimiento {
                         header = new MessageFormat("Listado de Lineas que atraviezan una Estacion");
                         footer = new MessageFormat("Estación:" + txtParam1.getText());
                         Object[] heardLinea = {"Nombre de Linea"};
-                        Utilitaria.asd(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea, 0);
+                        Utilitaria.setJTable(tableReporte, objFI.getLineasEsacion(txtParam1.getText()), heardLinea, -1);
                     } catch (ElementoNoEncontradoException ex) {
                         JOptionPane.showMessageDialog(rootPane, ex.getMessage());
                     }
@@ -346,7 +347,7 @@ public class Reporte extends Mantenimiento {
                 header = new MessageFormat("Listado de Usuarios con mayor Consumo");
                 footer = new MessageFormat("Periodo entre" + calFecha1.getDate() + " - " + calFecha2.getDate());
                 if (objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()).length > 0) {
-                    Utilitaria.asd(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr, 1);
+                    Utilitaria.setJTable(tableReporte, objFI.getUsuariosMasGasto(calFecha1.getDate(), calFecha2.getDate()), headerUsr, 1);
                 } else {
                     JOptionPane.showMessageDialog(rootPane, "No existen registros del periodo de tiempo solicitado");
                 }
@@ -356,7 +357,7 @@ public class Reporte extends Mantenimiento {
                     header = new MessageFormat("Listado de Usuarios aplicables a promocion");
                     footer = new MessageFormat("Edad Maxima: " + txtEdadPromo.getText() + " - Tiempo Registrado: "
                             + txtParam1.getText() + " - Cantidad de Usuarios Maxima:" + txtParam2.getText());
-                    Utilitaria.asd(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
+                    Utilitaria.setJTable(tableReporte, objFI.getUsuariosParaPromocion(Integer.parseInt(txtEdadPromo.getText()),
                             Integer.parseInt(txtParam1.getText()), Integer.parseInt(txtParam2.getText())), headerUsr, 1);
                     break;
                 } catch (NullPointerException  ex) {
@@ -365,7 +366,7 @@ public class Reporte extends Mantenimiento {
             case "Convenios Antiguos":
                 header = new MessageFormat("Listado de Convenios anteriores a:" + txtParam1.getText());
                 footer = new MessageFormat("");
-                Utilitaria.asd(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon, 1);
+                Utilitaria.setJTable(tableReporte, objFI.getConveniosVigentes(Integer.parseInt(txtParam1.getText())), headerCon, 1);
                 break;
             case "Listado de Estaciones Cercanas":
                 header = new MessageFormat("Listado de Estaciones Cercanas");
@@ -374,7 +375,7 @@ public class Reporte extends Mantenimiento {
                     if (!Utilitaria.isNumeric(txtParam1.getText()) && "".equals(txtParam1.getText())) {
                         JOptionPane.showMessageDialog(rootPane, "Ingrese un CI Numerico, sin puntos ni guiones.");
                     } else {
-                        Utilitaria.asd(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst, 0);
+                        Utilitaria.setJTable(tableReporte, objFI.getEstacionesCercanas(Integer.parseInt(txtParam1.getText())), headersEst, 0);
                     }
                 } catch (ElementoNoEncontradoException ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage());

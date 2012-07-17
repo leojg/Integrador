@@ -4,12 +4,14 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
 import integrador.Utilitaria;
 import integrador.dominio.Estacion;
 import integrador.dominio.FachadaInterfaz;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -28,7 +30,11 @@ public class LineasAsociadas extends javax.swing.JFrame {
         this.lblEstacion.setText(this.objE.getNom());
         this.objFI = objFI;
         Object[] header = {"Nombre de Linea"};
-        Utilitaria.asd(tableLineasEst, objFI.getLineasEsacion(objE.getNom()),header,0);
+        try {
+            Utilitaria.setJTable(tableLineasEst, objFI.getLineasEsacion(objE.getNom()),header,-1);
+        } catch (ElementoNoEncontradoException ex) {
+                            JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+        }
     }
 
 
@@ -41,7 +47,7 @@ public class LineasAsociadas extends javax.swing.JFrame {
         btnAtras = new javax.swing.JButton();
         lblEstacion = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tableLineasEst.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

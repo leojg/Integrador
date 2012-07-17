@@ -4,6 +4,8 @@
  */
 package integrador.Interfaz;
 
+import exceptions.ElementoNoEncontradoException;
+import exceptions.EstacionTieneLineaException;
 import integrador.Utilitaria;
 import integrador.dominio.FachadaInterfaz;
 import integrador.dominio.Linea;
@@ -34,8 +36,8 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     }
 
     private void setTables() {
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);    }
+            Utilitaria.setJTable(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+            Utilitaria.setJTable(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -168,9 +170,13 @@ public class AsignarEstaciones extends javax.swing.JFrame {
 
         srow = tableEstSinAsignar.getSelectedRow();
         if (srow != -1) {
-            objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
+            try {
+                objFI.agregarEstacionALinea(objL.getNom(), (String) tableEstSinAsignar.getValueAt(srow, 0));
+                Utilitaria.setJTable(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+                Utilitaria.setJTable(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
+            } catch (    EstacionTieneLineaException | ElementoNoEncontradoException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
 
         } else {
             JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Disponibles\" para continuar");
@@ -181,9 +187,13 @@ public class AsignarEstaciones extends javax.swing.JFrame {
     private void btnQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarActionPerformed
         srow = tableEstAsignadas.getSelectedRow();
         if (srow != -1) {
-            objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
-            Utilitaria.asd(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
-            Utilitaria.asd(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+            try {
+                objFI.quitarEstacionDeLinea(objL.getNom(), (String) tableEstAsignadas.getValueAt(srow, 0));
+                Utilitaria.setJTable(tableEstSinAsignar, objFI.getEstacionesNoEstanEnLinea(objL.getNom()), headers,0);
+                Utilitaria.setJTable(tableEstAsignadas, objFI.getEstacionesLinea(objL.getNom()), headers,0);
+            } catch (ElementoNoEncontradoException ex) {
+                               JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            }
         } else {
             JOptionPane.showMessageDialog(rootPane, "Seleccione una Estacion de la \nlista de\"Estaciones Asignadas\" para continuar");
         }

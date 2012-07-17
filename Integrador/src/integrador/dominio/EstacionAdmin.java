@@ -80,18 +80,10 @@ public class EstacionAdmin {
         throw new NoExisteCPException();
     }
 
-    boolean existenEstaciones(HashMap<String, Estacion> colEst) {
-        for (Estacion objE : colEst.values()) {
-            if (!this.colEstacion.containsKey(objE.getNom())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     Estacion getEstacion(String nom) throws ElementoNoEncontradoException {
-        if (this.colEstacion.containsKey(nom))
-        return this.colEstacion.get(nom);
+        if (this.colEstacion.containsKey(nom)) {
+            return this.colEstacion.get(nom);
+        }
         throw new ElementoNoEncontradoException("No se ha encontrado una estacion coincidente");
     }
 
@@ -111,10 +103,10 @@ public class EstacionAdmin {
     HashMap<String, Estacion> getEstacionesNoEstanEnLinea(Linea objL) {
         HashMap<String, Estacion> colEstacionesSinLinea = new HashMap<>();
         for (Estacion objE : colEstacion.values()) {
-            if (!objL.getColEstaciones().containsKey(objE.getNom())) {
-                colEstacionesSinLinea.put(objE.getNom(), objE);
+             if (!objL.getColEstaciones().containsKey(objE.getNom())) {
+                    colEstacionesSinLinea.put(objE.getNom(), objE);
+                }
             }
-        }
         return colEstacionesSinLinea;
     }
 

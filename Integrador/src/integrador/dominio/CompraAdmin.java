@@ -45,11 +45,14 @@ public class CompraAdmin {
         }
         return false;
     }
-    
+
     Integer calcularGastoUsuario(Date inicio, Date fin, Usuario objU) {
         Integer gasto = 0;
         for (Compra objC : this.colCompras.values()) {
-            if (objC.getObjU().getCI() == objU.getCI() && objC.getFechaCompra().getTime().compareTo(inicio) >= 0 && objC.getFechaCompra().getTime().compareTo(fin) <= 0) {
+            System.out.println(objC.getFechaCompra().getTime().toString());
+            System.out.println(objC.getFechaCompra().getTime().compareTo(inicio));
+            System.out.println(objC.getFechaCompra().getTime().compareTo(fin));
+            if (objC.getUsrCI().compareTo(objU.getCI()) == 0 && objC.getFechaCompra().getTime().compareTo(inicio) >= 0 && objC.getFechaCompra().getTime().compareTo(fin) <= 0) {
                 gasto = gasto + (objC.getCantidadTickets() * objC.getCosto());
             }
         }
@@ -60,14 +63,7 @@ public class CompraAdmin {
         Compra objC = new Compra();
         for (Object o : objC.obtenerTodos()) {
             Compra c = (Compra) o;
-            Usuario objU = null;
-            try {
-                objU = UsuarioAdmin.getInstance().getUsuario(c.getObjU().getCI());
-            } catch (NullPointerException ex) {
-            } finally {
-                c.setObjU(objU);
-                this.colCompras.put(c.getId(), c);
-            }
+            this.colCompras.put(c.getId(), c);
         }
     }
 
@@ -76,7 +72,7 @@ public class CompraAdmin {
             cantidad = 1;
         }
         int costo = cantidad * objU.getConvenio().getValor();
-        return new Compra(id, objU, cantidad, fecha, costo);
+        return new Compra(id, objU.getCI(), cantidad, fecha, costo);
     }
 
     Compra getCompra(Long id) {

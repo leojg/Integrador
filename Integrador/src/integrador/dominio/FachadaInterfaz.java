@@ -7,7 +7,10 @@ package integrador.dominio;
 import exceptions.*;
 import integrador.Utilitaria;
 import java.rmi.NoSuchObjectException;
-import java.util.*;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Observable;
 
 /**
  * Clase encargada de establecer el acceso por parte de la interfaz a la capa
@@ -65,11 +68,11 @@ public class FachadaInterfaz extends Observable {
     }
 
     public Object[][] getEstacionesLinea(String nom) {
-        Object[][] datos = new Object[objLA.getLinea(nom).getColEstaciones().size()][2];
+        Object[][] datos = new Object[objLA.getLinea(nom).getColParadas().size()][2];
         int cont = 0;
-        for (Estacion objE : objLA.getLinea(nom).getColEstaciones().values()) {
-            datos[cont][0] = objE.getNom();
-            datos[cont][1] = objE.getCp();
+        for (ParadaLinea objP : objLA.getLinea(nom).getColParadas().values()) {
+            datos[cont][0] = objP.getObjE().getNom();
+            datos[cont][1] = objP.getObjE().getCp();
             cont++;
         }
         return datos;
@@ -81,10 +84,10 @@ public class FachadaInterfaz extends Observable {
         for (Linea ObjL : objLA.getLineas().values()) {
             datos[cont][0] = ObjL.getNom();
             cont++;
-            for (Estacion objE : ObjL.getColEstaciones().values()) {
-                datos[cont][0] = "Parada Nº:" + ObjL.getPosicionEstacion(objE);
-                datos[cont][1] = objE.getNom();
-                datos[cont][2] = objE.getCp();
+            for (ParadaLinea objP : ObjL.getColParadas().values()) {
+                datos[cont][0] = "Parada " + objP.getPosicion();
+                datos[cont][1] = objP.getObjE().getNom();
+                datos[cont][2] = objP.getObjE().getCp();
                 cont++;
             }
         }
@@ -117,10 +120,10 @@ public class FachadaInterfaz extends Observable {
         return false;
     }
 
-    public boolean agregarEstacionALinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException {
+    public boolean agregarEstacionALinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException, EstacionTieneLineaException {
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
-        if (objL.AgregarEstacion(objE)) {
+        if (objL.agregarEstacion(objE)) {
             setChanged();
             notifyObservers("Linea");
             return true;
@@ -153,7 +156,7 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public Object[][] getLineasEsacion(String nom) throws ElementoNoEncontradoException{
+    public Object[][] getLineasEsacion(String nom) throws ElementoNoEncontradoException {
         Object[][] datos = new Object[objLA.getLineasEstacion(objEA.getEstacion(nom)).size()][1];
         int cont = 0;
         for (Linea objL : objLA.getLineasEstacion(objEA.getEstacion(nom)).values()) {
@@ -163,10 +166,10 @@ public class FachadaInterfaz extends Observable {
         return datos;
     }
 
-    public boolean quitarEstacionDeLinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException{
+    public boolean quitarEstacionDeLinea(String nomLinea, String nomEst) throws ElementoNoEncontradoException {
         Linea objL = objLA.getLinea(nomLinea);
         Estacion objE = objEA.getEstacion(nomEst);
-        if (objL.QuitarEstacion(objE)) {
+        if (objL.quitarEstacion(objE)) {
             setChanged();
             notifyObservers("Linea");
             return true;
@@ -261,20 +264,22 @@ public class FachadaInterfaz extends Observable {
     public Usuario getUsuario(Integer CI) throws ElementoNoEncontradoException {
         return this.objUA.getUsuario(CI);
     }
+
     /**
      * Retorna un array con los atributos del usuario buscado.
+     *
      * @param CI
-     * @return 
+     * @return
      */
     public Object[] getUsuarioArray(Integer CI) throws ElementoNoEncontradoException {
         Usuario objU = this.getUsuario(CI);
-        Object[] arrUsr = {objU.getCI(),objU.getNom(),objU.getConvenio().getNom(),objU.getBarrio(),
-        objU.getDir(),objU.getTel(),objU.getCP(),objU.getMail(),
-        Utilitaria.ConvertirGCalendarString(objU.getFechaRegistro()),
-        Utilitaria.ConvertirGCalendarString(objU.getFechaNac())};
+        Object[] arrUsr = {objU.getCI(), objU.getNom(), objU.getConvenio().getNom(), objU.getBarrio(),
+            objU.getDir(), objU.getTel(), objU.getCP(), objU.getMail(),
+            Utilitaria.ConvertirGCalendarString(objU.getFechaRegistro()),
+            Utilitaria.ConvertirGCalendarString(objU.getFechaNac())};
         return arrUsr;
     }
-    
+
     public Object[][] getUsuarios() {
         Object[][] datos = new Object[objUA.getUsuarios().size()][10];
         int cont = 0;
@@ -388,7 +393,7 @@ public class FachadaInterfaz extends Observable {
         int cont = 0;
         for (Compra objC : objCoA.getCompras().values()) {
             datos[cont][0] = objC.getId();
-            datos[cont][1] = objC.getObjU().getCI();
+            datos[cont][1] = objC.getUsrCI();
             datos[cont][2] = Utilitaria.ConvertirGCalendarStringHora(objC.getFechaCompra());
             datos[cont][3] = objC.getCantidadTickets();
             cont++;

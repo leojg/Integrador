@@ -151,6 +151,7 @@ public class UsuarioAdmin {
                 int gastoUsr = CompraAdmin.getInstance().calcularGastoUsuario(fecha, GregorianCalendar.getInstance().getTime(), u);
                 if (gastoUsr <= gastoMin) {
                     usrElegido = u;
+                    gastoMin = gastoUsr;
                 }
 
             }

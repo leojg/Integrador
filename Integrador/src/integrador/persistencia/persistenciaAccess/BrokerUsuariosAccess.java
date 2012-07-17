@@ -1,13 +1,11 @@
 package integrador.persistencia.persistenciaAccess;
 
 //
-import integrador.dominio.*;
+import integrador.dominio.Convenio;
+import integrador.dominio.IPersistente;
+import integrador.dominio.Usuario;
 import integrador.persistencia.Broker;
 import java.sql.Date;
-import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
@@ -49,7 +47,7 @@ public class BrokerUsuariosAccess extends Broker {
             java.sql.Date fecha = new java.sql.Date(objU.getFechaNac().getTimeInMillis());
             return "UPDATE Usuarios SET usr_nom='" + objU.getNom() + "', usr_fnac=#" + fecha 
                     + "#, usr_dir='" + objU.getDir() + "', usr_barrio='" + objU.getBarrio() 
-                    + "', usr_cp=" + objU.getCP() + ", usr_mail='" + objU.getMail() 
+                    + "', cp_num=" + objU.getCP() + ", usr_mail='" + objU.getMail() 
                     + "', usr_tel=" + objU.getTel() + " WHERE usr_ci=" + objU.getCI() + " and usr_activo=1";
         }
     }

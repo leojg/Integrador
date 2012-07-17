@@ -14,7 +14,7 @@ import javax.swing.*;
  * @author Administrador
  */
 //Como implementa observer aca. Las que heredan también lo implementan :)
-public class Mantenimiento extends Main  implements Observer {
+public abstract class Mantenimiento extends Main  implements Observer {
 
     public FachadaInterfaz objFI;
     /**
@@ -81,7 +81,7 @@ public class Mantenimiento extends Main  implements Observer {
         this.panelBtns = panelBtns;
     }
 
-    
+    abstract public void setComponents();
     
     public   void setTableItems(JTable tableItems) {
         this.tableItems = tableItems;

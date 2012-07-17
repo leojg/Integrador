@@ -101,22 +101,19 @@ public class LineaAdmin {
         return colLineasEstacion;
     }
     
-    public int getNumeroEstacionesLineas() {
-        int num = 0;
+    int getNumeroEstacionesLineas() {
+        int i = this.colLineas.size();
         for (Linea objL : this.colLineas.values()) {
-            for (Estacion objE : objL.getColEstaciones().values()) {
-                num ++;
-            }
-            num ++;
+            i = i + objL.getColParadas().size();
         }
-        return num;
+        return i;
     }
     
-    public int getNumLinea() {
+    int getNumLinea() {
         return numLinea;
     }
 
-    public void setNumLinea(int numLinea) {
+    void setNumLinea(int numLinea) {
        if (this.numLinea <= numLinea)
         this.numLinea = numLinea;
     }

@@ -43,16 +43,12 @@ public class MantenimientoUsuario extends Mantenimiento {
      * Creates new form MantenimientoUsuario
      */
     public MantenimientoUsuario() {
-        try {
             initComponents();
             this.btnAlta = super.getBtnAlta();
             this.btnBaja = super.getBtnBaja();
             this.btnMod = super.getBtnMod();
             this.tableUsr = super.getTableItems();
             setComponents();
-        } catch (ParseException ex) {
-            Logger.getLogger(MantenimientoUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override
@@ -66,20 +62,25 @@ public class MantenimientoUsuario extends Mantenimiento {
         }
     }
 
-    private void setComponents() throws ParseException {
-        setBtnAlta();
-        setBtnBaja();
-        setBtnMod();
-        setTableUsuarios();
-        for (CodigoPostal objCP : this.objFI.getCPs().values())  {
-           this.comboCP.addItem(objCP.getCp()); 
+    @Override
+    public void setComponents(){
+        try {
+            setBtnAlta();
+            setBtnBaja();
+            setBtnMod();
+            setTableUsuarios();
+            for (CodigoPostal objCP : this.objFI.getCPs().values())  {
+               this.comboCP.addItem(objCP.getCp()); 
+            }
+        } catch (ParseException ex) {
+            Logger.getLogger(MantenimientoUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void setTableUsuarios() throws ParseException {
         Object[] header = {"CI", "Nombre", "Convenio", "Barrio", "Direccion", "Telefono",
             "Código Postal", "EMail", "Fecha de Registro", "Fecha de Nacimiento"};
-        Utilitaria.asd(tableUsr, objFI.getUsuarios(), header,-1);
+        Utilitaria.setJTable(tableUsr, objFI.getUsuarios(), header,-1);
         setTableUsr();
     }
 
